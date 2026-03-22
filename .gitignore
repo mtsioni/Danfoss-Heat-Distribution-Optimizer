@@ -1,0 +1,87 @@
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio specific
+.vs/
+.vscode/
+*.sln.iml
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Rider
+.idea/
+*.sln.iml
+*.swp
+*.swo
+*~
+
+# Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~.nib
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# User-specific files
+.vs/
+.vscode/
+*.key
+*.jfm
+
+# Test Results
+TestResults/
+*.trx
+
+# Avonia specific
+.avalonia-cache/
+.avalonia-build
+
+# IDE settings
+*.code-workspace
+.editorconfig.user
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local environment variables
+.env
+.env.local
+
+# Node modules (if any web dependencies)
+node_modules/
