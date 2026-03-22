@@ -1,20 +1,233 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Danfoss_Heat_Distribution_Optimizer.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Danfoss_Heat_Distribution_Optimizer.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Danfoss_Heat_Distribution_Optimizer">
+        Title="Heat Optimization Tool"
+        Background="White">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <!-- here the themes are defined and can be adjusted -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                
+                <!-- light theme colors -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="RightPanelBg">#F2E6D8</SolidColorBrush>
+                    <SolidColorBrush x:Key="ChartAreaBg">#E8DACB</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainText">Black</SolidColorBrush>
+                </ResourceDictionary>
+                
+                <!-- dark theme colors -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="RightPanelBg">#1E1E1E</SolidColorBrush>
+                    <SolidColorBrush x:Key="ChartAreaBg">#333333</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainText">White</SolidColorBrush>
+                </ResourceDictionary>
+                
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <!-- main layout: left panel + right content -->
+    <Grid ColumnDefinitions="300, *">
 
+        <!-- left control panel -->
+        <Border Grid.Column="0" Background="#E3000F" Padding="10">
+            <Grid RowDefinitions="Auto, *, *">
+                
+                <!-- top section with controls -->
+                <StackPanel Grid.Row="0" Spacing="15">
+                    <TextBlock Text="Control Panel" FontSize="24" Foreground="White"/>
+
+                    <!-- scenario selection -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="SCENARIOS" Foreground="White"/>
+                        <RadioButton Content="Heat" GroupName="ScenariosGroup" IsChecked="True" Foreground="White"/>
+                        <RadioButton Content="Heat &amp; Electricity" GroupName="ScenariosGroup" Foreground="White"/>
+                    </StackPanel>
+
+                    <!-- period selection -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="PERIOD" Foreground="White"/>
+                        <RadioButton Content="Winter" GroupName="PeriodGroup" IsChecked="True" Foreground="White"/>
+                        <RadioButton Content="Summer" GroupName="PeriodGroup" Foreground="White"/>
+                    </StackPanel>
+
+                    <!-- unit control section -->
+                    <TextBlock Text="Unit Control" FontSize="20" Foreground="White" Margin="0,20,0,0"/>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="MAINTENANCE PLANNING" Foreground="White"/>
+                        
+                        <!-- slider for maintenance hours -->
+                        <Slider Minimum="0" Maximum="100" Value="60"/>
+                        
+                        <!-- static display of selected hours -->
+                        <TextBlock Text="60 hours" Foreground="White" HorizontalAlignment="Center"/>
+                        
+                        <!-- dropdown for selecting unit -->
+                        <ComboBox PlaceholderText="Select unit" HorizontalAlignment="Stretch" Margin="0,10,0,0">
+                            <ComboBoxItem>None</ComboBoxItem>
+                            <ComboBoxItem>Gas Boiler 1</ComboBoxItem>
+                            <ComboBoxItem>Gas Boiler 2</ComboBoxItem>
+                            <ComboBoxItem>Gas Boiler 3</ComboBoxItem>
+                            <ComboBoxItem>Oil Boiler</ComboBoxItem>
+                            <ComboBoxItem>Gas Motor</ComboBoxItem>
+                            <ComboBoxItem>Electric Boiler</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- bottom section: theme toggle -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Bottom">
+                    <TextBlock Text="LIGHT/DARK THEME" Foreground="White" VerticalAlignment="Center"/>
+                    
+                    <!-- switch between light and dark theme -->
+                    <ToggleSwitch x:Name="ThemeToggle" IsChecked="False" IsCheckedChanged="ThemeToggle_CheckedChanged"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- right side main content -->
+        <Border Grid.Column="1" Background="{DynamicResource RightPanelBg}" Padding="20">
+            <Grid RowDefinitions="Auto, *, Auto">
+                
+                <!-- header section -->
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="HEAT PRODUCTION OPTIMIZATION TOOL V1.0" FontSize="18" Foreground="{DynamicResource MainText}"/>
+                        <TextBlock Text="Heatington ~ 1600" Foreground="{DynamicResource MainText}"/>
+                    </StackPanel>
+                    
+                    <!-- brand label -->
+                    <TextBlock Grid.Column="1" Text="Danfoss" Foreground="#E3000F" FontSize="24"/>
+                </Grid>
+
+                <!-- chart area -->
+                <Border Grid.Row="1" Background="{DynamicResource ChartAreaBg}" Margin="0,15" BorderBrush="Black" BorderThickness="1">
+                    <Grid RowDefinitions="*, Auto">
+                        
+                        <!-- placeholder for future chart -->
+                        <TextBlock Grid.Row="0" Text="[ just a placeholder for the chart ]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource MainText}"/>
+                        
+                        <!-- chart data selection -->
+                        <WrapPanel Grid.Row="1" Margin="10" HorizontalAlignment="Center">
+                            <RadioButton Content="Heat Produced" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Heat Consumed" GroupName="ChartOptionGroup" IsChecked="True" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Electricity Consumed" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Electricity Produced" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Money Spent" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Money Earned" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}"/>
+                        </WrapPanel>
+                    </Grid>
+                </Border>
+
+                <!-- units grid (each card = one unit) -->
+                <UniformGrid Grid.Row="2" Columns="3" Rows="2">
+                    
+                    <!-- gas boiler 1 -->
+                    <Border Background="#E3000F" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Black">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <!-- image placeholder -->
+                            <Border Grid.Column="0" Width="60" Background="White" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock Text="IMG" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <!-- unit data -->
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="GB1" Foreground="White" FontSize="16"/>
+                                <TextBlock Text="Max Heat: 3 MW" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Cost: 550 DKK" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="CO2: 132 kg" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Gas: 1.05 MWh" Foreground="White" FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- gas boiler 2 -->
+                    <Border Background="#E3000F" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Black">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" Width="60" Background="White" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock Text="IMG" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="GB2" Foreground="White" FontSize="16"/>
+                                <TextBlock Text="Max Heat: 2 MW" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Cost: 510 DKK" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="CO2: 134 kg" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Gas: 1.08 MWh" Foreground="White" FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- gas boiler 3 -->
+                    <Border Background="#E3000F" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Black">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" Width="60" Background="White" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock Text="IMG" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="GB3" Foreground="White" FontSize="16"/>
+                                <TextBlock Text="Max Heat: 4 MW" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Cost: 560 DKK" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="CO2: 136 kg" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Gas: 1.09 MWh" Foreground="White" FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- oil boiler -->
+                    <Border Background="#E3000F" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Black">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" Width="60" Background="White" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock Text="IMG" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="OB1" Foreground="White" FontSize="16"/>
+                                <TextBlock Text="Max Heat: 6 MW" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Cost: 680 DKK" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="CO2: 143 kg" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Gas: 1.18 MWh" Foreground="White" FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- gas motor -->
+                    <Border Background="#E3000F" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Black">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" Width="60" Background="White" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock Text="IMG" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="GM1" Foreground="White" FontSize="16"/>
+                                <TextBlock Text="Max Heat: 5.3 MW" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Cost: 975 DKK" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="CO2: 227 kg" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Gas: 1.82 MWh" Foreground="White" FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- electric boiler -->
+                    <Border Background="#E3000F" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Black">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" Width="60" Background="White" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock Text="IMG" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <TextBlock Text="EB1" Foreground="White" FontSize="16"/>
+                                <TextBlock Text="Max Heat: 6 MW" Foreground="White" FontSize="10"/>
+                                <TextBlock Text="Cost: 15 DKK" Foreground="White" FontSize="10"/>
+                                
+                                <!-- negative value = electricity consumption -->
+                                <TextBlock Text="Elec: -6 MWh" Foreground="White" FontSize="10"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                </UniformGrid>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
