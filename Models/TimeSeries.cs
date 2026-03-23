@@ -34,10 +34,17 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         {
             return _timestamps; 
         }
-
+        public void SetTimestamps(List<DateTime> timeStamps)
+        {
+            _timestamps = timeStamps; 
+        }
         public int GetTimeResolution()
         {
             return _timeResolution;
+        }
+        public void SetTimeResolution(int timeResolution)
+        {
+            _timeResolution = timeResolution;
         }
     }
 }
