@@ -2,47 +2,49 @@
 using System;
 using System.Collections.Generic;
 
-
-public class TimeSeries<T>
+namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    private List<DateTime> _timestamps;
-    private List<T> _values;
-    private int _timeResolution; 
-
-    public TimeSeries()
+    public class TimeSeries<T>
     {
-        _timestamps = new List<DateTime>();
-        _values = new List<T>();
-        _timeResolution = 1;
-    } 
-
-    public TimeSeries(List<DateTime> date , List<T> value)
-    {
-        _timestamps = date;
-        _values = value;
-        _timeResolution = 1;
-    } 
-
-    public T? GetAt(DateTime date)
-    {
-        int index = _timestamps.IndexOf(date);
-        
-        return _values[index]; 
-        
-    }
-
-    public int Length()
-    {
-        return _timestamps.Count;
-    }
-
-    public List<DateTime> GetTimestamps()
-    {
-        return _timestamps; 
-    }
-
-    public int GetTimeResolution()
-    {
-        return _timeResolution;
+        private List<DateTime> _timestamps;
+        private List<T> _values;
+        private int _timeResolution;
+        public int Length
+        {
+            get {return _values.Count;}
+        }
+        public T this[DateTime index]
+        {
+            get { return _values[_timestamps.IndexOf(index)];}
+            set { _values[_timestamps.IndexOf(index)] = value;}
+        }
+        public TimeSeries()
+        {
+            _timestamps = new List<DateTime>();
+            _values = new List<T>();
+            _timeResolution = 1;
+        } 
+        public TimeSeries(List<DateTime> timeStamps, List<T> values)
+        {
+            _timestamps = timeStamps;
+            _values = values;
+            _timeResolution = 1;
+        } 
+        public List<DateTime> GetTimestamps()
+        {
+            return _timestamps; 
+        }
+        public void SetTimestamps(List<DateTime> timeStamps)
+        {
+            _timestamps = timeStamps; 
+        }
+        public int GetTimeResolution()
+        {
+            return _timeResolution;
+        }
+        public void SetTimeResolution(int timeResolution)
+        {
+            _timeResolution = timeResolution;
+        }
     }
 }
