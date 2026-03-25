@@ -1,14 +1,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
     public class TimeSeries<T>
     {
         private List<DateTime> _timestamps;
+        public List<DateTime> Timestamps
+        {
+            get { return _timestamps; }
+            set { _timestamps = value; }
+        }
         private List<T> _values;
+        public List<T> Values
+        {
+            get { return _values; }
+            set { _values = value; }
+        }
         private int _timeResolution;
+        public int TimeResolution
+        {
+            get { return _timeResolution; }
+            set { _timeResolution = value; }
+        }
         public int Length
         {
             get {return _values.Count;}
@@ -30,21 +46,5 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             _values = values;
             _timeResolution = 1;
         } 
-        public List<DateTime> GetTimestamps()
-        {
-            return _timestamps; 
-        }
-        public void SetTimestamps(List<DateTime> timeStamps)
-        {
-            _timestamps = timeStamps; 
-        }
-        public int GetTimeResolution()
-        {
-            return _timeResolution;
-        }
-        public void SetTimeResolution(int timeResolution)
-        {
-            _timeResolution = timeResolution;
-        }
     }
 }
