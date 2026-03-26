@@ -14,10 +14,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.AssetManager
         private static AssetsLoader _dataLoader { get; set; }
         private static bool _isInitialized { get; set; } = false;
 
-        // private static void LoadAssets()
-        // {
-
-        // }
+        private static void LoadAssets(string LoadPath)
+        {
+            _logoImagePath = logoPath;
+            _genericUnits = AssetLoader.LoadUnits(); 
+            _isInitialized = true;
+        }
 
         public static List<IOptimizedUnits> GetDataForOptimizer()
         {
