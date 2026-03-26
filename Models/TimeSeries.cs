@@ -6,6 +6,18 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
     public class TimeSeries<T>
     {
+        private Dictionary<DateTime, T> _values = new();
+        public Dictionary<DateTime, T> Values
+        {
+            get {return _values;}
+            set {_values = value;}
+        }
+        public T this[DateTime index]
+        {
+            get { return _values[index];}
+            set { _values[index] = value;}
+        }
+        /*
         private List<DateTime> _timestamps;
         public List<DateTime> Timestamps
         {
@@ -45,5 +57,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             _values = values;
             _timeResolution = 1;
         } 
+        */
     }
 }

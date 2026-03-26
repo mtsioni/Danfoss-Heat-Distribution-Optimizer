@@ -1,50 +1,69 @@
 using System;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 namespace Danfoss_Heat_Distribution_Optimizer.Data
 {
     public static class SourceDataLoader
     {
         private static string _sourceDataPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", "SourceData.csv");
-        private static StreamReader? _reader = null;
-        private static TimeSeries<double> LoadData(int value1Index, int value2Index)
+        private static TimeSeries<double> LoadSourceData(string arg)
         {
-            if (File.Exists(_sourceDataPath))
+            if (string.IsNullOrEmpty(arg) || string.IsNullOrWhiteSpace(arg) || ((arg != "HeatDemand") && (arg != "ElectricityPrice")))
             {
-                _reader = new StreamReader(File.OpenRead(_sourceDataPath));
-                TimeSeries<double> sourceData = new TimeSeries<double>();
-                while (!_reader.EndOfStream)
-                {
-                    string line = _reader.ReadLine() ?? ",,,,,,,,";
-                    string[] lineValues = line.Split(',');
-                    DateTime date;
-                    double value;
-
-                    date = DateTime.Parse(lineValues[0]);
-                    value = double.Parse(lineValues[value1Index]);
-                    sourceData.Timestamps.Add(date);
-                    sourceData[date] = value;
-                    
-                    date = DateTime.Parse(lineValues[5]);
-                    value = double.Parse(lineValues[value2Index]);
-                    sourceData.Timestamps.Add(date);
-                    sourceData[date] = value;
-                }
-                _reader.Close();
-                return sourceData;
+                throw new Exception("Invalid argument");
             }
-            else
+            if (!File.Exists(_sourceDataPath))
             {
                 throw new Exception("File does not exist");
+            }
+            TimeSeries<double> SourceData = new TimeSeries<double>();
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false,
+            };
+            using (StreamReader _reader = new StreamReader(_sourceDataPath))
+            {
+                using (CsvReader _csvReader = new CsvReader(_reader, config))
+                {
+                    var optionsDate = new TypeConverterOptions { Formats = new[] { "dd.MM.yyyy HH:mm" }};
+                    _csvReader.Context.TypeConverterOptionsCache.AddOptions<DateTime>(optionsDate);
+                    if (arg == "HeatDemand")
+                    {
+                        _csvReader.Context.RegisterClassMap<SourceDataModelHeatDemandMap>();
+                        var records = _csvReader.GetRecords<SourceDataModelHeatDemand>().ToList();
+                        foreach (SourceDataModelHeatDemand line in records)
+                        {
+                            SourceData[line.WinterTimeStamp] = line.WinterValue;
+                            SourceData[line.SummerTimeStamp] = line.SummerValue;
+                            Console.WriteLine(SourceData[line.WinterTimeStamp]);
+                        }
+                    }
+                    if (arg == "ElectricityPrice")
+                    {
+                        _csvReader.Context.RegisterClassMap<SourceDataModelElectricityPriceMap>();
+                        var records = _csvReader.GetRecords<SourceDataModelElectricityPrice>().ToList();
+                        foreach (SourceDataModelElectricityPrice line in records)
+                        {
+                            SourceData[line.WinterTimeStamp] = line.WinterValue;
+                            SourceData[line.SummerTimeStamp] = line.SummerValue;
+                        }
+                    }
+                }
+                return SourceData;
             }
         }
         public static TimeSeries<double> LoadHeatDemand()
         {
-            return LoadData(2, 7);
+            return LoadSourceData("HeatDemand");
         }
         public static TimeSeries<double> LoadElectricityPrices()
         {
-            return LoadData(3, 8);
+            return LoadSourceData("ElectricityPrice");
         }
     }
 }
