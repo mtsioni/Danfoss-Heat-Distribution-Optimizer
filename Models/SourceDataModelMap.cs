@@ -1,6 +1,8 @@
 
 using CsvHelper.Configuration;
-
+// this is a map for the values from SourceDataModel, which works as a config for CsvHelper's file reader
+// this map shows at which position in a line of comma separated values are values for specific properties
+// this does the same thing as headders in SourceDataModel, but for some reason if any headder or map is removed it doesn't work that's why it's done in this redundant way
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
     public sealed class SourceDataModelHeatDemandMap : ClassMap<SourceDataModelHeatDemand>

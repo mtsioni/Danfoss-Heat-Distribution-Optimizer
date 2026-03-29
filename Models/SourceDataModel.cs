@@ -1,6 +1,8 @@
 using System;
 using CsvHelper.Configuration.Attributes;
 namespace Danfoss_Heat_Distribution_Optimizer.Models
+// this object is a model for how the data is represented in csv file, this is needed for CsvHelper library methods to work propperly
+// every property of the object has [Index(n)] headder above, this tells CsvHelper at what position in the line of comma separated values its value will be
 {
     public class SourceDataModelHeatDemand
     {
