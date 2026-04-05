@@ -1,20 +1,201 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Danfoss_Heat_Distribution_Optimizer.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="clr-namespace:Danfoss_Heat_Distribution_Optimizer.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Danfoss_Heat_Distribution_Optimizer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Danfoss_Heat_Distribution_Optimizer">
+        Title="Heat Optimization Tool"
+        Icon="avares://Danfoss_Heat_Distribution_Optimizer/Assets/AppIcon.png"
+        Background="#EED9B9"
+        WindowState="Maximized">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <!-- here the themes are defined and can be adjusted -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                
+                <!-- light theme colors -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="RightPanelBg">#F2E6D8</SolidColorBrush>
+                    <SolidColorBrush x:Key="ChartAreaBg">#E8DACB</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainText">#5E0006</SolidColorBrush>
+                </ResourceDictionary>
+                
+                <!-- dark theme colors -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="RightPanelBg">#1E1E1E</SolidColorBrush>
+                    <SolidColorBrush x:Key="ChartAreaBg">#333333</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainText">#EED9B9</SolidColorBrush>
+                </ResourceDictionary>
+                
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <!-- main layout: left panel + right content -->
+    <Grid ColumnDefinitions="300, *">
 
+        <!-- left control panel -->
+        <Border Grid.Column="0" Background="#E3000F" Padding="10">
+            <Grid RowDefinitions="Auto, *, *">
+                
+                <!-- top section with controls -->
+                <StackPanel Grid.Row="0" Spacing="15">
+                    <TextBlock Text="Control Panel" FontSize="24" Foreground="#EED9B9"/>
+
+                    <!-- scenario selection -->
+                    <TextBlock Text="Scenarios:" FontSize="18" Foreground="#EED9B9"/>
+                    <RadioButton Content="Heat" 
+                                GroupName="ScenariosGroup" 
+                                IsChecked="{Binding IsHeatScenarioSelected}" 
+                                Foreground="#EED9B9"/>
+                    <RadioButton Content="Heat &amp; Electricity" 
+                                GroupName="ScenariosGroup" 
+                                IsChecked="{Binding IsHeatAndElecScenarioSelected}" 
+                                Foreground="#EED9B9"/>
+
+                    <TextBlock Text="Priods:" FontSize="18" Foreground="#EED9B9"/>
+                    <RadioButton Content="Winter" 
+                                GroupName="PeriodGroup" 
+                                IsChecked="{Binding IsWinterSelected}" 
+                                Foreground="#EED9B9"/>
+                    <RadioButton Content="Summer" 
+                                GroupName="PeriodGroup" 
+                                IsChecked="{Binding IsSummerSelected}" 
+                                Foreground="#EED9B9"/>
+
+                    <!-- unit control section -->
+                    <TextBlock Text="Unit Control" FontSize="20" Foreground="#EED9B9" Margin="0,20,0,0"/>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="MAINTENANCE PLANNING" Foreground="#EED9B9"/>
+                        
+                        <!-- slider for maintenance hours -->
+                        <Slider x:Name="Hours" Minimum="30" Maximum="60" Foreground="#EED9B9" IsSnapToTickEnabled="True" TickFrequency="1" Value="{Binding MaintenanceHours}">
+                            <Slider.Resources>
+                                <Color x:Key="SliderThumbBackground">#EED9B9</Color>
+                            </Slider.Resources>
+                        </Slider>
+                        
+                        <!-- static display of selected hours -->
+                        <TextBlock Foreground="#EED9B9" HorizontalAlignment="Center">
+                            <Run Text="{Binding #Hours.Value}"/>
+                            <Run Text=" hours"/>
+                        </TextBlock>
+                        
+                        <!-- dropdown for selecting unit -->
+
+                        <ComboBox PlaceholderText="Select unit" 
+                                HorizontalAlignment="Stretch" 
+                                Margin="0,10,0,0" 
+                                CornerRadius="15"
+                                ItemsSource="{Binding Units}"
+                                SelectedItem="{Binding SelectedUnit}">
+
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:UnitViewModel">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- bottom section: theme toggle -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Bottom">
+                    <TextBlock Text="LIGHT/DARK THEME" Foreground="#EED9B9" VerticalAlignment="Center"/>
+                    
+                    <!-- switch between light and dark theme -->
+                    <ToggleSwitch IsChecked="{Binding IsDarkTheme}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- right side main content -->
+        <Border Grid.Column="1" Background="{DynamicResource RightPanelBg}" Padding="20">
+            <Grid RowDefinitions="Auto, *, Auto">
+                
+                <!-- header section -->
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="HEAT PRODUCTION OPTIMIZATION TOOL V1.0" FontSize="18" Foreground="{DynamicResource MainText}"/>
+                        <TextBlock Text="Heatington ~ 1600" Foreground="{DynamicResource MainText}"/>
+                    </StackPanel>
+                    
+                    <!-- brand label -->
+                    <Image x:Name="Logo" Grid.Column="1" Width="100"/>
+                </Grid>
+
+                <!-- chart area -->
+                <Border Grid.Row="1" Background="{DynamicResource ChartAreaBg}" Margin="0,15" BorderBrush="{DynamicResource MainText}" BorderThickness="1" CornerRadius="15">
+                    <Grid RowDefinitions="*, Auto">
+                        
+                        <!-- placeholder for future chart -->
+                        <TextBlock Grid.Row="0" Text="[ just a placeholder for the chart ]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource MainText}"/>
+                        
+                        <!-- chart data selection -->
+                        <WrapPanel Grid.Row="1" Margin="10" HorizontalAlignment="Center">
+                            <RadioButton Content="Heat Produced" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Heat Consumed" GroupName="ChartOptionGroup" IsChecked="True" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Electricity Consumed" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Electricity Produced" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Money Spent" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Money Earned" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}"/>
+                        </WrapPanel>
+                    </Grid>
+                </Border>
+
+                <!-- units grid (each card = one unit) -->
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding Units}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="3" Rows="2"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:UnitViewModel">
+                            <Border Background="#E3000F" CornerRadius="15" Margin="5" Padding="5">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Image Source="{Binding ImagePath}" Width="120"/>
+                                    <StackPanel Margin="5,0,0,0" Spacing="2">
+                                        <TextBlock Text="{Binding Name}" 
+                                                FontFamily="Segoe UI" FontSize="24" FontWeight="Bold" 
+                                                Foreground="#EED9B9"/>
+
+                                        <TextBlock Text="{Binding MaxHeat, StringFormat='Max Heat: {0} MW'}" 
+                                                FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold" 
+                                                Foreground="#EED9B9"/>
+
+                                        <TextBlock Text="{Binding MaxElectricityDisplayText}" 
+                                                IsVisible="{Binding MaxElectricityDisplayText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                FontFamily="Segoe UI" FontSize="14" 
+                                                Foreground="#EED9B9"/>
+
+                                        <TextBlock Text="{Binding Cost, StringFormat='Cost: {0} DKK'}" 
+                                                FontFamily="Segoe UI" FontSize="14" 
+                                                Foreground="#EED9B9"/>
+
+                                        <TextBlock Text="{Binding Co2DisplayText}" 
+                                                IsVisible="{Binding Co2DisplayText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                FontFamily="Segoe UI" FontSize="14" 
+                                                Foreground="#EED9B9"/>
+
+                                        <TextBlock Text="{Binding FuelConsumptionDisplayText}" 
+                                                IsVisible="{Binding FuelConsumptionDisplayText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                FontFamily="Segoe UI" FontSize="14" 
+                                                Foreground="#EED9B9"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
