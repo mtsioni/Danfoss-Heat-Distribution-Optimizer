@@ -1,0 +1,70 @@
+{
+    "units": [
+        {
+            "unitID": 1,
+            "name": "GB1",
+            "fuelName": "Gas",
+            "maxHeat": 3.0,
+            "maxElectricity": 0.0,
+            "productionCosts": 510.0,
+            "emissions": 132.0,
+            "fuelConsumption": 1.05
+        },
+        {
+            "unitID": 2,
+            "name": "GB2",
+            "fuelName": "Gas",
+            "maxHeat": 2.0,
+            "maxElectricity": 0.0,
+            "productionCosts": 540.0,
+            "emissions": 134.0,
+            "fuelConsumption": 1.08
+        },
+        {
+            "unitID": 3,
+            "name": "GB3",
+            "fuelName": "Gas",
+            "maxHeat": 4.0,
+            "maxElectricity": 0.0,
+            "productionCosts": 580.0,
+            "emissions": 136.0,
+            "fuelConsumption": 1.09
+        },
+        {
+            "unitID": 4,
+            "name": "OB1",
+            "fuelName": "Oil",
+            "maxHeat": 6.0,
+            "maxElectricity": 0.0,
+            "productionCosts": 690.0,
+            "emissions": 147.0,
+            "fuelConsumption": 1.18
+        },
+        {
+            "unitID": 5,
+            "name": "GM1",
+            "fuelName": "Gas",
+            "maxHeat": 5.3,
+            "maxElectricity": 3.9,
+            "productionCosts": 975.0,
+            "emissions": 227.0,
+            "fuelConsumption": 1.82
+        },
+        {
+            "unitID": 6,
+            "name": "EB1",
+            "fuelName": "Electric",
+            "maxHeat": 6.0,
+            "maxElectricity": -6.0,
+            "productionCosts": 15.0,
+            "fuelConsumption": 0.0,
+            "emissions": 0.0
+        }
+    ],
+    "grid": {
+        "nameCity": "Heatington",
+        "size": "1600 buildings",
+        "descriptionArchitecture": "Single district heating network",
+        "imagePath": "Assets/Images/HeatingArea.png"
+    }
+}
