@@ -63,7 +63,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.AssetManager
 
         #region OPTION 2: CACHE PATTERN (In-Memory Caching) - ACTIVE BY DEFAULT
         
-        private static List<GenericUnits>? _genericUnits { get; set; }
+        private static List<GenericUnit>? _genericUnits { get; set; }
         private static Grid? _grid { get; set; }
         private static string? _logoImagePath { get; set; }
         private static bool _isInitialized { get; set; } = false;
@@ -97,7 +97,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.AssetManager
         /// Gets production units for the Optimizer.
         /// Returns cached data (loaded during Initialize).
         /// </summary>
-        public static List<GenericUnits> GetDataForOptimizer()
+        public static List<GenericUnit> GetDataForOptimizer()
         {
             if (!_isInitialized || _genericUnits == null)
                 throw new InvalidOperationException("AssetManager not initialized. Call Initialize(unitsPath, gridPath, logoPath) first.");
@@ -109,7 +109,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.AssetManager
         /// Gets units, grid, and logo path for the DataVisualizer.
         /// Returns cached data (loaded during Initialize).
         /// </summary>
-        public static (List<GenericUnits>, Grid, string) GetDataForDataVisualizer()
+        public static (List<GenericUnit>, Grid, string) GetDataForDataVisualizer()
         {
             if (!_isInitialized || _genericUnits == null || _grid == null || _logoImagePath == null)
                 throw new InvalidOperationException("AssetManager not initialized. Call Initialize(unitsPath, gridPath, logoPath) first.");

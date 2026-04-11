@@ -6,13 +6,13 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
 {
     // From IUnit
     public int UnitID { get; set; }
-    public required string Name { get; set; }
+    public string Name { get; set; }
     
     // From IElectricUnit
-    public double MaxElectricity { get; set; }
+    public double? MaxElectricity { get; set; }
     
     // From IFueledUnit  
-    public required string FuelName { get; set; }
+    public string FuelName { get; set; }
     public double FuelConsumption { get; set; }
     public double Emissions { get; set; }
     
@@ -25,7 +25,7 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
 
     // Constructer Generic
     public GenericUnit(int unitID, string name,
-                        double maxElectricity, 
+                        double? maxElectricity, 
                         string fuelName, double fuelConsumption, double emissions, 
                         double maxHeat, double productionCost, 
                         string imagePath)
@@ -41,7 +41,7 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
 
             MaxHeat = maxHeat;
             ProductionCost = productionCost;
-            
+
             ImagePath = imagePath;
         }
 }
