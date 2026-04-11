@@ -24,16 +24,24 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
     public string ImagePath { get; set; }
 
     // Constructer Generic
-    public GenericUnit(int unitID, string name, double maxElectricity, string fuelName, double fuelConsumption, double emissions, double maxHeat, double productionCost, string imagePath)
+    public GenericUnit(int unitID, string name,
+                        double maxElectricity, 
+                        string fuelName, double fuelConsumption, double emissions, 
+                        double maxHeat, double productionCost, 
+                        string imagePath)
         {
             UnitID = unitID;
             Name = name;
+
             MaxElectricity = maxElectricity;
+
             FuelName = fuelName;
             FuelConsumption = fuelConsumption;
             Emissions = emissions;
+
             MaxHeat = maxHeat;
             ProductionCost = productionCost;
+            
             ImagePath = imagePath;
         }
 }

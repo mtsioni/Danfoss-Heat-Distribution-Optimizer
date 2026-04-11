@@ -2,7 +2,7 @@ using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    public class CumbustionUnit : IUnit, IFueledUnit, IHeatUnit, IOptimizedUnit
+    public class CombustionUnit : IUnit, IFueledUnit, IHeatUnit, IOptimizedUnit
     {
         // From IUnit
         public int UnitID { get; set; }
@@ -27,7 +27,34 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public TimeSeries<double> ElectricityRecords { get; set; }
         public TimeSeries<double> PollutionRecords { get; set; }
 
-    
+         public CombustionUnit(int unitID, string name,
+                                string fuelName, double fuelConsumption, double emissions,
+                                double maxHeat, double productionCost,
+                                double netProductionCost, double netHeat, double netElectricity, double netPollution, 
+                                TimeSeries<double> productionCostRecords, TimeSeries<double> heatRecords,  TimeSeries<double> electricityRecords, TimeSeries<double> pollutionRecords )
+        {
+            UnitID = unitID;
+            Name = name;
+
+            FuelName = fuelName;
+            FuelConsumption = fuelConsumption;
+            Emissions = emissions;
+
+            MaxHeat = maxHeat;
+            ProductionCost = productionCost;
+
+            NetProductionCost = netProductionCost;
+            NetHeat = netHeat;
+            NetElectricity = netElectricity;
+            NetPollution = netPollution;
+
+            ProductionCostRecords = productionCostRecords;
+            HeatRecords = heatRecords;
+            ElectricityRecords = electricityRecords;
+            PollutionRecords = pollutionRecords;
+
+
+        }
     }
 
 }
