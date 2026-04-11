@@ -7,9 +7,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.Interfaces
         double NetHeat { get; set; }
         double NetElectricity { get; set; }
         double NetPollution { get; set; }
-        TimeSeries<double> ProductionCost { get; set; }
-        TimeSeries<double> Heat { get; set; }
-        TimeSeries<double> Electricity { get; set; }
-        TimeSeries<double> Pollution { get; set; }
+        TimeSeries<double> ProductionCostRecords { get; set; }
+        TimeSeries<double> HeatRecords { get; set; }
+        TimeSeries<double> ElectricityRecords { get; set; }
+        TimeSeries<double> PollutionRecords { get; set; }
     }
 }
