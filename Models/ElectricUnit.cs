@@ -24,6 +24,25 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
 
         // From IElectricUnit
         public double MaxElectricity { get; set; }
-    }
 
+        public ElectricUnit(int unitID, string name, double maxElectricity, double maxHeat, 
+        double productionCost, double netProductionCost, double netHeat, double netElectricity, 
+        double netPollution, TimeSeries<double> productionCostRecords, TimeSeries<double> heatRecords, 
+        TimeSeries<double> electricityRecords, TimeSeries<double> pollutionRecords)
+        {
+            UnitID = unitID;
+            Name = name;
+            MaxElectricity = maxElectricity;
+            MaxHeat = maxHeat;
+            ProductionCost = productionCost;
+            NetProductionCost = netProductionCost;
+            NetHeat = netHeat;
+            NetElectricity = netElectricity;
+            NetPollution = netPollution;
+            ProductionCostRecords = productionCostRecords;
+            HeatRecords = heatRecords;
+            ElectricityRecords = electricityRecords;
+            PollutionRecords = pollutionRecords;
+        }
+    }
 }
