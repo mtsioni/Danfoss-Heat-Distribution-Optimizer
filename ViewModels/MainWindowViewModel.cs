@@ -6,6 +6,10 @@ using ReactiveUI;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels;
 
+public enum Scenario { Heat, HeatAndElectricity }
+public enum Period { Winter, Summer }
+public enum ChartOption { HeatConsumed }
+
 public partial class MainWindowViewModel : ReactiveObject
 {
     public Scenario SelectedScenario;
