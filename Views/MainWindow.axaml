@@ -7,7 +7,7 @@
         x:Class="Danfoss_Heat_Distribution_Optimizer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Heat Optimization Tool"
-        Icon="avares://Danfoss_Heat_Distribution_Optimizer/Assets/AppIcon.png"
+        Icon="avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/AppIcon.png"
         Background="#EED9B9"
         WindowState="Maximized">
 
