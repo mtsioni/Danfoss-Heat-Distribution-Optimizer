@@ -19,5 +19,8 @@ public class GenericUnits : IUnit, IElectricUnit, IFueledUnit, IHeatUnit
     // From IHeatUnit
     public double MaxHeat { get; set; }
     public double ProductionCost { get; set; }
+    
+    // Image path for UI display
+    public string? ImagePath { get; set; }
 }
 }

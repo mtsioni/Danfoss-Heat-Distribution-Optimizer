@@ -8,7 +8,8 @@
             "maxElectricity": 0.0,
             "productionCosts": 510.0,
             "emissions": 132.0,
-            "fuelConsumption": 1.05
+            "fuelConsumption": 1.05,
+            "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png"
         },
         {
             "unitID": 2,
@@ -18,7 +19,8 @@
             "maxElectricity": 0.0,
             "productionCosts": 540.0,
             "emissions": 134.0,
-            "fuelConsumption": 1.08
+            "fuelConsumption": 1.08,
+            "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png"
         },
         {
             "unitID": 3,
@@ -28,7 +30,8 @@
             "maxElectricity": 0.0,
             "productionCosts": 580.0,
             "emissions": 136.0,
-            "fuelConsumption": 1.09
+            "fuelConsumption": 1.09,
+            "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png"
         },
         {
             "unitID": 4,
@@ -38,7 +41,8 @@
             "maxElectricity": 0.0,
             "productionCosts": 690.0,
             "emissions": 147.0,
-            "fuelConsumption": 1.18
+            "fuelConsumption": 1.18,
+            "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/OilBoiler.png"
         },
         {
             "unitID": 5,
@@ -48,7 +52,8 @@
             "maxElectricity": 3.9,
             "productionCosts": 975.0,
             "emissions": 227.0,
-            "fuelConsumption": 1.82
+            "fuelConsumption": 1.82,
+            "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasMotor.png"
         },
         {
             "unitID": 6,
@@ -58,13 +63,14 @@
             "maxElectricity": -6.0,
             "productionCosts": 15.0,
             "fuelConsumption": 0.0,
-            "emissions": 0.0
+            "emissions": 0.0,
+            "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/ElectricBoiler.png"
         }
     ],
     "grid": {
         "nameCity": "Heatington",
         "size": "1600 buildings",
         "descriptionArchitecture": "Single district heating network",
-        "imagePath": "Assets/Images/HeatingArea.png"
+        "imagePath": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/HeatingArea.png"
     }
 }

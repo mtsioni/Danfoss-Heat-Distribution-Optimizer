@@ -1,6 +1,7 @@
 {
     "images": [
         {
+            "noNeed": "We probably don't need the images paths here because I added them in the ProductionUnits.json. We can probably delete them.",
             "danfossLogo": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/DanfossLogo.png",
             "heatingArea": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/HeatingArea.png",
             "electricBoiler": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/ElectricBoiler.png",
