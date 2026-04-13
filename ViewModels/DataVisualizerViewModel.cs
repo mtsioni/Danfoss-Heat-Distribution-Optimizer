@@ -1,38 +1,40 @@
 using System;
 using System.Collections.Generic;
-using Danfoss_Heat_Distribution_Optimizer.ViewModels;
-using Danfoss_Heat_Distribution_Optimizer.ViewModels.DataVisualizerSubclasses;
+using Danfoss_Heat_Distribution_Optimizer.Models;
 
-namespace VášProjekt.ViewModels.DataVisualizerSubclasses
+namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 {
     public class DataVisualizerViewModel : ViewModelBase
     {
-        public GridConfigurationViewModel GridConfigVM { get; }
-        public HeatDataViewModel HeatDataVM { get; }
-        public ElectricityDataViewModel ElectricityDataVM { get; }
-        public FinancialViewModel FinancialVM { get; }
-        public EnvironmentalViewModel EnvironmentalVM { get; }
+        // Using object as placeholder until other branch is merged
+        private object _gridView;
+        private object _heatView;
+        private object _elecView;
+        private object _finView;
+        private object _envView;
 
-        private object _currentGraph;
-        public object CurrentGraph
-        {
-            get => _currentGraph;
-            set 
-            {
-                _currentGraph = value;
-                OnPropertyChanged(nameof(CurrentGraph)); 
-            }
-        }
+        // TODO: Replace mock data with real ResultDataManager once that branch is merged
+        private TimeSeries<double> _heatDemand;
+        private TimeSeries<double> _electricityPrices;
 
         public DataVisualizerViewModel()
         {
-            GridConfigVM = new GridConfigurationViewModel();
-            HeatDataVM = new HeatDataViewModel();
-            ElectricityDataVM = new ElectricityDataViewModel();
-            FinancialVM = new FinancialViewModel();
-            EnvironmentalVM = new EnvironmentalViewModel();
+            _heatDemand        = GenerateMockHeatDemand();
+            _electricityPrices = GenerateMockElectricityPrices();
+        }
 
-            CurrentGraph = GridConfigVM; 
+        public void RefreshAll()
+        {
+            RenderHeat();
+            RenderGrid();
+            RenderElectricity();
+            RenderEnvironmental();
+            RenderFinance();
+        }
+
+        public void RenderHeat()
+        {
+            // TODO: Call _heatView.PlotHeat() once HeatDataView exists
         }
 
         public void RenderGrid()
@@ -52,17 +54,23 @@ namespace VášProjekt.ViewModels.DataVisualizerSubclasses
 
         public void RenderFinance()
         {
-            CurrentGraph = FinancialVM;
+            // TODO: Call _finView.PlotFinancials() once FinancialView exists
         }
 
-        public void RenderEnvironmental()
+        private TimeSeries<double> GenerateMockHeatDemand()
         {
-            CurrentGraph = EnvironmentalVM;
+            var ts = new TimeSeries<double>();
+            for (int i = 0; i < 24; i++)
+                ts.Values[DateTime.Today.AddHours(i)] = 100 + i * 5;
+            return ts;
         }
 
-        public void RefreshAll()
+        private TimeSeries<double> GenerateMockElectricityPrices()
         {
-            
+            var ts = new TimeSeries<double>();
+            for (int i = 0; i < 24; i++)
+                ts.Values[DateTime.Today.AddHours(i)] = 50 + Math.Sin(i) * 10;
+            return ts;
         }
     }
 }
