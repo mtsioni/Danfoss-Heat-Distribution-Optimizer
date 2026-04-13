@@ -37,17 +37,17 @@ namespace VášProjekt.ViewModels.DataVisualizerSubclasses
 
         public void RenderGrid()
         {
-            CurrentGraph = GridConfigVM;
-        }
-
-        public void RenderHeat()
-        {
-            CurrentGraph = HeatDataVM;
+            // TODO: Call _gridView.DrawGrid() once GridConfigurationView exists
         }
 
         public void RenderElectricity()
         {
-            CurrentGraph = ElectricityDataVM;
+            // TODO: Call _elecView.PlotElectricity() once ElectricityDataView exists
+        }
+
+        public void RenderEnvironmental()
+        {
+            // TODO: Call _envView.PlotEnvironmental() once EnvironmentalView exists
         }
 
         public void RenderFinance()
