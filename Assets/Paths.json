@@ -1,12 +1,13 @@
 {
     "images": [
         {
-            "danfossLogo": "Assets/Images/DanfossLogo.png",
-            "heatingArea": "Assets/Images/HeatingArea.png",
-            "electricBoiler": "Assets/Images/ElectricBoilerImage.png",
-            "gasBoiler": "Assets/Images/GasBoilerImage.png",
-            "gasMotor": "Assets/Images/GasMotorImage.png",
-            "oilBoiler": "Assets/Images/OilBoilerImage.png"
+            "noNeed": "We probably don't need the images paths here because I added them in the ProductionUnits.json. We can probably delete them.",
+            "danfossLogo": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/DanfossLogo.png",
+            "heatingArea": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/HeatingArea.png",
+            "electricBoiler": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/ElectricBoiler.png",
+            "gasBoiler": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png",
+            "gasMotor": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasMotor.png",
+            "oilBoiler": "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/OilBoiler.png"
         }
     ]
 }

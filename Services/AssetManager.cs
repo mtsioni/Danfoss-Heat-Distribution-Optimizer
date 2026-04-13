@@ -3,7 +3,7 @@ using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Data;
 using System;
 
-namespace Danfoss_Heat_Distribution_Optimizer.Services.AssetManager
+namespace Danfoss_Heat_Distribution_Optimizer.Services
 {
     /// <summary>
     /// Asset Manager serves as the central repository for system configuration data.
