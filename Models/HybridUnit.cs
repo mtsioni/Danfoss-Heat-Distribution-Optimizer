@@ -11,7 +11,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public string Name { get; set; }
 
         // From IElectricUnit
-        public double? MaxElectricity { get; set; }
+        public double MaxElectricity { get; set; }
 
         // From IFueledUnit  
         public string FuelName { get; set; }
@@ -31,8 +31,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public TimeSeries<double>? HeatRecords { get; set; }
         public TimeSeries<double>? ElectricityRecords { get; set; }
         public TimeSeries<double>? PollutionRecords { get; set; }
+        public TimeSeries<double>? HeatPerPriceRecords {get; set;}
 
-        public HybridUnit(int unitID, string name, double? maxElectricity, string fuelName, 
+        public HybridUnit(int unitID, string name, double maxElectricity, string fuelName, 
         double fuelConsumption, double emissions, double maxHeat, double productionCost)
         {
             UnitID = unitID;
@@ -51,6 +52,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             HeatRecords = null;
             ElectricityRecords = null;
             PollutionRecords = null;
+            HeatPerPriceRecords = null;
         }
+
+        
+
     }
 }

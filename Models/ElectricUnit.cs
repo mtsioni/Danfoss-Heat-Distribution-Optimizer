@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
@@ -21,11 +22,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public TimeSeries<double>? HeatRecords { get; set; }
         public TimeSeries<double>? ElectricityRecords { get; set; }
         public TimeSeries<double>? PollutionRecords { get; set; }
+        public TimeSeries<double>? HeatPerPriceRecords {get; set;}
 
         // From IElectricUnit
-        public double? MaxElectricity { get; set; }
+        public double MaxElectricity { get; set; }
 
-        public ElectricUnit(int unitID, string name, double? maxElectricity, double maxHeat, 
+        public ElectricUnit(int unitID, string name, double maxElectricity, double maxHeat, 
         double productionCost)
         {
             UnitID = unitID;
@@ -41,6 +43,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             HeatRecords = null;
             ElectricityRecords = null;
             PollutionRecords = null;
+            HeatPerPriceRecords = null;
+        }
+
+        public double CalculatePrice(double electricityPrice)
+        {
+           return ProductionCost - (electricityPrice * MaxElectricity);
         }
     }
 }

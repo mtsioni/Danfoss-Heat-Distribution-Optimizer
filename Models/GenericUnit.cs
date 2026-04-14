@@ -9,7 +9,7 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
     public string Name { get; set; }
     
     // From IElectricUnit
-    public double? MaxElectricity { get; set; }
+    public double MaxElectricity { get; set; }
     
     // From IFueledUnit  
     public string FuelName { get; set; }
@@ -25,7 +25,7 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
 
     // Constructer Generic
     public GenericUnit(int unitID, string name,
-                        double? maxElectricity, 
+                        double maxElectricity, 
                         string fuelName, double fuelConsumption, double emissions, 
                         double maxHeat, double productionCost, 
                         string imagePath)

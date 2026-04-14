@@ -1,7 +1,8 @@
+using Avalonia.Rendering.Composition;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 namespace Danfoss_Heat_Distribution_Optimizer.Services.Interfaces
 {
-    public interface IOptimizedUnit
+    public interface IOptimizedUnit : IUnit, IHeatUnit
     {
         double? NetProductionCost { get; set; }
         double? NetHeat { get; set; }
@@ -11,5 +12,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.Interfaces
         TimeSeries<double>? HeatRecords { get; set; }
         TimeSeries<double>? ElectricityRecords { get; set; }
         TimeSeries<double>? PollutionRecords { get; set; }
+        TimeSeries<double>? HeatPerPriceRecords {get; set;}
+
+
     }
 }

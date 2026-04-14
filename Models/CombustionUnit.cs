@@ -26,9 +26,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public TimeSeries<double>? HeatRecords { get; set; }
         public TimeSeries<double>? ElectricityRecords { get; set; }
         public TimeSeries<double>? PollutionRecords { get; set; }
+        public TimeSeries<double>? HeatPerPriceRecords {get; set;}
 
 
-         public CombustionUnit(int unitID, string name,
+
+        public CombustionUnit(int unitID, string name,
                                 string fuelName, double fuelConsumption, double emissions,
                                 double maxHeat, double productionCost)
         {
@@ -50,8 +52,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             HeatRecords = null;
             ElectricityRecords = null;
             PollutionRecords = null;
+            HeatPerPriceRecords = null; 
 
         }
+
+        
     }
 
 }
