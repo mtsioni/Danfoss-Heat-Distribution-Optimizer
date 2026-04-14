@@ -1,11 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive;
-using System.Runtime.CompilerServices;
-using Avalonia.Controls;
-using Avalonia.Data;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
@@ -27,7 +21,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
         private static void RetrieveUnits()
         {
-            //Initilazing 
+            // May need to initialize
             _availableUnits = AssetManager.GetDataForOptimizer();
         }
 
@@ -38,36 +32,19 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             HeatDemand = SourceDataManager.GetHeatDemand();
 
         }
-
-        private static double CalculateHeatPerPrice(IOptimizedUnit currentUnit, double electricityPrice)
-        {
-            double totalProductioncost = 1;
-
-            if( currentUnit is CombustionUnit)
-            {
-                totalProductioncost = currentUnit.ProductionCost;
-                
-            }
-
-            if( (currentUnit is ElectricUnit) || (currentUnit is HybridUnit))
-            {
-                totalProductioncost = currentUnit.ProductionCost - (electricityPrice * currentUnit.MaxHeat);
-            }
-            return currentUnit.MaxHeat / totalProductioncost;
-
-        }
-
-         
         private static void Optimize()
         {
+            // preparing for optimization
             double heatDemand = 0;
             double producedHeat = 0;
             //List<double> heatPerPrice = new List<double>();  
             RetrieveUnits();
             RetriveSourceData();
-
+            
+            // Optimization hour by hour
             for (DateTime i = OptimizationPeriodStart; i <= OptimizationPeriodEnd; i = i.AddHours(TimeResolution))
             {
+                // reset variables
                 if (HeatDemand != null)
                 {
                     heatDemand = HeatDemand[i];
@@ -78,74 +55,49 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
                 if (_availableUnits != null)
                 {
+                    // Calculate heat/price ratio for this hour for every unit
                     for (int c = 0; c < _availableUnits.Count; c++)
                     {
                         if (ElectricityPrices != null)
                         {
                             electricityPrice = ElectricityPrices[i];
                         }
-
-                        if(_availableUnits[c].HeatPerPriceRecords.Values.ContainsKey(i))
+                        else
                         {
-                            _availableUnits[c].HeatPerPriceRecords[i] = CalculateHeatPerPrice(_availableUnits[c], electricityPrice);
+                            throw new Exception("Electricity prices not available");
+                        }
+
+                        if(_availableUnits[c].HeatPerPriceRecords.Values.ContainsKey(i)) // check if it needs to be reassigned or added
+                        {
+                            _availableUnits[c].HeatPerPriceRecords[i] = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateTotalProductionCost(electricityPrice);
                         }
                         else
                         {
-                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, CalculateHeatPerPrice(_availableUnits[c], electricityPrice));
+                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, _availableUnits[c].MaxHeat / _availableUnits[c].CalculateTotalProductionCost(electricityPrice));
                         }
-                        
-                        
                     }
 
-                    _availableUnits.Sort((left, right) => left.HeatPerPriceRecords[i].CompareTo(right.HeatPerPriceRecords[i]));
+                    // sort units in ascending order by cost efficiency (most heat per money to least)
+                    _availableUnits.Sort((left, right) => left.HeatPerPriceRecords[i].CompareTo(right.HeatPerPriceRecords[i])); 
 
+                    // Decide on which units to use, and record the usage (add values to records when used)
                     for (int c = 0;( c < _availableUnits.Count) || (producedHeat < heatDemand) ; c++) 
                     {
+                        // increase producedHeat to try reach demand
                         producedHeat += _availableUnits[c].MaxHeat;
-                        
-                        if(_availableUnits[c] is CombustionUnit)
-                        {
-                            
-                        }
-                        if(_availableUnits[c] is ElectricUnit)
-                        {
-                            
-                        }
-                        if(_availableUnits[c] is HybridUnit)
-                        {
-                            
-                        }
+                        // update records (effectively use the unit)
+                        _availableUnits[c].UpdateRecords(electricityPrice, i);
                     }
                 }
-                /*foreach(IOptimizedUnit unit in _availableUnits ?? throw new Exception("Available Unit is not available."))
-                {
-                    if (ElectricityPrices != null)
-                    {
-                        electricityPrice = ElectricityPrices[i];
-                    }
-                    
-                   // heatPerPrice.Insert(_availableUnits.IndexOf(unit), CalculateHeatPerPrice(unit, electricityPrice));
-                }
-
-               // heatPerPrice.Sort();
-                
-                foreach(double heat in heatPerPrice)
-                {
-                    if(producedHeat)
-                }
-*/
+                else throw new Exception("AvailableUnits not available");
             }
-
-            /* foreach( double heatdemand in Heatdemand)
-             {
-
-             }
-            */
-
-
         }
 
-        //public static List<IOptimizedUnit> GetOptimizationResult(){}
+        public static List<IOptimizedUnit> GetOptimizationResult()
+        {
+            Optimize();
+            return _availableUnits ?? throw new Exception("AvailableUnits not available");
+        }
 
     }
 

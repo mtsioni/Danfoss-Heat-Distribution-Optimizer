@@ -23,25 +23,25 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
         /// Loads production units from JSON file specified in UnitsPath.
         /// Returns empty list on any error -> 'return new List<GenericUnits>();'
         /// </summary>
-        public static List<GenericUnits> LoadUnits()
+        public static List<GenericUnit> LoadUnits()
         {
             try
             {
                 /// The whole process of parsing JSON
                 if (string.IsNullOrEmpty(UnitsPath) || !File.Exists(UnitsPath))
-                    return new List<GenericUnits>();
+                    return new List<GenericUnit>();
 
                 string jsonContent = File.ReadAllText(UnitsPath);
                 using (JsonDocument doc = JsonDocument.Parse(jsonContent))
                 {
                     var root = doc.RootElement;
                     if (!root.TryGetProperty("units", out var unitsArray))
-                        return new List<GenericUnits>();
+                        return new List<GenericUnit>();
 
-                    var units = new List<GenericUnits>();
+                    var units = new List<GenericUnit>();
                     foreach (var u in unitsArray.EnumerateArray())
                     {
-                        var unit = new GenericUnits
+                        var unit = new GenericUnit
                         {
                             UnitID = u.TryGetProperty("unitID", out var unitId) ? unitId.GetInt32() : 0,
                             Name = u.TryGetProperty("name", out var name) ? name.GetString() ?? "Unknown" : "Unknown",
@@ -61,7 +61,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading units: {ex.Message}");
-                return new List<GenericUnits>();
+                return new List<GenericUnit>();
             }
         }
 
@@ -69,7 +69,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
         /// Loads both units and grid data from the same JSON file.
         /// Returns triple set of (units, grid, logoImagePath).
         /// </summary>
-        public static (List<GenericUnits>, Grid, string) LoadGridData()
+        public static (List<GenericUnit>, Grid, string) LoadGridData()
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading grid data: {ex.Message}");
-                return (new List<GenericUnits>(), new Grid(), LogoImagePath ?? "");
+                return (new List<GenericUnit>(), new Grid(), LogoImagePath ?? "");
             }
         }
     }

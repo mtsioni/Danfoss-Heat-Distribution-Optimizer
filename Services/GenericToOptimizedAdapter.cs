@@ -18,7 +18,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                 fueled = true;
             }
 
-            if (inputUnit.MaxElectricity != null)
+            if (inputUnit.MaxElectricity != 0)
             {
                 electric = true;
             }
