@@ -10,22 +10,22 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
     {
         public static DateTime OptimizationPeriodStart {get; set;}
         public static DateTime OptimizationPeriodEnd {get; set;}
-        public static TimeSeries<double> ElectricityPrices;
-        public static TimeSeries<double> Heatdemand; 
+        public static TimeSeries<double>? ElectricityPrices;
+        public static TimeSeries<double>? Heatdemand; 
         public static int TimeResolution{get; set;}
 
-        private static List<IOptimizedUnit> _availableUnits;
+        private static List<IOptimizedUnit>? _availableUnits;
 
         private static void RetrieveUnits()
         {
-            
+            _availableUnits = AssetManager.GetDataForOptimizer();
         }
         
         private static void RetriveSourceData()
         {
             
-            ElectricityPrices = SourceDataManager.GetElectricityPrice() ?? new();
-            Heatdemand = SourceDataManager.GetHeatDemand() ?? new();
+            ElectricityPrices = SourceDataManager.GetElectricityPrice();
+            Heatdemand = SourceDataManager.GetHeatDemand();
 
         }
         private static void Optimize()

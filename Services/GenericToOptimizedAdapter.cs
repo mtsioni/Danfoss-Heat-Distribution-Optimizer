@@ -49,5 +49,14 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
             throw new Exception ("Invalid type");
         }
+        public List<IOptimizedUnit> GenericToOprimizedList(List<GenericUnit> inputList)
+        {
+            List<IOptimizedUnit> ans = new();
+            foreach(GenericUnit genericUnit in inputList)
+            {
+                ans.Add(GenericToOptimized(genericUnit));
+            }
+            return ans;
+        }
     }
 }

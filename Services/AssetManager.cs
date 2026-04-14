@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Data;
+using Danfoss_Heat_Distribution_Optimizer.Services;
+using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 using System;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Services
@@ -97,12 +99,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         /// Gets production units for the Optimizer.
         /// Returns cached data (loaded during Initialize).
         /// </summary>
-        public static List<GenericUnit> GetDataForOptimizer()
+        public static List<IOptimizedUnit> GetDataForOptimizer()
         {
             if (!_isInitialized || _genericUnits == null)
                 throw new InvalidOperationException("AssetManager not initialized. Call Initialize(unitsPath, gridPath, logoPath) first.");
-            
-            return _genericUnits;
+            GenericToOptimizedAdapter adapter = new();
+            return adapter.GenericToOprimizedList(_genericUnits);
         }
 
         /// <summary>
