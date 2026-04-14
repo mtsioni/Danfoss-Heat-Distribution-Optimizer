@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/avalonia"
         xmlns:vm="clr-namespace:Danfoss_Heat_Distribution_Optimizer.ViewModels"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Danfoss_Heat_Distribution_Optimizer.Views.MainWindow"
@@ -134,8 +135,8 @@
                 <Border Grid.Row="1" Background="{DynamicResource ChartAreaBg}" Margin="0,15" BorderBrush="{DynamicResource MainText}" BorderThickness="1" CornerRadius="15">
                     <Grid RowDefinitions="*, Auto">
                         
-                        <!-- placeholder for future chart -->
-                        <TextBlock Grid.Row="0" Text="[ just a placeholder for the chart ]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource MainText}"/>
+                        <!-- future chart -->
+                        <oxy:PlotView Grid.Row="0" Model="{Binding CurrentPlotModel}" Background="Transparent"/>
                         
                         <!-- chart data selection -->
                         <WrapPanel Grid.Row="1" Margin="10" HorizontalAlignment="Center">
