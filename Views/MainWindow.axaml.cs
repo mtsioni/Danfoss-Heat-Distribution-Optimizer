@@ -88,5 +88,15 @@ public partial class MainWindow : Window
 
     }
 
+    public void OnPrevPageClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel vm)
+            vm.PreviousPage();
+    }
 
+    public void OnNextPageClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel vm)
+            vm.NextPage();
+    }
 }

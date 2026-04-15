@@ -15,7 +15,7 @@
           "Avalonia.Themes.Fluent": "11.3.12",
           "CommunityToolkit.Mvvm": "8.2.1",
           "CsvHelper": "33.1.0",
-          "OxyPlot.Avalonia": "2.1.0",
+          "Oxyplot.Avalonia": "2.1.0-Avalonia11",
           "ReactiveUI": "23.1.8"
         },
         "runtime": {
@@ -79,17 +79,17 @@
           "runtimes/win-arm64/native/av_libglesv2.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "2.1.25606.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x64/native/av_libglesv2.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "2.1.25606.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x86/native/av_libglesv2.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "2.1.25606.0"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -382,7 +382,7 @@
           }
         }
       },
-      "OxyPlot.Avalonia/2.1.0": {
+      "Oxyplot.Avalonia/2.1.0-Avalonia11": {
         "dependencies": {
           "Avalonia": "11.3.12",
           "OxyPlot.Core": "2.1.0"
@@ -708,12 +708,12 @@
       "path": "microcom.runtime/0.11.0",
       "hashPath": "microcom.runtime.0.11.0.nupkg.sha512"
     },
-    "OxyPlot.Avalonia/2.1.0": {
+    "Oxyplot.Avalonia/2.1.0-Avalonia11": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-eYIRqGFeIKg2Iv4kdcfxbQvfqmApqBe556WZjlQ0MU3gH+KRVetigYSFFi74yyUEFLI9kbNwAvS41FeTHgZBrQ==",
-      "path": "oxyplot.avalonia/2.1.0",
-      "hashPath": "oxyplot.avalonia.2.1.0.nupkg.sha512"
+      "sha512": "sha512-+Duyr4oXKWOBW0hYHb7vK502XPyNeLsc7bLjB8VW4UHXkT7mlGJFuc1GffspsNgdg5tgR/dcOcydoc6rK5zhzQ==",
+      "path": "oxyplot.avalonia/2.1.0-avalonia11",
+      "hashPath": "oxyplot.avalonia.2.1.0-avalonia11.nupkg.sha512"
     },
     "OxyPlot.Core/2.1.0": {
       "type": "package",

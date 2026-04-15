@@ -135,67 +135,141 @@
                 <Border Grid.Row="1" Background="{DynamicResource ChartAreaBg}" Margin="0,15" BorderBrush="{DynamicResource MainText}" BorderThickness="1" CornerRadius="15">
                     <Grid RowDefinitions="*, Auto">
                         
-                        <!-- future chart -->
+
                         <oxy:PlotView Grid.Row="0" Model="{Binding CurrentPlotModel}" Background="Transparent"/>
                         
-                        <!-- chart data selection -->
-                        <WrapPanel Grid.Row="1" Margin="10" HorizontalAlignment="Center">
-                            <RadioButton Content="Heat Produced" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
-                            <RadioButton Content="Heat Consumed" GroupName="ChartOptionGroup" IsChecked="True" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
-                            <RadioButton Content="Electricity Consumed" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
-                            <RadioButton Content="Electricity Produced" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
-                            <RadioButton Content="Money Spent" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}" Margin="0,0,10,0"/>
-                            <RadioButton Content="Money Earned" GroupName="ChartOptionGroup" Foreground="{DynamicResource MainText}"/>
-                        </WrapPanel>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="10">
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Heat" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
+                                <CheckBox Content="Produced" IsChecked="{Binding ShowHeatProduced}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Demand" IsChecked="{Binding ShowHeatConsumed}" Foreground="{DynamicResource MainText}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Electricity" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
+                                <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" Foreground="{DynamicResource MainText}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Finance" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
+                                <CheckBox Content="Profit" IsChecked="{Binding ShowProfit}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Expenses" IsChecked="{Binding ShowExpenses}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Real Earned" IsChecked="{Binding ShowMoneyEarned}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Real Spent" IsChecked="{Binding ShowMoneySpent}" Foreground="{DynamicResource MainText}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3">
+                                <TextBlock Text="Environment" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
+                                <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Primary Energy" IsChecked="{Binding ShowPrimaryEnergy}" Foreground="{DynamicResource MainText}"/>
+                            </StackPanel>
+                        </Grid>
+
                     </Grid>
                 </Border>
 
-                <!-- units grid (each card = one unit) -->
-                <ItemsControl Grid.Row="2" ItemsSource="{Binding Units}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="3" Rows="2"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                <!-- units section: 3 visible cards with prev/next navigation -->
+                <Grid Grid.Row="2" ColumnDefinitions="Auto, *, Auto" Height="230" Margin="0,5,0,0">
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="vm:UnitViewModel">
-                            <Border Background="#E3000F" CornerRadius="15" Margin="5" Padding="5">
-                                <Grid ColumnDefinitions="Auto,*">
-                                    <Image Source="{Binding ImagePath}" Width="120"/>
-                                    <StackPanel Margin="5,0,0,0" Spacing="2">
-                                        <TextBlock Text="{Binding Name}" 
-                                                FontFamily="Segoe UI" FontSize="24" FontWeight="Bold" 
-                                                Foreground="#EED9B9"/>
+                    <!-- prev arrow -->
+                    <Button Grid.Column="0"
+                            Content="◀"
+                            FontSize="22"
+                            Background="Transparent"
+                            Foreground="{DynamicResource MainText}"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            IsEnabled="{Binding CanGoPrev}"
+                            Click="OnPrevPageClicked"/>
 
-                                        <TextBlock Text="{Binding MaxHeat, StringFormat='Max Heat: {0} MW'}" 
-                                                FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold" 
-                                                Foreground="#EED9B9"/>
+                    <!-- 3 unit cards -->
+                    <ItemsControl Grid.Column="1" ItemsSource="{Binding VisibleUnits}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="3" Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                                        <TextBlock Text="{Binding MaxElectricityDisplayText}" 
-                                                IsVisible="{Binding MaxElectricityDisplayText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                FontFamily="Segoe UI" FontSize="14" 
-                                                Foreground="#EED9B9"/>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:UnitViewModel">
+                                <!-- outer card — rounded corners, clips the image to round edges -->
+                                <Border CornerRadius="15" Margin="5" ClipToBounds="True">
+                                    <Grid ColumnDefinitions="*, *">
 
-                                        <TextBlock Text="{Binding Cost, StringFormat='Cost: {0} DKK'}" 
-                                                FontFamily="Segoe UI" FontSize="14" 
-                                                Foreground="#EED9B9"/>
+                                        <!-- left half: machine photo fills the space -->
+                                        <Image Grid.Column="0"
+                                               Source="{Binding Image}"
+                                               Stretch="UniformToFill"/>
 
-                                        <TextBlock Text="{Binding Co2DisplayText}" 
-                                                IsVisible="{Binding Co2DisplayText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                FontFamily="Segoe UI" FontSize="14" 
-                                                Foreground="#EED9B9"/>
+                                        <!-- right half: red panel with stats -->
+                                        <Border Grid.Column="1" Background="#E3000F" Padding="10,8">
+                                            <StackPanel Spacing="0" VerticalAlignment="Center">
 
-                                        <TextBlock Text="{Binding FuelConsumptionDisplayText}" 
-                                                IsVisible="{Binding FuelConsumptionDisplayText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                FontFamily="Segoe UI" FontSize="14" 
-                                                Foreground="#EED9B9"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                <!-- big unit name -->
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontFamily="Segoe UI" FontSize="26" FontWeight="Bold"
+                                                           Foreground="White" Margin="0,0,0,6"/>
+
+                                                <TextBlock Text="Max Heat"
+                                                           FontFamily="Segoe UI" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="White"/>
+                                                <TextBlock Text="{Binding MaxHeatText}"
+                                                           FontFamily="Segoe UI" FontSize="10"
+                                                           Foreground="White" Margin="0,0,0,4"/>
+
+                                                <TextBlock Text="Max Electricity"
+                                                           IsVisible="{Binding HasElectricity}"
+                                                           FontFamily="Segoe UI" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="White"/>
+                                                <TextBlock Text="{Binding MaxElectricityText}"
+                                                           IsVisible="{Binding HasElectricity}"
+                                                           FontFamily="Segoe UI" FontSize="10"
+                                                           Foreground="White" Margin="0,0,0,4"/>
+
+                                                <TextBlock Text="Production Cost"
+                                                           FontFamily="Segoe UI" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="White"/>
+                                                <TextBlock Text="{Binding ProductionCostText}"
+                                                           FontFamily="Segoe UI" FontSize="10"
+                                                           Foreground="White" Margin="0,0,0,4"/>
+
+                                                <TextBlock Text="CO2 Emissions"
+                                                           FontFamily="Segoe UI" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="White"/>
+                                                <TextBlock Text="{Binding Co2Text}"
+                                                           FontFamily="Segoe UI" FontSize="10"
+                                                           Foreground="White" Margin="0,0,0,4"/>
+
+                                                <TextBlock Text="{Binding FuelConsumptionLabel}"
+                                                           IsVisible="{Binding HasFuelConsumption}"
+                                                           FontFamily="Segoe UI" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="White"/>
+                                                <TextBlock Text="{Binding FuelConsumptionText}"
+                                                           IsVisible="{Binding HasFuelConsumption}"
+                                                           FontFamily="Segoe UI" FontSize="10"
+                                                           Foreground="White"/>
+
+                                            </StackPanel>
+                                        </Border>
+
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- next arrow -->
+                    <Button Grid.Column="2"
+                            Content="▶"
+                            FontSize="22"
+                            Background="Transparent"
+                            Foreground="{DynamicResource MainText}"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            IsEnabled="{Binding CanGoNext}"
+                            Click="OnNextPageClicked"/>
+                </Grid>
             </Grid>
         </Border>
     </Grid>
