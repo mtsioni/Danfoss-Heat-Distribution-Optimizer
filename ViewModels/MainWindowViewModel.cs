@@ -106,8 +106,27 @@ public partial class MainWindowViewModel : ReactiveObject
     private bool _showPrimaryEnergy;
     public bool ShowPrimaryEnergy { get => _showPrimaryEnergy; set { this.RaiseAndSetIfChanged(ref _showPrimaryEnergy, value); UpdateChart(); } }
 
+    private bool _isEnergyEnabled = true;
+    public bool IsEnergyEnabled { get => _isEnergyEnabled; set => this.RaiseAndSetIfChanged(ref _isEnergyEnabled, value); }
+    
+    private bool _isFinanceEnabled = true;
+    public bool IsFinanceEnabled { get => _isFinanceEnabled; set => this.RaiseAndSetIfChanged(ref _isFinanceEnabled, value); }
+    
+    private bool _isEnvironmentEnabled = true;
+    public bool IsEnvironmentEnabled { get => _isEnvironmentEnabled; set => this.RaiseAndSetIfChanged(ref _isEnvironmentEnabled, value); }
+
     private void UpdateChart()
     {
+        bool hasEnergy = ShowHeatProduced || ShowHeatConsumed || ShowElectricityProduced || ShowElectricityConsumed || ShowElectricityPrice;
+        bool hasFinance = ShowMoneyEarned || ShowMoneySpent || ShowProfit || ShowExpenses;
+        bool hasEnvironment = ShowCo2Emissions || ShowFuelConsumption || ShowPrimaryEnergy;
+
+        int activeGroups = (hasEnergy ? 1 : 0) + (hasFinance ? 1 : 0) + (hasEnvironment ? 1 : 0);
+
+        IsEnergyEnabled = (activeGroups < 2) || hasEnergy;
+        IsFinanceEnabled = (activeGroups < 2) || hasFinance;
+        IsEnvironmentEnabled = (activeGroups < 2) || hasEnvironment;
+
         var active = new List<DataKind>();
         if (ShowHeatProduced) active.Add(DataKind.HeatProduced);
         if (ShowHeatConsumed) active.Add(DataKind.HeatConsumed);
@@ -177,6 +196,7 @@ public partial class MainWindowViewModel : ReactiveObject
 
     public MainWindowViewModel()
     {
+        Visualizer.UpdateThemeColors(IsDarkTheme);
         LoadUnits();
         UpdateChart();
     }
@@ -242,5 +262,7 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         if (Application.Current != null)
             Application.Current.RequestedThemeVariant = IsDarkTheme ? ThemeVariant.Dark : ThemeVariant.Light;
+            
+        Visualizer?.UpdateThemeColors(IsDarkTheme);
     }
 }

@@ -34,7 +34,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                 switch (kind)
                 {
                     case DataKind.HeatProduced:
-                        value = 100 + i * 5;
+                        value = 0 + i * 0.2;
                         break;
                     case DataKind.HeatConsumed:
                         value = 150 + Math.Sin(i * 0.5) * 30;
