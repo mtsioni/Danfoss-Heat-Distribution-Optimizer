@@ -3,7 +3,7 @@
 %
 % -------------------------------------------------------------
 
-\documentclass[11pt,                                          % Main text font size
+\documentclass[12pt,                                          % Main text font size
                a4paper,                                       % Paper size
                openright,                                     % Chapters start on odd pages (right)
                twoside]{report}                               % Print two-sided, LaTeX 'report' template
@@ -49,9 +49,9 @@
 % USER VARIABLES AND DEFINITIONS                              % EDIT THIS SECTION
 % -------------------------------------------------------------
 %\newcommand{}{}
-\newcommand{\theTitle}{F25 Software Engineering Course - Exam Assignment}            % Thesis title
-\newcommand{\runningTitle}{Exam Assignment}                % Short title for headers
-\newcommand{\thegroup}{\textbf{Group X}}                  % Author name
+\newcommand{\theTitle}{Second Semester Project: Development of Software Systems (F26)}            % Thesis title
+\newcommand{\runningTitle}{Semester Project (F26)}                % Short title for headers
+\newcommand{\thegroup}{\textbf{Group 11}}                  % Author name
 
 \newcommand{\subtitle}[1]{%
   \\[0.5em] % adjust vertical space as needed
@@ -92,10 +92,12 @@
 \vspace{5mm}\hrule\vspace{20mm}                               % Horizontal rule below title
 
 {\large \thegroup} \\ \vspace{2mm} 
-{\large Student Name} \\ \vspace{2mm} % The author
-{\large Student Name} \\ \vspace{2mm} % The author
-{\large Student Name} \\ \vspace{2mm} % The author
-{\large Student Name} \\ \vspace{2mm} % The author
+{\large Daniel Falat dafal25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Dominik Bežo dobez25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Maria Thalia Tsioni matsi25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Pavel Seliavko pasel25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Zoe Elea Schiwi zozei25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Zoja Angelovicova zoang25@student.sdu.dk} \\ \vspace{2mm} % The author
 
 \vfill                                                        % Fill space down to bottom of page
 {\small \today}               
@@ -107,63 +109,80 @@
 % -------------------------------------------------------------
 \pagenumbering{roman}                                         % Roman page numbering for preamble
 \setcounter{page}{1}                                          % Start page counter
-\input{Chapters/Abstract}                             % Call abstract file
+
+% -------------------------------------------------------------
+% TABLE OF CONTENTS, LISTS OF TABLES AND FIGURES
+% -------------------------------------------------------------
 \tableofcontents                                              % Add table of contents
-
-% -------------------------------------------------------------
-% LISTS OF FIGURES AND TABLES
-% -------------------------------------------------------------
-\listoffigures                                                % Add list of figures
 \listoftables                                                 % Add list of tables
+\listoffigures                                                % Add list of figures
 
 % -------------------------------------------------------------
-% CHAPTER
+% ABSTRACT
+% -------------------------------------------------------------
+\input{Chapters/Abstract}                                     % Call abstract file
+
+% -------------------------------------------------------------
+% INTRODUCTION
 % -------------------------------------------------------------
 \pagestyle{fancy}                                             % Include fancy headers and footers
-\chapter[Introduction]{Introduction}             % Short and long title versions
+\chapter[Introduction]{Introduction}                          % Short and long title versions
 \label{chap:intro}                                            % Chapter label
 \pagenumbering{arabic}                                        % Change age numbering to arabic
 \input{Chapters/Introduction.tex}                             % Call file with chapter
 
 % -------------------------------------------------------------
-% CHAPTER
+% SCRUM IMPLEMENTATION
 % -------------------------------------------------------------
-\chapter[Project Background]{Project Background}               % Short and long title versions
-\label{chap:background}
+\chapter[Scrum Implementation]{Scrum Implementation}           % Short and long title versions
+\label{chap:scrumimplementation}
 % Chapter label
-\input{Chapters/Project_Background}                        % Call file with chapter
+\input{Chapters/ScrumImplementation}                           % Call file with chapter
 
 % -------------------------------------------------------------
-% CHAPTER
+% SPRINTS
 % -------------------------------------------------------------
-\chapter{Process-related problem}                                              % Short and long title versions
-\label{chap:process}                                           % Chapter label
-\input{Chapters/Process}                                   % Call file with chapter
+\chapter{Sprints}                                              % Short and long title versions
+\label{chap:sprints}                                           % Chapter label
+\input{Chapters/Sprints}                                       % Call file with chapter
 
-\chapter{Software Engineering-Related Problem}                                           % Chapter title
-\label{chap:SE} % Chapter label
+% -------------------------------------------------------------
+% SOLUTION
+% -------------------------------------------------------------
+\chapter{Solution}                                             % Chapter title
+\label{chap:solution}                                          % Chapter label
 
-\input{Chapters/SE}                                  % Call file 
+\input{Chapters/Solution}                                      % Call file 
 
-\chapter{Reflection}\label{chap:reflection}
+% -------------------------------------------------------------
+% IMPLEMENTATION AND TECHNICAL REALIZATION
+% -------------------------------------------------------------
+\chapter{Implementation and Technical Realization}
+\label{chap:implementation}
 
-\input{Chapters/Reflection}   
+\input{Chapters/Implementation}   
 
-\chapter{Individual Reflections}\label{chap:iReflect} 
+% -------------------------------------------------------------
+% DISCUSSION AND REFLECTION
+% -------------------------------------------------------------
+\chapter{Discussion and Reflection}\label{chap:discussion} 
 
-\input{Chapters/iReflections}    
+\input{Chapters/Discussion}    
 
+% -------------------------------------------------------------
+% CONCLUSION
+% -------------------------------------------------------------
 \chapter{Conclusion}                                           % Chapter title
-\label{chap:conclude} % Chapter label
+\label{chap:conclusion} % Chapter label
 
 \input{Chapters/Conclusion}    
 
 % -------------------------------------------------------------
 % APPENDIX
 % -------------------------------------------------------------
-\appendix                                                     % Start appendices
-\chapter{Appendix A}                          % Title of first appendix
-\input{Chapters/Appendix.tex}                                 % Call file with appendix
+\appendix                                                       % Start appendices
+\chapter{Appendix A}                                            % Title of first appendix
+\input{Chapters/Appendix.tex}                                   % Call file with appendix
 
 % -------------------------------------------------------------
 % BIBLIOGRAPHY 
