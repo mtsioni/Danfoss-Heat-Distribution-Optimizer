@@ -13,7 +13,10 @@
           "Avalonia.Diagnostics": "11.3.12",
           "Avalonia.Fonts.Inter": "11.3.12",
           "Avalonia.Themes.Fluent": "11.3.12",
-          "CommunityToolkit.Mvvm": "8.2.1"
+          "CommunityToolkit.Mvvm": "8.2.1",
+          "CsvHelper": "33.1.0",
+          "Oxyplot.Avalonia": "2.1.0-Avalonia11",
+          "ReactiveUI": "23.1.8"
         },
         "runtime": {
           "Danfoss_Heat_Distribution_Optimizer.dll": {}
@@ -76,17 +79,17 @@
           "runtimes/win-arm64/native/av_libglesv2.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "2.1.25606.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x64/native/av_libglesv2.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "2.1.25606.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x86/native/av_libglesv2.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "2.1.25606.0"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -253,6 +256,25 @@
           }
         }
       },
+      "CsvHelper/33.1.0": {
+        "runtime": {
+          "lib/net9.0/CsvHelper.dll": {
+            "assemblyVersion": "33.0.0.0",
+            "fileVersion": "33.1.0.26"
+          }
+        }
+      },
+      "DynamicData/9.4.1": {
+        "dependencies": {
+          "System.Reactive": "6.1.0"
+        },
+        "runtime": {
+          "lib/net9.0/DynamicData.dll": {
+            "assemblyVersion": "9.4.0.0",
+            "fileVersion": "9.4.1.30094"
+          }
+        }
+      },
       "HarfBuzzSharp/8.3.1.1": {
         "dependencies": {
           "HarfBuzzSharp.NativeAssets.Win32": "8.3.1.1",
@@ -360,6 +382,39 @@
           }
         }
       },
+      "Oxyplot.Avalonia/2.1.0-Avalonia11": {
+        "dependencies": {
+          "Avalonia": "11.3.12",
+          "OxyPlot.Core": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/OxyPlot.Avalonia.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "OxyPlot.Core/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/OxyPlot.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "ReactiveUI/23.1.8": {
+        "dependencies": {
+          "DynamicData": "9.4.1",
+          "Splat": "19.3.1",
+          "System.Reactive": "6.1.0"
+        },
+        "runtime": {
+          "lib/net10.0/ReactiveUI.dll": {
+            "assemblyVersion": "23.1.0.0",
+            "fileVersion": "23.1.8.25042"
+          }
+        }
+      },
       "SkiaSharp/2.88.9": {
         "dependencies": {
           "SkiaSharp.NativeAssets.Win32": "2.88.9",
@@ -424,6 +479,62 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Splat/19.3.1": {
+        "dependencies": {
+          "Splat.Builder": "19.3.1",
+          "Splat.Logging": "19.3.1",
+          "System.Reactive": "6.1.0"
+        },
+        "runtime": {
+          "lib/net10.0/Splat.dll": {
+            "assemblyVersion": "19.3.0.0",
+            "fileVersion": "19.3.1.31687"
+          }
+        }
+      },
+      "Splat.Builder/19.3.1": {
+        "dependencies": {
+          "Splat.Core": "19.3.1",
+          "System.Reactive": "6.1.0"
+        },
+        "runtime": {
+          "lib/net10.0/Splat.Builder.dll": {
+            "assemblyVersion": "19.3.0.0",
+            "fileVersion": "19.3.1.31687"
+          }
+        }
+      },
+      "Splat.Core/19.3.1": {
+        "dependencies": {
+          "System.Reactive": "6.1.0"
+        },
+        "runtime": {
+          "lib/net10.0/Splat.Core.dll": {
+            "assemblyVersion": "19.3.0.0",
+            "fileVersion": "19.3.1.31687"
+          }
+        }
+      },
+      "Splat.Logging/19.3.1": {
+        "dependencies": {
+          "Splat.Core": "19.3.1",
+          "System.Reactive": "6.1.0"
+        },
+        "runtime": {
+          "lib/net10.0/Splat.Logging.dll": {
+            "assemblyVersion": "19.3.0.0",
+            "fileVersion": "19.3.1.31687"
+          }
+        }
+      },
+      "System.Reactive/6.1.0": {
+        "runtime": {
+          "lib/net6.0/System.Reactive.dll": {
+            "assemblyVersion": "6.1.0.0",
+            "fileVersion": "6.1.0.62682"
           }
         }
       },
@@ -548,6 +659,20 @@
       "path": "communitytoolkit.mvvm/8.2.1",
       "hashPath": "communitytoolkit.mvvm.8.2.1.nupkg.sha512"
     },
+    "CsvHelper/33.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg==",
+      "path": "csvhelper/33.1.0",
+      "hashPath": "csvhelper.33.1.0.nupkg.sha512"
+    },
+    "DynamicData/9.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+SoDTbuzY9j0K+sZfRbbVpGjjylkVMhUQnw6qiPhxzYLBJlwxFpmunXSaNBtTxwC2C9d/XIp0kO7VhMAVuUt7w==",
+      "path": "dynamicdata/9.4.1",
+      "hashPath": "dynamicdata.9.4.1.nupkg.sha512"
+    },
     "HarfBuzzSharp/8.3.1.1": {
       "type": "package",
       "serviceable": true,
@@ -583,6 +708,27 @@
       "path": "microcom.runtime/0.11.0",
       "hashPath": "microcom.runtime.0.11.0.nupkg.sha512"
     },
+    "Oxyplot.Avalonia/2.1.0-Avalonia11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+Duyr4oXKWOBW0hYHb7vK502XPyNeLsc7bLjB8VW4UHXkT7mlGJFuc1GffspsNgdg5tgR/dcOcydoc6rK5zhzQ==",
+      "path": "oxyplot.avalonia/2.1.0-avalonia11",
+      "hashPath": "oxyplot.avalonia.2.1.0-avalonia11.nupkg.sha512"
+    },
+    "OxyPlot.Core/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jG+Ct3T59fXDG2LE1hyUaXqH7i+h5Nfway1iB0+0NaY2mvDsz8Row/BKjiBWCt5NHp3+q9JSMiD2wpin2hh3kw==",
+      "path": "oxyplot.core/2.1.0",
+      "hashPath": "oxyplot.core.2.1.0.nupkg.sha512"
+    },
+    "ReactiveUI/23.1.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Z8vtRa76RJ4efznElUzoOCYmguuKEndsV4VdPPVyobsYDLdVsoJV/njpCW4OXVnB+Mw/xTTrP6+gxYPU+TF8zw==",
+      "path": "reactiveui/23.1.8",
+      "hashPath": "reactiveui.23.1.8.nupkg.sha512"
+    },
     "SkiaSharp/2.88.9": {
       "type": "package",
       "serviceable": true,
@@ -610,6 +756,41 @@
       "sha512": "sha512-wb2kYgU7iy84nQLYZwMeJXixvK++GoIuECjU4ECaUKNuflyRlJKyiRhN1MAHswvlvzuvkrjRWlK0Za6+kYQK7w==",
       "path": "skiasharp.nativeassets.win32/2.88.9",
       "hashPath": "skiasharp.nativeassets.win32.2.88.9.nupkg.sha512"
+    },
+    "Splat/19.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-at6uM1+KfkjyjfYRIiiUjTBUTEwxBysoLOE4zuxGCy6kqNAG9mpSGliTkZtsPe8WqJuU6+Jup7oOoNdjz5R8FQ==",
+      "path": "splat/19.3.1",
+      "hashPath": "splat.19.3.1.nupkg.sha512"
+    },
+    "Splat.Builder/19.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FR9ISOBiEV/wXTq0oU+VrGZmsWVEE/yWkI79oeXF7luvr9P6GKRzZD+acjl+5T8oAJdXPWnBhFTJ/XDpAEW35Q==",
+      "path": "splat.builder/19.3.1",
+      "hashPath": "splat.builder.19.3.1.nupkg.sha512"
+    },
+    "Splat.Core/19.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MrRbpO/wdWtAfH5c2Nys8Bm7EQ5yi+IAJD3AJsCUMyaRssImIhqmbC7QwfXRnpC2EXOdGENRi0NCTf6y5ODWxQ==",
+      "path": "splat.core/19.3.1",
+      "hashPath": "splat.core.19.3.1.nupkg.sha512"
+    },
+    "Splat.Logging/19.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-u4MCO7dFKCX9+dnxNhbAWB9GmtY70fvVGexqr3YoesevExijpYoMiPpsCSYk36bJyKpq9XVgyJBxdg4ChrPS3A==",
+      "path": "splat.logging/19.3.1",
+      "hashPath": "splat.logging.19.3.1.nupkg.sha512"
+    },
+    "System.Reactive/6.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-M5cCC1ZMkZr9jbSQGTHnVkb5TDN67qWCV7AP8TAHdGkvDlu0puT5NzemESNn9+HkYIDpWpocP68/i+/ame2/2w==",
+      "path": "system.reactive/6.1.0",
+      "hashPath": "system.reactive.6.1.0.nupkg.sha512"
     },
     "Tmds.DBus.Protocol/0.21.2": {
       "type": "package",

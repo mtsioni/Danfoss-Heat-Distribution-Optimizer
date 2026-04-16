@@ -12,7 +12,20 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
     public static class SourceDataLoader
     {
         // this string shows a path to a csv file, will be replaced with a reference to paths.json in the future
-        private static string _sourceDataPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", "SourceData.csv");
+        private static string _sourceDataPath = GetSourceDataPath();
+
+        private static string GetSourceDataPath()
+        {
+            // Try current directory (running from root)
+            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "SourceData.csv");
+            if (File.Exists(rootPath)) return rootPath;
+
+            // Try going up from bin/Debug/...
+            string debugPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", "SourceData.csv");
+            if (File.Exists(debugPath)) return debugPath;
+
+            return rootPath; // fallback
+        }
         // this method takes input string as a parameter that tells it what data to load
         private static TimeSeries<double> LoadSourceData(string arg)
         {

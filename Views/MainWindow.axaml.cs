@@ -18,7 +18,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = new MainWindowViewModel();
 
-        // this sets the default theme to light when the app launched
         //Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
 
         ViewImages();
@@ -88,5 +87,18 @@ public partial class MainWindow : Window
 
     }
 
+    // left arrow clicked
+    public void OnPrevPageClicked(object? sender, RoutedEventArgs e)
+    {
+        // 'is' keyword safely casts DataContext to the viewmodel type
+        if (DataContext is MainWindowViewModel vm)
+            vm.PreviousPage();
+    }
 
+    // right arrow clicked
+    public void OnNextPageClicked(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel vm)
+            vm.NextPage();
+    }
 }

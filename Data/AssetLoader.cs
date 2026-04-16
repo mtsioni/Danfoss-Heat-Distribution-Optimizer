@@ -50,7 +50,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
                             MaxElectricity = u.TryGetProperty("maxElectricity", out var maxElec) ? maxElec.GetDouble() : 0.0,
                             ProductionCost = u.TryGetProperty("productionCosts", out var cost) ? cost.GetDouble() : 0.0,
                             FuelConsumption = u.TryGetProperty("fuelConsumption", out var fuelCons) ? fuelCons.GetDouble() : 0.0,
-                            Emissions = u.TryGetProperty("emissions", out var emissions) ? emissions.GetDouble() : 0.0
+                            Emissions = u.TryGetProperty("emissions", out var emissions) ? emissions.GetDouble() : 0.0,
+                            ImagePath = u.TryGetProperty("imagePath", out var imgPath) ? imgPath.GetString() : null
                         };
                         
                         units.Add(unit);

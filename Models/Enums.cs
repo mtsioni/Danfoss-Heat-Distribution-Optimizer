@@ -13,13 +13,19 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         Summer
     }
 
-    public enum ChartOption
+    public enum DataKind
     {
         HeatProduced,
         HeatConsumed,
         ElectricityProduced,
         ElectricityConsumed,
+        ElectricityPrice,
         MoneyEarned,
-        MoneySpent
+        MoneySpent,
+        Co2Emissions,
+        FuelConsumption,
+        PrimaryEnergy,
+        Profit,
+        Expenses
     }
 }

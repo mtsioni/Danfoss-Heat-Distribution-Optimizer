@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:oxy="http://oxyplot.org/avalonia"
              x:Class="Danfoss_Heat_Distribution_Optimizer.App"
              xmlns:local="using:Danfoss_Heat_Distribution_Optimizer"
              RequestedThemeVariant="Default">
@@ -11,5 +12,6 @@
   
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://OxyPlot.Avalonia/Themes/Default.axaml"/>
     </Application.Styles>
 </Application>
