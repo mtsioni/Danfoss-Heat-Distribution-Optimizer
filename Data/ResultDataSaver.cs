@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Data
@@ -11,29 +12,34 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
 
         public static void SaveToCSV (string unitName, List<ResultDataDTO> data)
         {
-            _resultDataPath = "Assets/ResultData/" + unitName; 
+            _resultDataPath = $"Assets/ResultData/{unitName}.csv"; 
             
             string result = ConvertToCSV(data);
 
             File.WriteAllText(_resultDataPath, result);
         }
 
-        public static string ConvertToCSV (List<ResultDataDTO> data)
+        
+        public static string ConvertToCSV(List<ResultDataDTO> data)
         {
-            string csv = "Time,HeatMWh,Electricity,ProductionCost,PrimaryEnergy,Co2Emissions\n";
+            StringBuilder sb = new StringBuilder();
+            
+            sb.AppendLine("Time,HeatMWh,Electricity,ProductionCost,PrimaryEnergy,Co2Emissions,NetCost");
 
-            foreach(var spec in data)
+            foreach (var spec in data)
             {
-                csv +=
-                    $"{spec.Time:dd.mm.yyyy HH:mm}," +
+                sb.AppendLine(
+                    $"{spec.Time:dd.MM.yyyy HH:mm}," + // MM is Month, mm is minutes!
                     $"{spec.HeatMWh.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.Electricity.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.ProductionCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.PrimaryEnergy.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
-                    $"{spec.Co2Emissions.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+                    $"{spec.Co2Emissions.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
+                    $"{spec.NetCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}"
+                );
             }
 
-            return csv;
+            return sb.ToString();
         }
     }
 }
