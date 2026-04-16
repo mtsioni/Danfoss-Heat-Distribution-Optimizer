@@ -15,6 +15,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.Interfaces
         TimeSeries<double> PollutionRecords { get; set; }
         TimeSeries<double> HeatPerPriceRecords {get; set;}
         double CalculateTotalProductionCost(double electricityPrice);
-        void UpdateRecords(double electricityPtice, DateTime hour);
+        void UpdateRecords(double electricityPrice, DateTime hour);
     }
 }

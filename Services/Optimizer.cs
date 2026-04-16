@@ -10,8 +10,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
     {
         public static DateTime OptimizationPeriodStart { get; set; }
         public static DateTime OptimizationPeriodEnd { get; set; }
-        public static TimeSeries<double>? ElectricityPrices;
-        public static TimeSeries<double>? HeatDemand;
+        public static TimeSeries<double>? ElectricityPrices { get; set; }
+        public static TimeSeries<double>? HeatDemand { get; set; }
         public static int TimeResolution { get; set; }
 
 
@@ -93,7 +93,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             }
         }
 
-        public static List<IOptimizedUnit> GetOptimizationResult()
+        public static List<IOptimizedUnit> GetResultData()
         {
             Optimize();
             return _availableUnits ?? throw new Exception("AvailableUnits not available");
