@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using Danfoss_Heat_Distribution_Optimizer.Data;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 
@@ -31,22 +32,22 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
         }
         
-        public static TimeSeries<double>? GetHeatDemand()
+        public static TimeSeries<double> GetHeatDemand()
         {
             if (_heatDemand == null)
             {
                 LoadSourceData();
             }
-            return _heatDemand;
+            return _heatDemand ?? throw new Exception("Loading of heat demand failed");
         }
 
-        public static TimeSeries<double>? GetElectricityPrice()
+        public static TimeSeries<double> GetElectricityPrice()
         {
             if (_electricityPrices == null)
             {
                 LoadSourceData();
             }
-            return _electricityPrices;
+            return _electricityPrices ?? throw new Exception("Loading of electricity prices failed");
         }
 
     }
