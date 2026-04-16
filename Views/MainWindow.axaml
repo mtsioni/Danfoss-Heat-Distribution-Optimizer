@@ -12,7 +12,8 @@
         Background="#EED9B9"
         WindowState="Maximized">
 
-    <!-- here the themes are defined and can be adjusted -->
+    <!-- theme color definitions - swap these to change the whole app color scheme -->
+    <!-- the x:Key names are referenced with DynamicResource throughout the file -->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
@@ -73,21 +74,23 @@
         </Style>
     </Window.Styles>
 
-    <!-- main layout: left panel + right content -->
+    <!-- two column layout: 300px sidebar + rest of window -->
     <Grid ColumnDefinitions="300, *">
 
-        <!-- left control panel -->
+        <!-- left sidebar -->
+        <!-- Grid.Column="0" puts this into the first 300px column -->
+        <!-- RowDefinitions="Auto, *, Auto" means top/bottom rows are content-sized, middle expands -->
         <Border Grid.Column="0" Background="#d01d29" Padding="20,40,20,20">
             <Grid RowDefinitions="Auto, *, Auto">
                 
                 <!-- top section with controls -->
                 <StackPanel Grid.Row="0" Spacing="25">
-                    <TextBlock Text="Control Panel" FontSize="35" FontWeight="Bold" Foreground="#efebe5" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Control Panel" FontSize="35" FontWeight="Bold" Foreground="#efebe5" HorizontalAlignment="Center"/>
 
                     <!-- scenario selection -->
                     <StackPanel Spacing="10">
                         <TextBlock Text="SCENARIOS" FontSize="14" FontWeight="SemiBold" Foreground="#efebe5"/>
-                        <Grid ColumnDefinitions="*,*">
+                        <Grid ColumnDefinitions="*,Auto">
                             <RadioButton Grid.Column="0" Classes="Segmented SegmentedLeft" Content="Heat" 
                                         GroupName="ScenariosGroup" IsChecked="{Binding IsHeatScenarioSelected}"/>
                             <RadioButton Grid.Column="1" Classes="Segmented SegmentedRight" Content="Heat &amp; Electricity" 
@@ -107,10 +110,10 @@
                     </StackPanel>
 
                     <!-- unit control section -->
-                    <TextBlock Text="Unit Control" FontSize="35" FontWeight="Bold" Foreground="#efebe5" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+                    <TextBlock Text="Unit Control" FontSize="35" FontWeight="Bold" Foreground="#efebe5" HorizontalAlignment="Center" Margin="0,20,0,0"/>
 
                     <StackPanel Spacing="15">
-                        <TextBlock Text="MAINTENANCE PLANNING" FontSize="20" FontWeight="Bold" Foreground="#efebe5" HorizontalAlignment="Left"/>
+                        <TextBlock Text="MAINTENANCE PLANNING" FontSize="20" FontWeight="Bold" Foreground="#efebe5" HorizontalAlignment="Center"/>
                         
                         <!-- slider for maintenance hours -->
                         <Slider x:Name="Hours" Minimum="30" Maximum="60" Foreground="#efebe5" IsSnapToTickEnabled="True" TickFrequency="1" Value="{Binding MaintenanceHours}">
@@ -139,6 +142,11 @@
                                 Padding="15,10"
                                 ItemsSource="{Binding Units}"
                                 SelectedItem="{Binding SelectedUnit}">
+                            <ComboBox.Styles>
+                                <Style Selector="ComboBoxItem">
+                                    <Setter Property="Foreground" Value="#efebe5"/>
+                                </Style>
+                            </ComboBox.Styles>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate x:DataType="vm:UnitViewModel">
                                     <TextBlock Text="{Binding Name}" />
@@ -156,11 +164,12 @@
             </Grid>
         </Border>
 
-        <!-- right side main content -->
+        <!-- right side content area -->
+        <!-- DynamicResource picks up the correct color from the theme dict above -->
         <Border Grid.Column="1" Background="{DynamicResource RightPanelBg}" Padding="20">
             <Grid RowDefinitions="Auto, *, Auto">
                 
-                <!-- header section -->
+                <!-- header with logo -->
                 <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="HEAT PRODUCTION OPTIMIZATION TOOL V1.0" FontSize="18" Foreground="{DynamicResource MainText}"/>
@@ -175,6 +184,8 @@
                 <Border Grid.Row="1" Background="{DynamicResource ChartAreaBg}" Margin="0,15" BorderBrush="{DynamicResource MainText}" BorderThickness="1" CornerRadius="15">
                     <Grid RowDefinitions="*, Auto">
                         
+                        <!-- the oxyplot chart control -->
+
 
                         <oxy:PlotView Grid.Row="0" Model="{Binding CurrentPlotModel}" Background="Transparent"/>
                         
@@ -182,8 +193,10 @@
                         <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="40,15,20,10">
                             <!-- Left: tightly packed metrics -->
                             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="40" HorizontalAlignment="Left">
+                                <!-- StackPanel stacks items vertically -->
                                 <StackPanel>
                                     <TextBlock Text="Heat" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
+                                    <!-- Binding links checkbox state to a property in the ViewModel -->
                                     <CheckBox Content="Produced" IsChecked="{Binding ShowHeatProduced}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
                                     <CheckBox Content="Demand" IsChecked="{Binding ShowHeatConsumed}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
@@ -191,7 +204,7 @@
                                     <TextBlock Text="Electricity" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
                                     <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
                                     <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Finance" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
@@ -202,19 +215,19 @@
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Environment" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsEnvironmentEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsEnvironmentEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Primary Energy" IsChecked="{Binding ShowPrimaryEnergy}" IsEnabled="{Binding IsEnvironmentEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2Enabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Primary Energy" IsChecked="{Binding ShowPrimaryEnergy}" IsEnabled="{Binding IsPrimaryEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                             </StackPanel>
 
-                            <!-- Right: Legend Panel -->
+                            <!-- legend panel - ItemsControl loops through ActiveLegendItems and renders each one -->
                             <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
                                 <TextBlock Text="Legend" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,10"/>
                                 <ItemsControl ItemsSource="{Binding Visualizer.ActiveLegendItems}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Vertical" MaxHeight="130" ItemWidth="160"/>
+                                            <WrapPanel Orientation="Vertical" MaxHeight="130" ItemWidth="190"/>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
@@ -232,7 +245,7 @@
                     </Grid>
                 </Border>
 
-                <!-- units section: 3 visible cards with prev/next navigation -->
+                <!-- unit cards section with pagination arrows -->
                 <Grid Grid.Row="2" ColumnDefinitions="Auto, *, Auto" Height="230" Margin="0,5,0,0">
 
                     <!-- prev arrow -->

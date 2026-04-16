@@ -14,10 +14,14 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels;
 
 public partial class MainWindowViewModel : ReactiveObject
 {
+    // visualizer holds all the graph logic so we dont clutter this file too much
     public DataVisualizerViewModel Visualizer { get; } = new();
 
     public PlotModel CurrentPlotModel => Visualizer.CurrentPlotModel;
 
+    // =# SCENARIO STUFF #=
+    // keeps track of what scenario the user choosed
+    // we use a private variable with a public getter/setter so we can inject RaiseAndSetIfChanged
     private Scenario _selectedScenario = Scenario.Heat;
     public Scenario SelectedScenario
     {
@@ -69,7 +73,6 @@ public partial class MainWindowViewModel : ReactiveObject
     private UnitViewModel? _selectedUnit;
     public UnitViewModel? SelectedUnit { get => _selectedUnit; set => this.RaiseAndSetIfChanged(ref _selectedUnit, value); }
 
-    // Chart checkboxes
     private bool _showHeatProduced = true;
     public bool ShowHeatProduced { get => _showHeatProduced; set { this.RaiseAndSetIfChanged(ref _showHeatProduced, value); UpdateChart(); } }
 
@@ -115,10 +118,19 @@ public partial class MainWindowViewModel : ReactiveObject
     private bool _isEnvironmentEnabled = true;
     public bool IsEnvironmentEnabled { get => _isEnvironmentEnabled; set => this.RaiseAndSetIfChanged(ref _isEnvironmentEnabled, value); }
 
+    // =# MUTUAL EXCLUSIVITY LOGIC #=
+    // this prevents user from selecting multiple weird things at once
+    // like if you select CO2 it hides the other environment checkboxes so graph doesnt crash
+    public bool IsCo2Enabled => IsEnvironmentEnabled && (!ShowFuelConsumption && !ShowPrimaryEnergy);
+    public bool IsFuelEnabled => IsEnvironmentEnabled && (!ShowCo2Emissions && !ShowPrimaryEnergy);
+    public bool IsPrimaryEnergyEnabled => IsEnvironmentEnabled && (!ShowCo2Emissions && !ShowFuelConsumption);
+
+    // =# CHART UPDATER #=
+    // core logic to refresh graph and grey out the checkboxes
     private void UpdateChart()
     {
-        bool hasEnergy = ShowHeatProduced || ShowHeatConsumed || ShowElectricityProduced || ShowElectricityConsumed || ShowElectricityPrice;
-        bool hasFinance = ShowMoneyEarned || ShowMoneySpent || ShowProfit || ShowExpenses;
+        bool hasEnergy = ShowHeatProduced || ShowHeatConsumed || ShowElectricityProduced || ShowElectricityConsumed;
+        bool hasFinance = ShowMoneyEarned || ShowMoneySpent || ShowProfit || ShowExpenses || ShowElectricityPrice;
         bool hasEnvironment = ShowCo2Emissions || ShowFuelConsumption || ShowPrimaryEnergy;
 
         int activeGroups = (hasEnergy ? 1 : 0) + (hasFinance ? 1 : 0) + (hasEnvironment ? 1 : 0);
@@ -126,6 +138,10 @@ public partial class MainWindowViewModel : ReactiveObject
         IsEnergyEnabled = (activeGroups < 2) || hasEnergy;
         IsFinanceEnabled = (activeGroups < 2) || hasFinance;
         IsEnvironmentEnabled = (activeGroups < 2) || hasEnvironment;
+
+        this.RaisePropertyChanged(nameof(IsCo2Enabled));
+        this.RaisePropertyChanged(nameof(IsFuelEnabled));
+        this.RaisePropertyChanged(nameof(IsPrimaryEnergyEnabled));
 
         var active = new List<DataKind>();
         if (ShowHeatProduced) active.Add(DataKind.HeatProduced);
@@ -145,16 +161,18 @@ public partial class MainWindowViewModel : ReactiveObject
         this.RaisePropertyChanged(nameof(CurrentPlotModel));
     }
 
-    // All loaded units
+    // =# UNIT CARDS PAGINATION #=
+    // All loaded units keeps everything from json
     private List<UnitViewModel> _allUnits = new();
 
-    // The 3 units currently shown on screen
+    // The 3 units currently shown on screen in the cards area
     private ObservableCollection<UnitViewModel> _visibleUnits = new();
     public ObservableCollection<UnitViewModel> VisibleUnits => _visibleUnits;
 
     // Which page we are on (0 = first 3 units, 1 = next 3, etc)
     private int _unitPageIndex = 0;
 
+    // simple math checks if we can go back or forward so the arrows grey out automatically
     public bool CanGoPrev => _unitPageIndex > 0;
     public bool CanGoNext => (_unitPageIndex + 1) * 3 < _allUnits.Count;
 
@@ -176,7 +194,10 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         _visibleUnits.Clear();
         int start = _unitPageIndex * 3;
+        
+        // Skip jumps over previous pages and Take grabs exactly 3 for the current page
         var page = _allUnits.Skip(start).Take(3);
+        
         foreach (var unit in page)
             _visibleUnits.Add(unit);
 
@@ -203,50 +224,31 @@ public partial class MainWindowViewModel : ReactiveObject
 
     private void LoadUnits()
     {
-        try
-        {
-            string jsonPath = FindAsset("ProductionUnits.json");
-            AssetManager.Initialize(jsonPath, jsonPath, string.Empty);
+        string jsonPath = FindAsset("ProductionUnits.json");
+        AssetManager.Initialize(jsonPath, jsonPath, string.Empty);
 
-            var units = AssetManager.GetDataForOptimizer();
-            foreach (var data in units)
-            {
-                var vm = new UnitViewModel(
-                    data.Name,
-                    data.FuelName,
-                    data.MaxHeat,
-                    data.MaxElectricity,
-                    data.ProductionCost,
-                    data.Emissions,
-                    data.FuelConsumption,
-                    data.ImagePath ?? string.Empty
-                );
-                _allUnits.Add(vm);
-                Units.Add(vm);
-            }
-        }
-        catch
+        // just ask AssetManager for the units, it loads them from json automatically
+        var units = AssetManager.GetDataForOptimizer();
+        foreach (var data in units)
         {
-            LoadFallbackUnits();
-            return;
+            var vm = new UnitViewModel(
+                data.Name,
+                data.FuelName,
+                data.MaxHeat,
+                data.MaxElectricity,
+                data.ProductionCost,
+                data.Emissions,
+                data.FuelConsumption,
+                data.ImagePath ?? string.Empty
+            );
+            _allUnits.Add(vm);
+            Units.Add(vm);
         }
 
         RefreshVisibleUnits();
     }
 
-    private void LoadFallbackUnits()
-    {
-        _allUnits.Add(new UnitViewModel("GB1", "Gas", 3, 0, 510, 132, 1.05, "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png"));
-        _allUnits.Add(new UnitViewModel("GB2", "Gas", 2, 0, 540, 134, 1.08, "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png"));
-        _allUnits.Add(new UnitViewModel("GB3", "Gas", 4, 0, 580, 136, 1.09, "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasBoiler.png"));
-        _allUnits.Add(new UnitViewModel("OB1", "Oil",  6, 0, 690, 147, 1.18, "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/OilBoiler.png"));
-        _allUnits.Add(new UnitViewModel("GM1", "Gas", 5.3, 3.9, 975, 227, 1.82, "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/GasMotor.png"));
-        _allUnits.Add(new UnitViewModel("EB1", "Electric", 6, -6, 15, 0, 0, "avares://Danfoss_Heat_Distribution_Optimizer/Assets/Images/HeatingArea.png"));
-
-        foreach (var u in _allUnits) Units.Add(u);
-        RefreshVisibleUnits();
-    }
-
+    // finds where the assets are placed depending if we are debugging or running production
     private string FindAsset(string filename)
     {
         string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", filename);
@@ -258,6 +260,7 @@ public partial class MainWindowViewModel : ReactiveObject
         return rootPath;
     }
 
+    // pushes the bright or dark mode deep into Avalonia internal settings
     private void ApplyTheme()
     {
         if (Application.Current != null)

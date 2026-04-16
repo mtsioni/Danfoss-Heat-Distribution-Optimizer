@@ -14,6 +14,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 {
     using System;
 
+    // small helper class to hold one legend row - the label and color
     public class LegendItem
     {
         public string Title { get; set; } = string.Empty;
@@ -31,6 +32,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _currentPlotModel, value);
         }
 
+        // legend list - ObservableCollection so UI updates automatically when items change
         private ObservableCollection<LegendItem> _activeLegendItems = new();
         public ObservableCollection<LegendItem> ActiveLegendItems
         {
@@ -40,34 +42,41 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
         public DataVisualizerViewModel()
         {
-            var model = new PlotModel { Title = "Unit Optimization Data Overlay" };
+            var model = new PlotModel();
 
-            // Axes are created once and never recreated - this prevents the chart from rescaling on every toggle
-            model.Axes.Add(new DateTimeAxis
+            // X-axis: fixed 0-23 (hours), LinearAxis avoids OxyPlot date calculation bugs
+            model.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                StringFormat = "HH:mm",
-                Title = "Time",
-                Key = "TimeAxis"
+                StringFormat = "00",
+                Title = "Time (Hours)",
+                Key = "TimeAxis",
+                MajorStep = 1,
+                MinorStep = 1,
+                Minimum = 0,
+                Maximum = 23,
+                MinimumPadding = 0,
+                MaximumPadding = 0
             });
 
+            // left Y axis
             model.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Left,
-                Title = "Quantity / Energy (MW, MWh, kg)",
+                Title = "Energy (MW, MWh)",
                 Key = "LeftAxis",
                 MinimumPadding = 0.1,
                 MaximumPadding = 0.1
             });
 
+            // right Y axis - used when two categories are active at once
             model.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Right,
-                Title = "Financial (DKK, DKK/MWh)",
+                Title = "",
                 Key = "RightAxis",
                 MinimumPadding = 0.1,
                 MaximumPadding = 0.1,
-                // Reserve space always so the chart width stays stable even without financial series
                 Minimum = 0,
                 Maximum = 3000
             });
@@ -75,9 +84,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             CurrentPlotModel = model;
         }
 
+        // rebuilds chart every time a checkbox is toggled
         public void UpdatePlot(IEnumerable<DataKind> activeKinds, Period period)
         {
-            // Only clear series - axes stay untouched so the chart never shifts
             CurrentPlotModel.Series.Clear();
             ActiveLegendItems.Clear();
 
@@ -85,6 +94,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             bool hasFinancial = activeKinds.Any(IsFinancial);
             bool hasEnvironment = activeKinds.Any(IsEnvironment);
 
+            // Decide what labels to put on the left and right Y axes
             string leftTitle = "Quantity";
             string rightTitle = "";
             Func<DataKind, string> getAxisKey = k => "LeftAxis";
@@ -98,13 +108,13 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             else if (hasEnergy && hasEnvironment)
             {
                 leftTitle = "Energy (MW, MWh)";
-                rightTitle = "Environment (kg, ton)";
+                rightTitle = GetEnvironmentTitle(activeKinds);
                 getAxisKey = k => IsEnvironment(k) ? "RightAxis" : "LeftAxis";
             }
             else if (hasFinancial && hasEnvironment)
             {
                 leftTitle = "Financial (DKK, DKK/MWh)";
-                rightTitle = "Environment (kg, ton)";
+                rightTitle = GetEnvironmentTitle(activeKinds);
                 getAxisKey = k => IsEnvironment(k) ? "RightAxis" : "LeftAxis";
             }
             else if (hasEnergy)
@@ -119,10 +129,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             }
             else if (hasEnvironment)
             {
-                leftTitle = "Environment (kg, ton)";
+                leftTitle = GetEnvironmentTitle(activeKinds);
                 getAxisKey = k => "LeftAxis";
             }
 
+            // update axis labels based on what's selected
             var leftAxis = CurrentPlotModel.Axes.FirstOrDefault(a => a.Key == "LeftAxis");
             if (leftAxis != null) leftAxis.Title = leftTitle;
 
@@ -134,17 +145,29 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                 var data = _dataManager.GetTimeSeriesData(kind, period);
                 var series = CreateSeries(kind, getAxisKey(kind));
 
+                // extract hour from DateTime so X-axis stays as 0-23 integers
                 foreach (var point in data.Values.OrderBy(p => p.Key))
-                    series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(point.Key), point.Value));
+                    series.Points.Add(new DataPoint(point.Key.Hour, point.Value));
 
                 CurrentPlotModel.Series.Add(series);
-                
+
+                // convert OxyPlot color to Avalonia brush for the legend swatch
                 var c = series.Color;
-                var brush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
+                var brush = new Avalonia.Media.SolidColorBrush(
+                    Avalonia.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
                 ActiveLegendItems.Add(new LegendItem { Title = series.Title, Brush = brush });
             }
 
             CurrentPlotModel.InvalidatePlot(true);
+        }
+
+        // returns correct unit label for environmental axis
+        private string GetEnvironmentTitle(IEnumerable<DataKind> activeKinds)
+        {
+            if (activeKinds.Contains(DataKind.Co2Emissions)) return "CO2 Emissions (kg)";
+            if (activeKinds.Contains(DataKind.FuelConsumption)) return "Fuel Consumption (MWh)";
+            if (activeKinds.Contains(DataKind.PrimaryEnergy)) return "Primary Energy (MW)";
+            return "Environment";
         }
 
         public void UpdateThemeColors(bool isDarkTheme)
@@ -177,7 +200,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             };
 
             return series;
-            
         }
 
         private bool IsEnergy(DataKind kind) => kind switch
@@ -207,6 +229,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             _ => false
         };
 
+        // "HeatProduced" -> "Heat Produced"
         private string SplitCamelCase(string s)
         {
             return System.Text.RegularExpressions.Regex.Replace(s, "([A-Z])", " $1").Trim();
