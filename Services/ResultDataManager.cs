@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Data;
 using System;
+using System.Linq;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Services
@@ -12,7 +13,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static DateTime OptimizationPeriodEnd { get; set; }
         public static int TimeResolution { get; set; }
         private static List<IOptimizedUnit>? _resultData { get; set; }
-        private static ResultDataSaver? _dataSaver { get; set; }
 
         // called by Optimizer
         public static void ProcessResults(List<IOptimizedUnit> results)
@@ -26,8 +26,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             if (_resultData == null || _resultData.Count == 0)
                 return;
             
-            //Need to do DTO shenanigans for the FUEL INFO
-
             foreach (var unit in _resultData)
             {
                 List<ResultDataDTO> hourlyRecords = new List<ResultDataDTO>();
@@ -44,15 +42,25 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                     {
                         UnitName = unit.Name,
                         Time = currentTime,
+                        ProductionCost = unit.ProductionCostRecords[currentTime],
                         HeatMWh = unit.HeatRecords[currentTime],
                         Electricity = unit.ElectricityRecords[currentTime],
-                        ProductionCost = unit.ProductionCostRecords[currentTime],
                         Co2Emissions = unit.PollutionRecords[currentTime],
-                        NetCost = unit.NetProductionCost  // Total net cost for this unit
+                        FuelConsumption = unit.FuelConsumptionRecords[currentTime]
                     };
 
                     hourlyRecords.Add(dto);
                 }
+
+                /// Check if the code write into the CVS two times - might be wrong and we need to delete it
+                // var groups = hourlyRecords.GroupBy(x => x.UnitName);
+
+                // foreach (var group in groups)
+                // {
+                //     string name = group.Key ?? "Unknown";
+                //     ResultDataSaver.SaveToCSV(name, group.ToList());
+                //     Console.WriteLine($"Saved {name}.csv");
+                // }
 
                 ResultDataSaver.SaveToCSV(unit.Name, hourlyRecords);
             }

@@ -33,8 +33,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
                     $"{spec.Electricity.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.ProductionCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.PrimaryEnergy.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
-                    $"{spec.Co2Emissions.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
-                    $"{spec.NetCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}"
+                    $"{spec.Co2Emissions.ToString(System.Globalization.CultureInfo.InvariantCulture)}," 
+                    // $"{spec.NetCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}"
                 );
             }
 
