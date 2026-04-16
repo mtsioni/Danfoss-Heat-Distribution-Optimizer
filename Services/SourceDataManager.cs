@@ -1,5 +1,4 @@
 using System;
-using System.Security.Cryptography;
 using Danfoss_Heat_Distribution_Optimizer.Data;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 

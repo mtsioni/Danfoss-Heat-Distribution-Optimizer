@@ -25,6 +25,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         {
             if (_resultData == null || _resultData.Count == 0)
                 return;
+            
+            //Need to do DTO shenanigans for the FUEL INFO
 
             foreach (var unit in _resultData)
             {
@@ -42,11 +44,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                     {
                         UnitName = unit.Name,
                         Time = currentTime,
-                        HeatMWh = unit.Heat[currentTime],
-                        Electricity = unit.Electricity[currentTime],
-                        ProductionCost = unit.ProductionCost[currentTime],
-                        // PrimaryEnergy = unit.PrimaryEnergy[currentTime],
-                        // Co2Emissions = unit.Co2Emissions[currentTime],
+                        HeatMWh = unit.HeatRecords[currentTime],
+                        Electricity = unit.ElectricityRecords[currentTime],
+                        ProductionCost = unit.ProductionCostRecords[currentTime],
+                        Co2Emissions = unit.PollutionRecords[currentTime],
                         NetCost = unit.NetProductionCost  // Total net cost for this unit
                     };
 

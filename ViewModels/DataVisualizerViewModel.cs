@@ -23,8 +23,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
     public class DataVisualizerViewModel : ViewModelBase
     {
-        private readonly ResultDataManager _dataManager = new();
-
         private PlotModel _currentPlotModel = new PlotModel();
         public PlotModel CurrentPlotModel
         {
@@ -142,7 +140,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
             foreach (var kind in activeKinds)
             {
-                var data = _dataManager.GetTimeSeriesData(kind, period);
+                var data = ResultDataManager.GetResultData();
                 var series = CreateSeries(kind, getAxisKey(kind));
 
                 // extract hour from DateTime so X-axis stays as 0-23 integers

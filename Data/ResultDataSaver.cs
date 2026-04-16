@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Linq;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Data
