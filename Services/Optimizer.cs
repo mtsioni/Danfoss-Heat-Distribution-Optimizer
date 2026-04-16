@@ -69,11 +69,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
                         if(_availableUnits[c].HeatPerPriceRecords.Values.ContainsKey(i)) // check if it needs to be reassigned or added
                         {
-                            _availableUnits[c].HeatPerPriceRecords[i] = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateTotalProductionCost(electricityPrice);
+                            _availableUnits[c].HeatPerPriceRecords[i] = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice);
                         }
                         else
                         {
-                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, _availableUnits[c].MaxHeat / _availableUnits[c].CalculateTotalProductionCost(electricityPrice));
+                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice));
                         }
                     }
 

@@ -14,14 +14,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public double ProductionCost { get; set; }
 
         // From IOptimizedUnit
-        public double NetProductionCost { get; set; }
-        public double NetHeat { get; set; }
-        public double NetElectricity { get; set; }
-        public double NetPollution { get; set; }
         public TimeSeries<double> ProductionCostRecords { get; set; }
         public TimeSeries<double> HeatRecords { get; set; }
         public TimeSeries<double> ElectricityRecords { get; set; }
         public TimeSeries<double> PollutionRecords { get; set; }
+        public TimeSeries<double> FuelConsumptionRecords { get; set; }
         public TimeSeries<double> HeatPerPriceRecords {get; set;}
 
         // From IElectricUnit
@@ -35,17 +32,14 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             MaxElectricity = maxElectricity;
             MaxHeat = maxHeat;
             ProductionCost = productionCost;
-            NetProductionCost = 0;
-            NetHeat = 0;
-            NetElectricity = 0;
-            NetPollution = 0;
             ProductionCostRecords = new();
             HeatRecords = new();
             ElectricityRecords = new();
             PollutionRecords = new();
+            FuelConsumptionRecords = new();
             HeatPerPriceRecords = new(); 
         }
-        public double CalculateTotalProductionCost(double electricityPrice)
+        public double CalculateNetProductionCost(double electricityPrice)
         {
             return ProductionCost - MaxElectricity * electricityPrice;
         }
@@ -54,11 +48,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             //Update ProductionCostRecords
             if (ProductionCostRecords.Values.ContainsKey(hour))
             {
-                ProductionCostRecords[hour] = CalculateTotalProductionCost(electricityPrice);
+                ProductionCostRecords[hour] = CalculateNetProductionCost(electricityPrice);
             }
             else
             {
-                ProductionCostRecords.Values.Add(hour, CalculateTotalProductionCost(electricityPrice));
+                ProductionCostRecords.Values.Add(hour, CalculateNetProductionCost(electricityPrice));
             }
             //Update HeatRecords
             if (HeatRecords.Values.ContainsKey(hour))
@@ -87,33 +81,14 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             {
                 PollutionRecords.Values.Add(hour, 0);
             }
-
-            // Update NetProductionCost
-            if (NetProductionCost == 0)
+            // Update FuelConsumptionRecords
+            if (FuelConsumptionRecords.Values.ContainsKey(hour))
             {
-                NetProductionCost = ProductionCostRecords[hour];
+                FuelConsumptionRecords[hour] = 0;
             }
             else
             {
-                NetProductionCost = (NetProductionCost + ProductionCostRecords[hour]) / 2;
-            }
-            // Update NetHeat
-            if (NetHeat == 0)
-            {
-                NetHeat = HeatRecords[hour];
-            }
-            else
-            {
-                NetHeat = (NetHeat + HeatRecords[hour]) / 2;
-            }
-            // Update NetElectricity
-            if (NetElectricity == 0)
-            {
-                NetElectricity = HeatRecords[hour];
-            }
-            else
-            {
-                NetElectricity = (NetElectricity + ElectricityRecords[hour]) / 2;
+                FuelConsumptionRecords.Values.Add(hour, 0);
             }
         }
     }
