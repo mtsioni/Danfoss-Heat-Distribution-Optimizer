@@ -2,7 +2,7 @@
     "units": [
         {
             "unitID": 1,
-            "name": "GB1",
+            "name": "Gas Boiler 1",
             "fuelName": "Gas",
             "maxHeat": 3.0,
             "maxElectricity": 0.0,
@@ -13,7 +13,7 @@
         },
         {
             "unitID": 2,
-            "name": "GB2",
+            "name": "Gas Boiler 2",
             "fuelName": "Gas",
             "maxHeat": 2.0,
             "maxElectricity": 0.0,
@@ -24,7 +24,7 @@
         },
         {
             "unitID": 3,
-            "name": "GB3",
+            "name": "Gas Boiler 3",
             "fuelName": "Gas",
             "maxHeat": 4.0,
             "maxElectricity": 0.0,
@@ -35,7 +35,7 @@
         },
         {
             "unitID": 4,
-            "name": "OB1",
+            "name": "Oil Boiler 1",
             "fuelName": "Oil",
             "maxHeat": 6.0,
             "maxElectricity": 0.0,
@@ -46,7 +46,7 @@
         },
         {
             "unitID": 5,
-            "name": "GM1",
+            "name": "Gas Motor 1",
             "fuelName": "Gas",
             "maxHeat": 5.3,
             "maxElectricity": 3.9,
@@ -57,7 +57,7 @@
         },
         {
             "unitID": 6,
-            "name": "EB1",
+            "name": "Electric Boiler 1",
             "fuelName": "Electric",
             "maxHeat": 6.0,
             "maxElectricity": -6.0,
