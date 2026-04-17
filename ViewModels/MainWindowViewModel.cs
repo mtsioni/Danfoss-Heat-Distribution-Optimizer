@@ -228,7 +228,7 @@ public partial class MainWindowViewModel : ReactiveObject
         AssetManager.Initialize(jsonPath, jsonPath, string.Empty);
 
         // just ask AssetManager for the units, it loads them from json automatically
-        var units = AssetManager.GetDataForOptimizer();
+        var units = AssetManager.GetDataForDataVisualizer().Item1;
         foreach (var data in units)
         {
             var vm = new UnitViewModel(

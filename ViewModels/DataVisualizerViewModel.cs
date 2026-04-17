@@ -18,7 +18,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
     public class LegendItem
     {
         public string Title { get; set; } = string.Empty;
-        public Avalonia.Media.IBrush Brush { get; set; }
+        public Avalonia.Media.IBrush? Brush { get; set; }
     }
 
     public class DataVisualizerViewModel : ViewModelBase
@@ -42,19 +42,16 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
         {
             var model = new PlotModel();
 
-            // X-axis: fixed 0-23 (hours), LinearAxis avoids OxyPlot date calculation bugs
-            model.Axes.Add(new LinearAxis
+            // X-axis: DateTimeAxis to correctly display dates across multiple days
+            model.Axes.Add(new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
-                StringFormat = "00",
-                Title = "Time (Hours)",
+                StringFormat = "MM/dd HH:mm",
+                Title = "Time",
                 Key = "TimeAxis",
-                MajorStep = 1,
-                MinorStep = 1,
-                Minimum = 0,
-                Maximum = 23,
-                MinimumPadding = 0,
-                MaximumPadding = 0
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                IntervalType = DateTimeIntervalType.Hours
             });
 
             // left Y axis
@@ -140,12 +137,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
             foreach (var kind in activeKinds)
             {
-                var data = ResultDataManager.GetResultData();
+                var data = GetAggregatedData(kind, period);
                 var series = CreateSeries(kind, getAxisKey(kind));
 
-                // extract hour from DateTime so X-axis stays as 0-23 integers
-                foreach (var point in data.Values.OrderBy(p => p.Key))
-                    series.Points.Add(new DataPoint(point.Key.Hour, point.Value));
+                // create real DateTime points so X-axis shows the full span of days correctly
+                foreach (var point in data.OrderBy(p => p.Key))
+                    series.Points.Add(DateTimeAxis.CreateDataPoint(point.Key, point.Value));
 
                 CurrentPlotModel.Series.Add(series);
 
@@ -157,6 +154,82 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             }
 
             CurrentPlotModel.InvalidatePlot(true);
+        }
+
+        public Dictionary<DateTime, double> GetAggregatedData(DataKind kind, Period period)
+        {
+            var dict = new Dictionary<DateTime, double>();
+
+            // Small helper to filter out dates belonging to the wrong period
+            // In our CSV, Winter is January (1), Summer is September (9)
+            bool isCorrectPeriod(DateTime dt) => period == Period.Winter ? dt.Month == 1 : dt.Month == 9;
+
+            if (kind == DataKind.ElectricityPrice)
+            {
+                try 
+                {
+                    var priceSeries = SourceDataManager.GetElectricityPrice();
+                    foreach (var kvp in priceSeries.Values.Where(k => isCorrectPeriod(k.Key)))
+                        dict[kvp.Key] = kvp.Value;
+                } 
+                catch { }
+                return dict;
+            }
+            
+            if (kind == DataKind.HeatConsumed)
+            {
+                try 
+                {
+                    var demandSeries = SourceDataManager.GetHeatDemand();
+                    foreach (var kvp in demandSeries.Values.Where(k => isCorrectPeriod(k.Key)))
+                        dict[kvp.Key] = kvp.Value;
+                } 
+                catch { }
+                return dict;
+            }
+
+            var units = ResultDataManager.GetResultData();
+            if (units == null || units.Count == 0 || units[0].HeatRecords == null) return dict;
+
+            foreach (var kvp in units[0].HeatRecords.Values.Where(k => isCorrectPeriod(k.Key)))
+            {
+                DateTime dt = kvp.Key;
+                double sum = 0;
+
+                foreach (var u in units)
+                {
+                    double val = 0;
+                    switch (kind)
+                    {
+                        case DataKind.HeatProduced:
+                            if (u.HeatRecords.Values.TryGetValue(dt, out var hp)) val = hp;
+                            break;
+                        case DataKind.ElectricityProduced:
+                            if (u.ElectricityRecords.Values.TryGetValue(dt, out var ep) && ep > 0) val = ep;
+                            break;
+                        case DataKind.ElectricityConsumed:
+                            if (u.ElectricityRecords.Values.TryGetValue(dt, out var ec) && ec < 0) val = Math.Abs(ec);
+                            break;
+                        case DataKind.Expenses:
+                        case DataKind.MoneySpent:
+                            if(u.ProductionCostRecords.Values.TryGetValue(dt, out var ms) && ms > 0) val = ms;
+                            break;
+                        case DataKind.Profit:
+                        case DataKind.MoneyEarned:
+                            if(u.ProductionCostRecords.Values.TryGetValue(dt, out var me) && me < 0) val = Math.Abs(me);
+                            break;
+                        case DataKind.Co2Emissions:
+                            if (u.PollutionRecords.Values.TryGetValue(dt, out var co)) val = co;
+                            break;
+                        case DataKind.FuelConsumption:
+                            if (u.FuelConsumptionRecords.Values.TryGetValue(dt, out var fc)) val = fc;
+                            break;
+                    }
+                    sum += val;
+                }
+                dict[dt] = sum;
+            }
+            return dict;
         }
 
         // returns correct unit label for environmental axis
