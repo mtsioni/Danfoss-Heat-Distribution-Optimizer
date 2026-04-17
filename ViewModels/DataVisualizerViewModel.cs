@@ -46,8 +46,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             model.Axes.Add(new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
-                StringFormat = "MM/dd HH:mm",
-                Title = "Time",
+                StringFormat = "MM/dd",
+                Title = "Date",
                 Key = "TimeAxis",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
