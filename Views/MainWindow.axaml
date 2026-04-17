@@ -202,9 +202,9 @@
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Electricity" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" IsEnabled="{Binding IsElecProdEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" IsEnabled="{Binding IsElecConsEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsElecPriceEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Finance" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>

@@ -34,9 +34,18 @@ public partial class MainWindowViewModel : ReactiveObject
         get => SelectedScenario == Scenario.Heat;
         set
         {
-            if (value) SelectedScenario = Scenario.Heat;
+            if (value) 
+            {
+                SelectedScenario = Scenario.Heat;
+                ShowElectricityProduced = false;
+                ShowElectricityConsumed = false;
+                ShowElectricityPrice = false;
+            }
             this.RaisePropertyChanged(nameof(IsHeatScenarioSelected));
             this.RaisePropertyChanged(nameof(IsHeatAndElecScenarioSelected));
+            this.RaisePropertyChanged(nameof(IsElecProdEnabled));
+            this.RaisePropertyChanged(nameof(IsElecConsEnabled));
+            this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
         }
     }
 
@@ -48,6 +57,9 @@ public partial class MainWindowViewModel : ReactiveObject
             if (value) SelectedScenario = Scenario.HeatAndElectricity;
             this.RaisePropertyChanged(nameof(IsHeatScenarioSelected));
             this.RaisePropertyChanged(nameof(IsHeatAndElecScenarioSelected));
+            this.RaisePropertyChanged(nameof(IsElecProdEnabled));
+            this.RaisePropertyChanged(nameof(IsElecConsEnabled));
+            this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
         }
     }
 
@@ -114,16 +126,19 @@ public partial class MainWindowViewModel : ReactiveObject
     
     private bool _isFinanceEnabled = true;
     public bool IsFinanceEnabled { get => _isFinanceEnabled; set => this.RaiseAndSetIfChanged(ref _isFinanceEnabled, value); }
-    
-    private bool _isEnvironmentEnabled = true;
-    public bool IsEnvironmentEnabled { get => _isEnvironmentEnabled; set => this.RaiseAndSetIfChanged(ref _isEnvironmentEnabled, value); }
 
-    // =# MUTUAL EXCLUSIVITY LOGIC #=
-    // this prevents user from selecting multiple weird things at once
-    // like if you select CO2 it hides the other environment checkboxes so graph doesnt crash
-    public bool IsCo2Enabled => IsEnvironmentEnabled && (!ShowFuelConsumption && !ShowPrimaryEnergy);
-    public bool IsFuelEnabled => IsEnvironmentEnabled && (!ShowCo2Emissions && !ShowPrimaryEnergy);
-    public bool IsPrimaryEnergyEnabled => IsEnvironmentEnabled && (!ShowCo2Emissions && !ShowFuelConsumption);
+    private bool _isCo2Enabled = true;
+    public bool IsCo2Enabled { get => _isCo2Enabled; set => this.RaiseAndSetIfChanged(ref _isCo2Enabled, value); }
+    
+    private bool _isFuelEnabled = true;
+    public bool IsFuelEnabled { get => _isFuelEnabled; set => this.RaiseAndSetIfChanged(ref _isFuelEnabled, value); }
+    
+    private bool _isPrimaryEnergyEnabled = true;
+    public bool IsPrimaryEnergyEnabled { get => _isPrimaryEnergyEnabled; set => this.RaiseAndSetIfChanged(ref _isPrimaryEnergyEnabled, value); }
+
+    public bool IsElecProdEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsEnergyEnabled;
+    public bool IsElecConsEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsEnergyEnabled;
+    public bool IsElecPriceEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsFinanceEnabled;
 
     // =# CHART UPDATER #=
     // core logic to refresh graph and grey out the checkboxes
@@ -131,17 +146,21 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         bool hasEnergy = ShowHeatProduced || ShowHeatConsumed || ShowElectricityProduced || ShowElectricityConsumed;
         bool hasFinance = ShowMoneyEarned || ShowMoneySpent || ShowProfit || ShowExpenses || ShowElectricityPrice;
-        bool hasEnvironment = ShowCo2Emissions || ShowFuelConsumption || ShowPrimaryEnergy;
+        bool hasCo2 = ShowCo2Emissions;
+        bool hasFuel = ShowFuelConsumption;
+        bool hasPrimary = ShowPrimaryEnergy;
 
-        int activeGroups = (hasEnergy ? 1 : 0) + (hasFinance ? 1 : 0) + (hasEnvironment ? 1 : 0);
+        int activeGroups = (hasEnergy ? 1 : 0) + (hasFinance ? 1 : 0) + (hasCo2 ? 1 : 0) + (hasFuel ? 1 : 0) + (hasPrimary ? 1 : 0);
 
         IsEnergyEnabled = (activeGroups < 2) || hasEnergy;
         IsFinanceEnabled = (activeGroups < 2) || hasFinance;
-        IsEnvironmentEnabled = (activeGroups < 2) || hasEnvironment;
+        IsCo2Enabled = (activeGroups < 2) || hasCo2;
+        IsFuelEnabled = (activeGroups < 2) || hasFuel;
+        IsPrimaryEnergyEnabled = (activeGroups < 2) || hasPrimary;
 
-        this.RaisePropertyChanged(nameof(IsCo2Enabled));
-        this.RaisePropertyChanged(nameof(IsFuelEnabled));
-        this.RaisePropertyChanged(nameof(IsPrimaryEnergyEnabled));
+        this.RaisePropertyChanged(nameof(IsElecProdEnabled));
+        this.RaisePropertyChanged(nameof(IsElecConsEnabled));
+        this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
 
         var active = new List<DataKind>();
         if (ShowHeatProduced) active.Add(DataKind.HeatProduced);
