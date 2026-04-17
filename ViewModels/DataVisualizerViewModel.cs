@@ -85,47 +85,29 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             CurrentPlotModel.Series.Clear();
             ActiveLegendItems.Clear();
 
-            bool hasEnergy = activeKinds.Any(IsEnergy);
-            bool hasFinancial = activeKinds.Any(IsFinancial);
-            bool hasEnvironment = activeKinds.Any(IsEnvironment);
+            // Find which of the 5 distinct unit groups are active
+            var activeGroups = new List<(Func<DataKind, bool> IsMatch, string Title)>();
+            
+            if (activeKinds.Any(IsEnergy)) activeGroups.Add((IsEnergy, "Energy (MW, MWh)"));
+            if (activeKinds.Any(IsFinancial)) activeGroups.Add((IsFinancial, "Financial (DKK)"));
+            if (activeKinds.Any(IsCo2)) activeGroups.Add((IsCo2, "CO2 Emissions (kg)"));
+            if (activeKinds.Any(IsFuel)) activeGroups.Add((IsFuel, "Fuel Consumption (MWh)"));
+            if (activeKinds.Any(IsPrimaryEnergy)) activeGroups.Add((IsPrimaryEnergy, "Primary Energy (MW)"));
 
-            // Decide what labels to put on the left and right Y axes
-            string leftTitle = "Quantity";
+            string leftTitle = "";
             string rightTitle = "";
             Func<DataKind, string> getAxisKey = k => "LeftAxis";
 
-            if (hasEnergy && hasFinancial)
+            if (activeGroups.Count == 1)
             {
-                leftTitle = "Energy (MW, MWh)";
-                rightTitle = "Financial (DKK, DKK/MWh)";
-                getAxisKey = k => IsFinancial(k) ? "RightAxis" : "LeftAxis";
-            }
-            else if (hasEnergy && hasEnvironment)
-            {
-                leftTitle = "Energy (MW, MWh)";
-                rightTitle = GetEnvironmentTitle(activeKinds);
-                getAxisKey = k => IsEnvironment(k) ? "RightAxis" : "LeftAxis";
-            }
-            else if (hasFinancial && hasEnvironment)
-            {
-                leftTitle = "Financial (DKK, DKK/MWh)";
-                rightTitle = GetEnvironmentTitle(activeKinds);
-                getAxisKey = k => IsEnvironment(k) ? "RightAxis" : "LeftAxis";
-            }
-            else if (hasEnergy)
-            {
-                leftTitle = "Energy (MW, MWh)";
+                leftTitle = activeGroups[0].Title;
                 getAxisKey = k => "LeftAxis";
             }
-            else if (hasFinancial)
+            else if (activeGroups.Count == 2)
             {
-                leftTitle = "Financial (DKK, DKK/MWh)";
-                getAxisKey = k => "LeftAxis";
-            }
-            else if (hasEnvironment)
-            {
-                leftTitle = GetEnvironmentTitle(activeKinds);
-                getAxisKey = k => "LeftAxis";
+                leftTitle = activeGroups[0].Title;
+                rightTitle = activeGroups[1].Title;
+                getAxisKey = k => activeGroups[1].IsMatch(k) ? "RightAxis" : "LeftAxis";
             }
 
             // update axis labels based on what's selected
@@ -232,14 +214,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             return dict;
         }
 
-        // returns correct unit label for environmental axis
-        private string GetEnvironmentTitle(IEnumerable<DataKind> activeKinds)
-        {
-            if (activeKinds.Contains(DataKind.Co2Emissions)) return "CO2 Emissions (kg)";
-            if (activeKinds.Contains(DataKind.FuelConsumption)) return "Fuel Consumption (MWh)";
-            if (activeKinds.Contains(DataKind.PrimaryEnergy)) return "Primary Energy (MW)";
-            return "Environment";
-        }
+
 
         public void UpdateThemeColors(bool isDarkTheme)
         {
@@ -292,13 +267,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             _ => false
         };
 
-        private bool IsEnvironment(DataKind kind) => kind switch
-        {
-            DataKind.Co2Emissions => true,
-            DataKind.FuelConsumption => true,
-            DataKind.PrimaryEnergy => true,
-            _ => false
-        };
+        private bool IsCo2(DataKind kind) => kind == DataKind.Co2Emissions;
+        private bool IsFuel(DataKind kind) => kind == DataKind.FuelConsumption;
+        private bool IsPrimaryEnergy(DataKind kind) => kind == DataKind.PrimaryEnergy;
 
         // "HeatProduced" -> "Heat Produced"
         private string SplitCamelCase(string s)

@@ -197,27 +197,27 @@
                                 <StackPanel>
                                     <TextBlock Text="Heat" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
                                     <!-- Binding links checkbox state to a property in the ViewModel -->
-                                    <CheckBox Content="Produced" IsChecked="{Binding ShowHeatProduced}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Demand" IsChecked="{Binding ShowHeatConsumed}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Produced" IsChecked="{Binding ShowHeatProduced}" IsEnabled="{Binding IsEnergyGroupEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Demand" IsChecked="{Binding ShowHeatConsumed}" IsEnabled="{Binding IsEnergyGroupEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Electricity" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" IsEnabled="{Binding IsElecProdEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" IsEnabled="{Binding IsElecConsEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsElecPriceEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Finance" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="Profit" IsChecked="{Binding ShowProfit}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Expenses" IsChecked="{Binding ShowExpenses}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Real Earned" IsChecked="{Binding ShowMoneyEarned}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Real Spent" IsChecked="{Binding ShowMoneySpent}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Profit" IsChecked="{Binding ShowProfit}" IsEnabled="{Binding IsFinanceGroupEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Expenses" IsChecked="{Binding ShowExpenses}" IsEnabled="{Binding IsFinanceGroupEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Real Earned" IsChecked="{Binding ShowMoneyEarned}" IsEnabled="{Binding IsFinanceGroupEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Real Spent" IsChecked="{Binding ShowMoneySpent}" IsEnabled="{Binding IsFinanceGroupEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Environment" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2Enabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Primary Energy" IsChecked="{Binding ShowPrimaryEnergy}" IsEnabled="{Binding IsPrimaryEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2GroupEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelGroupEnabled}" Foreground="{DynamicResource MainText}"/>
+                                    <CheckBox Content="Primary Energy" IsChecked="{Binding ShowPrimaryEnergy}" IsEnabled="{Binding IsPrimaryEnergyGroupEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                             </StackPanel>
 
