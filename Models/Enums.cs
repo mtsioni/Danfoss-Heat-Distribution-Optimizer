@@ -24,7 +24,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         MoneySpent,
         Co2Emissions,
         FuelConsumption,
-        PrimaryEnergy,
         Profit,
         Expenses
     }

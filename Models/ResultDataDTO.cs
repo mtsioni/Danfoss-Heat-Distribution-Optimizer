@@ -11,6 +11,5 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public double ProductionCost {get;set;}
         public double Co2Emissions {get;set;}
         public double FuelConsumption {get;set;}
-        public double PrimaryEnergy {get;set;}
     }
 }

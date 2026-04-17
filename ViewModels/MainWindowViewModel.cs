@@ -118,9 +118,6 @@ public partial class MainWindowViewModel : ReactiveObject
     private bool _showFuelConsumption;
     public bool ShowFuelConsumption { get => _showFuelConsumption; set { this.RaiseAndSetIfChanged(ref _showFuelConsumption, value); UpdateChart(); } }
 
-    private bool _showPrimaryEnergy;
-    public bool ShowPrimaryEnergy { get => _showPrimaryEnergy; set { this.RaiseAndSetIfChanged(ref _showPrimaryEnergy, value); UpdateChart(); } }
-
     private bool _isEnergyEnabled = true;
     public bool IsEnergyEnabled { get => _isEnergyEnabled; set => this.RaiseAndSetIfChanged(ref _isEnergyEnabled, value); }
     
@@ -132,9 +129,6 @@ public partial class MainWindowViewModel : ReactiveObject
     
     private bool _isFuelEnabled = true;
     public bool IsFuelEnabled { get => _isFuelEnabled; set => this.RaiseAndSetIfChanged(ref _isFuelEnabled, value); }
-    
-    private bool _isPrimaryEnergyEnabled = true;
-    public bool IsPrimaryEnergyEnabled { get => _isPrimaryEnergyEnabled; set => this.RaiseAndSetIfChanged(ref _isPrimaryEnergyEnabled, value); }
 
     public bool IsElecProdEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsEnergyEnabled;
     public bool IsElecConsEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsEnergyEnabled;
@@ -148,15 +142,13 @@ public partial class MainWindowViewModel : ReactiveObject
         bool hasFinance = ShowMoneyEarned || ShowMoneySpent || ShowProfit || ShowExpenses || ShowElectricityPrice;
         bool hasCo2 = ShowCo2Emissions;
         bool hasFuel = ShowFuelConsumption;
-        bool hasPrimary = ShowPrimaryEnergy;
 
-        int activeGroups = (hasEnergy ? 1 : 0) + (hasFinance ? 1 : 0) + (hasCo2 ? 1 : 0) + (hasFuel ? 1 : 0) + (hasPrimary ? 1 : 0);
+        int activeGroups = (hasEnergy ? 1 : 0) + (hasFinance ? 1 : 0) + (hasCo2 ? 1 : 0) + (hasFuel ? 1 : 0);
 
         IsEnergyEnabled = (activeGroups < 2) || hasEnergy;
         IsFinanceEnabled = (activeGroups < 2) || hasFinance;
         IsCo2Enabled = (activeGroups < 2) || hasCo2;
         IsFuelEnabled = (activeGroups < 2) || hasFuel;
-        IsPrimaryEnergyEnabled = (activeGroups < 2) || hasPrimary;
 
         this.RaisePropertyChanged(nameof(IsElecProdEnabled));
         this.RaisePropertyChanged(nameof(IsElecConsEnabled));
@@ -174,7 +166,6 @@ public partial class MainWindowViewModel : ReactiveObject
         if (ShowExpenses) active.Add(DataKind.Expenses);
         if (ShowCo2Emissions) active.Add(DataKind.Co2Emissions);
         if (ShowFuelConsumption) active.Add(DataKind.FuelConsumption);
-        if (ShowPrimaryEnergy) active.Add(DataKind.PrimaryEnergy);
 
         Visualizer.UpdatePlot(active, SelectedPeriod);
         this.RaisePropertyChanged(nameof(CurrentPlotModel));

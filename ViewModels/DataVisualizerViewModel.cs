@@ -90,7 +90,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             if (activeKinds.Any(IsFinancial)) activeGroups.Add("Financial (DKK)");
             if (activeKinds.Any(IsCo2)) activeGroups.Add("CO2 Emissions (kg)");
             if (activeKinds.Any(IsFuel)) activeGroups.Add("Fuel Consumption (MWh)");
-            if (activeKinds.Any(IsPrimaryEnergy)) activeGroups.Add("Primary Energy (MW)");
 
             string leftTitle = "";
             string rightTitle = "";
@@ -111,7 +110,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                     if (IsFinancial(k) && activeGroups[1] == "Financial (DKK)") return "RightAxis";
                     if (IsCo2(k) && activeGroups[1] == "CO2 Emissions (kg)") return "RightAxis";
                     if (IsFuel(k) && activeGroups[1] == "Fuel Consumption (MWh)") return "RightAxis";
-                    if (IsPrimaryEnergy(k) && activeGroups[1] == "Primary Energy (MW)") return "RightAxis";
                     return "LeftAxis";
                 };
             }
@@ -275,7 +273,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
         private bool IsCo2(DataKind kind) => kind == DataKind.Co2Emissions;
         private bool IsFuel(DataKind kind) => kind == DataKind.FuelConsumption;
-        private bool IsPrimaryEnergy(DataKind kind) => kind == DataKind.PrimaryEnergy;
 
         // "HeatProduced" -> "Heat Produced"
         private string SplitCamelCase(string s)
@@ -296,7 +293,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             DataKind.Expenses => OxyColors.DarkRed,
             DataKind.Co2Emissions => OxyColors.Gray,
             DataKind.FuelConsumption => OxyColors.Brown,
-            DataKind.PrimaryEnergy => OxyColors.SaddleBrown,
             _ => OxyColors.Gray
         };
     }

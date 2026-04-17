@@ -23,7 +23,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
         {
             StringBuilder sb = new StringBuilder();
             
-            sb.AppendLine("Time,HeatMWh,Electricity,ProductionCost,PrimaryEnergy,Co2Emissions,NetCost");
+            sb.AppendLine("Time,HeatMWh,Electricity,ProductionCost,FuelConsumption,Co2Emissions,NetCost");
 
             foreach (var spec in data)
             {
@@ -32,7 +32,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
                     $"{spec.HeatMWh.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.Electricity.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.ProductionCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
-                    $"{spec.PrimaryEnergy.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
+                    $"{spec.FuelConsumption.ToString(System.Globalization.CultureInfo.InvariantCulture)}," +
                     $"{spec.Co2Emissions.ToString(System.Globalization.CultureInfo.InvariantCulture)}," 
                     // $"{spec.NetCost.ToString(System.Globalization.CultureInfo.InvariantCulture)}"
                 );

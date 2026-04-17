@@ -217,7 +217,6 @@
                                     <TextBlock Text="Environment" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
                                     <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2Enabled}" Foreground="{DynamicResource MainText}"/>
                                     <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Primary Energy" IsChecked="{Binding ShowPrimaryEnergy}" IsEnabled="{Binding IsPrimaryEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
                                 </StackPanel>
                             </StackPanel>
 
