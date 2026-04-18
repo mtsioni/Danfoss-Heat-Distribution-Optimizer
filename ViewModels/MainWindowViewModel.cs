@@ -154,6 +154,9 @@ public partial class MainWindowViewModel : ReactiveObject
         this.RaisePropertyChanged(nameof(IsElecConsEnabled));
         this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
 
+        //Suggestion: in case the ResultDataManager doesn't work on line: 243, uncomment line:158
+        ResultDataManager.GetResultData();
+
         var active = new List<DataKind>();
         if (ShowHeatProduced) active.Add(DataKind.HeatProduced);
         if (ShowHeatConsumed) active.Add(DataKind.HeatConsumed);
@@ -235,7 +238,10 @@ public partial class MainWindowViewModel : ReactiveObject
         Optimizer.OptimizationPeriodEnd = new DateTime(2026, 1, 6);
         Optimizer.TimeResolution = 1;
 
-        Optimizer.GetResultData();
+        // Maria here: I comment line: 242 and replaced it with RDM GetResultData moethod, cause this is the correct place of where the Optimizer should be called.
+        //Optimizer.GetResultData();
+        ResultDataManager.GetResultData();
+
         var diagnosticModel = new DataVisualizerModel();
         diagnosticModel.PrintData();
 
@@ -244,8 +250,8 @@ public partial class MainWindowViewModel : ReactiveObject
 
     private void LoadUnits()
     {
-        string jsonPath = FindAsset("ProductionUnits.json");
-        AssetManager.Initialize(jsonPath, jsonPath, string.Empty);
+        // string jsonPath = FindAsset("ProductionUnits.json");
+        // AssetManager.Initialize(jsonPath, jsonPath, string.Empty);
 
         // just ask AssetManager for the units, it loads them from json automatically
         var units = AssetManager.GetDataForDataVisualizer().Item1;
@@ -269,16 +275,16 @@ public partial class MainWindowViewModel : ReactiveObject
     }
 
     // finds where the assets are placed depending if we are debugging or running production
-    private string FindAsset(string filename)
-    {
-        string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", filename);
-        if (File.Exists(rootPath)) return rootPath;
+    // private string FindAsset(string filename)
+    // {
+    //     string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", filename);
+    //     if (File.Exists(rootPath)) return rootPath;
 
-        string debugPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", filename);
-        if (File.Exists(debugPath)) return debugPath;
+    //     string debugPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", filename);
+    //     if (File.Exists(debugPath)) return debugPath;
 
-        return rootPath;
-    }
+    //     return rootPath;
+    // }
 
     // pushes the bright or dark mode deep into Avalonia internal settings
     private void ApplyTheme()
