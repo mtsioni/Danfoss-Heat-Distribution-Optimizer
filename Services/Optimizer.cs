@@ -37,6 +37,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             // preparing for optimization
             double heatDemand = 0;
             double producedHeat = 0;
+            double workload = 1;
             //List<double> heatPerPrice = new List<double>();  
             RetrieveUnits();
             RetriveSourceData();
@@ -81,10 +82,14 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                     // Decide on which units to use, and record the usage (add values to records when used)
                     for (int c = 0; (c < _availableUnits.Count) && (producedHeat < heatDemand); c++) 
                     {
-                        // increase producedHeat to try reach demand
-                        producedHeat += _availableUnits[c].MaxHeat;
+                        if (_availableUnits[c].MaxHeat > (heatDemand - producedHeat))
+                            workload = (heatDemand - producedHeat) / _availableUnits[c].MaxHeat;
+                        else workload = 1;
+
+                        producedHeat += _availableUnits[c].MaxHeat * workload;
+
                         // update records (effectively use the unit)
-                        _availableUnits[c].UpdateRecords(electricityPrice, i);
+                        _availableUnits[c].UpdateRecords(workload, _availableUnits[c].CalculateNetProductionCost(electricityPrice), i);
                     }
                 }
                 else throw new Exception("AvailableUnits not available");

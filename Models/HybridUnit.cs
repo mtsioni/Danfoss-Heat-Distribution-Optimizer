@@ -49,54 +49,54 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         }
         public double CalculateNetProductionCost(double electricityPrice)
         {
-            return ProductionCost - MaxElectricity * electricityPrice;
+            return double.Round(ProductionCost - MaxElectricity * electricityPrice, 2);
         }
-        public void UpdateRecords(double electricityPrice, DateTime hour)
+        public void UpdateRecords(double workload, double netProductionCost, DateTime hour)
         {
             //Update ProductionCostRecords
             if (ProductionCostRecords.Values.ContainsKey(hour))
             {
-                ProductionCostRecords[hour] = CalculateNetProductionCost(electricityPrice);
+                ProductionCostRecords[hour] = netProductionCost * workload;
             }
             else
             {
-                ProductionCostRecords.Values.Add(hour, CalculateNetProductionCost(electricityPrice));
+                ProductionCostRecords.Values.Add(hour, netProductionCost * workload);
             }
             //Update HeatRecords
             if (HeatRecords.Values.ContainsKey(hour))
             {
-                HeatRecords[hour] = MaxHeat;
+                HeatRecords[hour] = MaxHeat * workload;
             }
             else
             {
-                HeatRecords.Values.Add(hour, MaxHeat);
+                HeatRecords.Values.Add(hour, MaxHeat * workload);
             }
             //Update ElectricityRecords
             if (ElectricityRecords.Values.ContainsKey(hour))
             {
-                ElectricityRecords[hour] = MaxElectricity;
+                ElectricityRecords[hour] = MaxElectricity * workload;
             }
             else
             {
-                ElectricityRecords.Values.Add(hour, MaxElectricity);
+                ElectricityRecords.Values.Add(hour, MaxElectricity * workload);
             }
             //Update PollutionRecords
             if (PollutionRecords.Values.ContainsKey(hour))
             {
-                PollutionRecords[hour] = Emissions;
+                PollutionRecords[hour] = Emissions * workload;
             }
             else
             {
-                PollutionRecords.Values.Add(hour, Emissions);
+                PollutionRecords.Values.Add(hour, Emissions * workload);
             }
             // Update FuelConsumptionRecords
             if (FuelConsumptionRecords.Values.ContainsKey(hour))
             {
-                FuelConsumptionRecords[hour] = FuelConsumption;
+                FuelConsumptionRecords[hour] = FuelConsumption * workload;
             }
             else
             {
-                FuelConsumptionRecords.Values.Add(hour, FuelConsumption);
+                FuelConsumptionRecords.Values.Add(hour, FuelConsumption * workload);
             }
         }
     }

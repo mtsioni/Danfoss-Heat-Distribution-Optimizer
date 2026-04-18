@@ -13,11 +13,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             bool fueled = false;
 
 
-            if (!string.IsNullOrEmpty(inputUnit.FuelName))
+            if (inputUnit.FuelName != "Electric")
             {
                 fueled = true;
             }
-
+            
             if (inputUnit.MaxElectricity != 0)
             {
                 electric = true;

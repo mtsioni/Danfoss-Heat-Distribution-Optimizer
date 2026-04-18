@@ -11,6 +11,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services.Interfaces
         TimeSeries<double> FuelConsumptionRecords { get; set; }
         TimeSeries<double> HeatPerPriceRecords {get; set;}
         double CalculateNetProductionCost(double electricityPrice);
-        void UpdateRecords(double electricityPrice, DateTime hour);
+        void UpdateRecords(double workload, double netProductionCost, DateTime hour);
     }
 }
