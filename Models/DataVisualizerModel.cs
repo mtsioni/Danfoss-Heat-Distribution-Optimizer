@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
+using Danfoss_Heat_Distribution_Optimizer.Services;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
     public class DataVisualizerModel
     {
-        public List<IOptimizedUnit> Units { get; set; }
+        public List<IOptimizedUnit> Units => ResultDataManager.GetResultData();
 
-        public DataVisualizerModel(List<IOptimizedUnit> units)
+        public DataVisualizerModel()
         {
-            Units = units;
         }
 
         public void PrintData()

@@ -235,8 +235,8 @@ public partial class MainWindowViewModel : ReactiveObject
         Optimizer.OptimizationPeriodEnd = new DateTime(2026, 1, 6);
         Optimizer.TimeResolution = 1;
 
-        var resultData = Optimizer.GetResultData();
-        var diagnosticModel = new DataVisualizerModel(resultData);
+        Optimizer.GetResultData();
+        var diagnosticModel = new DataVisualizerModel();
         diagnosticModel.PrintData();
 
         UpdateChart();
