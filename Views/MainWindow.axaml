@@ -12,7 +12,7 @@
         Background="#EED9B9"
         WindowState="Maximized">
 
-    <!-- theme color definitions - swap these to change the whole app color scheme -->
+    <!-- theme color definitions - swap these to change the base app color scheme -->
     <!-- the x:Key names are referenced with DynamicResource throughout the file -->
     <Window.Resources>
         <ResourceDictionary>
@@ -132,6 +132,7 @@
                         
                         <!-- dropdown for selecting unit -->
                         <ComboBox PlaceholderText="Select a production unit" 
+                                PlaceholderForeground="#efebe5"
                                 HorizontalAlignment="Stretch" 
                                 Foreground="#efebe5"
                                 Background="#4A0404"
@@ -142,9 +143,30 @@
                                 Padding="15,10"
                                 ItemsSource="{Binding Units}"
                                 SelectedItem="{Binding SelectedUnit}">
+                            <ComboBox.Resources>
+                                <SolidColorBrush x:Key="ComboBoxDropDownBackground">#4A0404</SolidColorBrush>
+                                <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush">#efebe5</SolidColorBrush>
+                                <SolidColorBrush x:Key="ComboBoxPlaceholderTextForeground">#efebe5</SolidColorBrush>
+                            </ComboBox.Resources>
                             <ComboBox.Styles>
                                 <Style Selector="ComboBoxItem">
                                     <Setter Property="Foreground" Value="#efebe5"/>
+                                    <Setter Property="Padding" Value="12,8"/>
+                                    <Setter Property="Margin" Value="2,1"/>
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                    <Setter Property="Transitions">
+                                        <Transitions>
+                                            <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                                        </Transitions>
+                                    </Setter>
+                                </Style>
+                                <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+                                    <Setter Property="Background" Value="#d01d29"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Style>
+                                <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+                                    <Setter Property="Background" Value="#5E0006"/>
+                                    <Setter Property="Foreground" Value="White"/>
                                 </Style>
                             </ComboBox.Styles>
                             <ComboBox.ItemTemplate>
@@ -172,8 +194,8 @@
                 <!-- header with logo -->
                 <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="HEAT PRODUCTION OPTIMIZATION TOOL V1.0" FontSize="18" Foreground="{DynamicResource MainText}"/>
-                        <TextBlock Text="Heatington ~ 1600" Foreground="{DynamicResource MainText}"/>
+                        <TextBlock Text="HEAT PRODUCTION OPTIMIZATION TOOL V1.0" FontSize="18" Foreground="{DynamicResource MainText}" FontFamily="Segoe UI"/>
+                        <TextBlock Text="Heatington ~ 1600" Foreground="{DynamicResource MainText}" FontFamily="Segoe UI"/>
                     </StackPanel>
                     
                     <!-- brand label -->
@@ -283,46 +305,46 @@
 
                                                 <!-- big unit name -->
                                                 <TextBlock Text="{Binding Name}"
-                                                           FontFamily="Segoe UI" FontSize="26" FontWeight="Bold"
+                                                           FontFamily="Segoe UI" FontSize="23" FontWeight="Bold"
                                                            Foreground="White" Margin="0,0,0,6"/>
 
                                                 <TextBlock Text="Max Heat"
-                                                           FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"
+                                                           FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
                                                            Foreground="White"/>
                                                 <TextBlock Text="{Binding MaxHeatText}"
-                                                           FontFamily="Segoe UI" FontSize="15"
+                                                           FontFamily="Segoe UI" FontSize="14"
                                                            Foreground="White" Margin="0,0,0,4"/>
 
                                                 <TextBlock Text="Max Electricity"
                                                            IsVisible="{Binding HasElectricity}"
-                                                           FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"
+                                                           FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
                                                            Foreground="White"/>
                                                 <TextBlock Text="{Binding MaxElectricityText}"
                                                            IsVisible="{Binding HasElectricity}"
-                                                           FontFamily="Segoe UI" FontSize="15"
+                                                           FontFamily="Segoe UI" FontSize="14"
                                                            Foreground="White" Margin="0,0,0,4"/>
 
                                                 <TextBlock Text="Production Cost"
-                                                           FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"
+                                                           FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
                                                            Foreground="White"/>
                                                 <TextBlock Text="{Binding ProductionCostText}"
-                                                           FontFamily="Segoe UI" FontSize="15"
+                                                           FontFamily="Segoe UI" FontSize="14"
                                                            Foreground="White" Margin="0,0,0,4"/>
 
                                                 <TextBlock Text="CO2 Emissions"
-                                                           FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"
+                                                           FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
                                                            Foreground="White"/>
                                                 <TextBlock Text="{Binding Co2Text}"
-                                                           FontFamily="Segoe UI" FontSize="15"
+                                                           FontFamily="Segoe UI" FontSize="14"
                                                            Foreground="White" Margin="0,0,0,4"/>
 
                                                 <TextBlock Text="{Binding FuelConsumptionLabel}"
                                                            IsVisible="{Binding HasFuelConsumption}"
-                                                           FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"
+                                                           FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
                                                            Foreground="White"/>
                                                 <TextBlock Text="{Binding FuelConsumptionText}"
                                                            IsVisible="{Binding HasFuelConsumption}"
-                                                           FontFamily="Segoe UI" FontSize="15"
+                                                           FontFamily="Segoe UI" FontSize="14"
                                                            Foreground="White"/>
 
                                             </StackPanel>
