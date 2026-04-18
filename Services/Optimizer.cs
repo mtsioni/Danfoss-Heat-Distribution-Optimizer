@@ -81,7 +81,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                     _availableUnits.Sort((left, right) => left.HeatPerPriceRecords[i].CompareTo(right.HeatPerPriceRecords[i])); 
 
                     // Decide on which units to use, and record the usage (add values to records when used)
-                    for (int c = 0;( c < _availableUnits.Count) || (producedHeat < heatDemand) ; c++) 
+                    for (int c = 0; (c < _availableUnits.Count) && (producedHeat < heatDemand); c++) 
                     {
                         // increase producedHeat to try reach demand
                         producedHeat += _availableUnits[c].MaxHeat;
@@ -96,7 +96,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static List<IOptimizedUnit> GetResultData()
         {
             Optimize();
-            return _availableUnits ?? throw new Exception("AvailableUnits not available");
+            return ResultDataManager.GetResultData();
         }
 
     }

@@ -229,6 +229,16 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         Visualizer.UpdateThemeColors(IsDarkTheme);
         LoadUnits();
+
+        // Diagnostic Optimization Trigger
+        Optimizer.OptimizationPeriodStart = new DateTime(2026, 1, 5); 
+        Optimizer.OptimizationPeriodEnd = new DateTime(2026, 1, 6);
+        Optimizer.TimeResolution = 1;
+
+        var resultData = Optimizer.GetResultData();
+        var diagnosticModel = new DataVisualizerModel(resultData);
+        diagnosticModel.PrintData();
+
         UpdateChart();
     }
 
