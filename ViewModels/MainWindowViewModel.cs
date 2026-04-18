@@ -17,8 +17,6 @@ public partial class MainWindowViewModel : ReactiveObject
     // visualizer holds all the graph logic so we dont clutter this file too much
     public DataVisualizerViewModel Visualizer { get; } = new();
 
-    public PlotModel CurrentPlotModel => Visualizer.CurrentPlotModel;
-
     // =# SCENARIO STUFF #=
     // keeps track of what scenario the user choosed
     // we use a private variable with a public getter/setter so we can inject RaiseAndSetIfChanged
@@ -37,15 +35,12 @@ public partial class MainWindowViewModel : ReactiveObject
             if (value) 
             {
                 SelectedScenario = Scenario.Heat;
-                ShowElectricityProduced = false;
-                ShowElectricityConsumed = false;
+                ShowElectricity = false;
                 ShowElectricityPrice = false;
+                RefreshDataAndChart();
             }
             this.RaisePropertyChanged(nameof(IsHeatScenarioSelected));
             this.RaisePropertyChanged(nameof(IsHeatAndElecScenarioSelected));
-            this.RaisePropertyChanged(nameof(IsElecProdEnabled));
-            this.RaisePropertyChanged(nameof(IsElecConsEnabled));
-            this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
         }
     }
 
@@ -54,12 +49,13 @@ public partial class MainWindowViewModel : ReactiveObject
         get => SelectedScenario == Scenario.HeatAndElectricity;
         set
         {
-            if (value) SelectedScenario = Scenario.HeatAndElectricity;
+            if (value) 
+            {
+                SelectedScenario = Scenario.HeatAndElectricity;
+                RefreshDataAndChart();
+            }
             this.RaisePropertyChanged(nameof(IsHeatScenarioSelected));
             this.RaisePropertyChanged(nameof(IsHeatAndElecScenarioSelected));
-            this.RaisePropertyChanged(nameof(IsElecProdEnabled));
-            this.RaisePropertyChanged(nameof(IsElecConsEnabled));
-            this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
         }
     }
 
@@ -70,53 +66,62 @@ public partial class MainWindowViewModel : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedPeriod, value);
-            UpdateChart();
+            RefreshDataAndChart();
             this.RaisePropertyChanged(nameof(IsWinterSelected));
             this.RaisePropertyChanged(nameof(IsSummerSelected));
         }
+    }
+
+    private void SyncOptimizationPeriod()
+    {
+        if (SelectedPeriod == Period.Winter)
+        {
+            Optimizer.OptimizationPeriodStart = new DateTime(2026, 1, 5);
+            Optimizer.OptimizationPeriodEnd = new DateTime(2026, 1, 19);
+        }
+        else
+        {
+            Optimizer.OptimizationPeriodStart = new DateTime(2025, 9, 8);
+            Optimizer.OptimizationPeriodEnd = new DateTime(2025, 9, 22);
+        }
+
+        Optimizer.TimeResolution = 1;
+
+        // Sync with ResultDataManager
+        ResultDataManager.OptimizationPeriodStart = Optimizer.OptimizationPeriodStart;
+        ResultDataManager.OptimizationPeriodEnd = Optimizer.OptimizationPeriodEnd;
+        ResultDataManager.TimeResolution = Optimizer.TimeResolution;
     }
 
     public bool IsWinterSelected { get => SelectedPeriod == Period.Winter; set { if (value) SelectedPeriod = Period.Winter; } }
     public bool IsSummerSelected { get => SelectedPeriod == Period.Summer; set { if (value) SelectedPeriod = Period.Summer; } }
 
     private double _maintenanceHours = 30;
-    public double MaintenanceHours { get => _maintenanceHours; set => this.RaiseAndSetIfChanged(ref _maintenanceHours, value); }
+    public double MaintenanceHours { get => _maintenanceHours; set { this.RaiseAndSetIfChanged(ref _maintenanceHours, value); RefreshDataAndChart(); } }
 
     private UnitViewModel? _selectedUnit;
-    public UnitViewModel? SelectedUnit { get => _selectedUnit; set => this.RaiseAndSetIfChanged(ref _selectedUnit, value); }
+    public UnitViewModel? SelectedUnit { get => _selectedUnit; set { this.RaiseAndSetIfChanged(ref _selectedUnit, value); RefreshDataAndChart(); } }
 
-    private bool _showHeatProduced = true;
-    public bool ShowHeatProduced { get => _showHeatProduced; set { this.RaiseAndSetIfChanged(ref _showHeatProduced, value); UpdateChart(); } }
+    private bool _showHeatDemand = true;
+    public bool ShowHeatDemand { get => _showHeatDemand; set { this.RaiseAndSetIfChanged(ref _showHeatDemand, value); UpdateChart(); } }
 
-    private bool _showHeatConsumed = true;
-    public bool ShowHeatConsumed { get => _showHeatConsumed; set { this.RaiseAndSetIfChanged(ref _showHeatConsumed, value); UpdateChart(); } }
+    private bool _showHeatProduction = true;
+    public bool ShowHeatProduction { get => _showHeatProduction; set { this.RaiseAndSetIfChanged(ref _showHeatProduction, value); UpdateChart(); } }
 
-    private bool _showElectricityProduced;
-    public bool ShowElectricityProduced { get => _showElectricityProduced; set { this.RaiseAndSetIfChanged(ref _showElectricityProduced, value); UpdateChart(); } }
-
-    private bool _showElectricityConsumed;
-    public bool ShowElectricityConsumed { get => _showElectricityConsumed; set { this.RaiseAndSetIfChanged(ref _showElectricityConsumed, value); UpdateChart(); } }
+    private bool _showElectricity;
+    public bool ShowElectricity { get => _showElectricity; set { this.RaiseAndSetIfChanged(ref _showElectricity, value); UpdateChart(); } }
 
     private bool _showElectricityPrice;
     public bool ShowElectricityPrice { get => _showElectricityPrice; set { this.RaiseAndSetIfChanged(ref _showElectricityPrice, value); UpdateChart(); } }
-
-    private bool _showMoneyEarned;
-    public bool ShowMoneyEarned { get => _showMoneyEarned; set { this.RaiseAndSetIfChanged(ref _showMoneyEarned, value); UpdateChart(); } }
-
-    private bool _showMoneySpent;
-    public bool ShowMoneySpent { get => _showMoneySpent; set { this.RaiseAndSetIfChanged(ref _showMoneySpent, value); UpdateChart(); } }
-
-    private bool _showProfit;
-    public bool ShowProfit { get => _showProfit; set { this.RaiseAndSetIfChanged(ref _showProfit, value); UpdateChart(); } }
-
-    private bool _showExpenses;
-    public bool ShowExpenses { get => _showExpenses; set { this.RaiseAndSetIfChanged(ref _showExpenses, value); UpdateChart(); } }
 
     private bool _showCo2Emissions;
     public bool ShowCo2Emissions { get => _showCo2Emissions; set { this.RaiseAndSetIfChanged(ref _showCo2Emissions, value); UpdateChart(); } }
 
     private bool _showFuelConsumption;
     public bool ShowFuelConsumption { get => _showFuelConsumption; set { this.RaiseAndSetIfChanged(ref _showFuelConsumption, value); UpdateChart(); } }
+
+    private bool _showProductionCosts;
+    public bool ShowProductionCosts { get => _showProductionCosts; set { this.RaiseAndSetIfChanged(ref _showProductionCosts, value); UpdateChart(); } }
 
     private bool _isEnergyEnabled = true;
     public bool IsEnergyEnabled { get => _isEnergyEnabled; set => this.RaiseAndSetIfChanged(ref _isEnergyEnabled, value); }
@@ -130,16 +135,20 @@ public partial class MainWindowViewModel : ReactiveObject
     private bool _isFuelEnabled = true;
     public bool IsFuelEnabled { get => _isFuelEnabled; set => this.RaiseAndSetIfChanged(ref _isFuelEnabled, value); }
 
-    public bool IsElecProdEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsEnergyEnabled;
-    public bool IsElecConsEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsEnergyEnabled;
-    public bool IsElecPriceEnabled => SelectedScenario == Scenario.HeatAndElectricity && IsFinanceEnabled;
+    private void RefreshDataAndChart()
+    {
+        SyncOptimizationPeriod();
+        ResultDataManager.GetResultData();
+        Visualizer.Model.UpdateData();
+        UpdateChart();
+    }
 
     // =# CHART UPDATER #=
     // core logic to refresh graph and grey out the checkboxes
     private void UpdateChart()
     {
-        bool hasEnergy = ShowHeatProduced || ShowHeatConsumed || ShowElectricityProduced || ShowElectricityConsumed;
-        bool hasFinance = ShowMoneyEarned || ShowMoneySpent || ShowProfit || ShowExpenses || ShowElectricityPrice;
+        bool hasEnergy = ShowHeatDemand || ShowHeatProduction || ShowElectricity;
+        bool hasFinance = ShowProductionCosts || ShowElectricityPrice;
         bool hasCo2 = ShowCo2Emissions;
         bool hasFuel = ShowFuelConsumption;
 
@@ -150,28 +159,16 @@ public partial class MainWindowViewModel : ReactiveObject
         IsCo2Enabled = (activeGroups < 2) || hasCo2;
         IsFuelEnabled = (activeGroups < 2) || hasFuel;
 
-        this.RaisePropertyChanged(nameof(IsElecProdEnabled));
-        this.RaisePropertyChanged(nameof(IsElecConsEnabled));
-        this.RaisePropertyChanged(nameof(IsElecPriceEnabled));
+        var activeKinds = new List<DataKind>();
+        if (ShowHeatDemand) activeKinds.Add(DataKind.HeatDemand);
+        if (ShowHeatProduction) activeKinds.Add(DataKind.HeatProduction);
+        if (ShowElectricity) activeKinds.Add(DataKind.Electricity);
+        if (ShowElectricityPrice) activeKinds.Add(DataKind.ElectricityPrice);
+        if (ShowCo2Emissions) activeKinds.Add(DataKind.Co2Emissions);
+        if (ShowFuelConsumption) activeKinds.Add(DataKind.FuelConsumption);
+        if (ShowProductionCosts) activeKinds.Add(DataKind.ProductionCosts);
 
-        //Suggestion: in case the ResultDataManager doesn't work on line: 243, uncomment line:158
-        ResultDataManager.GetResultData();
-
-        var active = new List<DataKind>();
-        if (ShowHeatProduced) active.Add(DataKind.HeatProduced);
-        if (ShowHeatConsumed) active.Add(DataKind.HeatConsumed);
-        if (ShowElectricityProduced) active.Add(DataKind.ElectricityProduced);
-        if (ShowElectricityConsumed) active.Add(DataKind.ElectricityConsumed);
-        if (ShowElectricityPrice) active.Add(DataKind.ElectricityPrice);
-        if (ShowMoneyEarned) active.Add(DataKind.MoneyEarned);
-        if (ShowMoneySpent) active.Add(DataKind.MoneySpent);
-        if (ShowProfit) active.Add(DataKind.Profit);
-        if (ShowExpenses) active.Add(DataKind.Expenses);
-        if (ShowCo2Emissions) active.Add(DataKind.Co2Emissions);
-        if (ShowFuelConsumption) active.Add(DataKind.FuelConsumption);
-
-        Visualizer.UpdatePlot(active, SelectedPeriod);
-        this.RaisePropertyChanged(nameof(CurrentPlotModel));
+        Visualizer.UpdatePlot(activeKinds, SelectedPeriod);
     }
 
     // =# UNIT CARDS PAGINATION #=
@@ -232,27 +229,11 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         Visualizer.UpdateThemeColors(IsDarkTheme);
         LoadUnits();
-
-        // Diagnostic Optimization Trigger
-        Optimizer.OptimizationPeriodStart = new DateTime(2026, 1, 5); 
-        Optimizer.OptimizationPeriodEnd = new DateTime(2026, 1, 6);
-        Optimizer.TimeResolution = 1;
-
-        // Maria here: I comment line: 242 and replaced it with RDM GetResultData moethod, cause this is the correct place of where the Optimizer should be called.
-        //Optimizer.GetResultData();
-        ResultDataManager.GetResultData();
-
-        var diagnosticModel = new DataVisualizerModel();
-        diagnosticModel.PrintData();
-
-        UpdateChart();
+        RefreshDataAndChart();
     }
 
     private void LoadUnits()
     {
-        // string jsonPath = FindAsset("ProductionUnits.json");
-        // AssetManager.Initialize(jsonPath, jsonPath, string.Empty);
-
         // just ask AssetManager for the units, it loads them from json automatically
         var units = AssetManager.GetDataForDataVisualizer().Item1;
         foreach (var data in units)
@@ -273,18 +254,6 @@ public partial class MainWindowViewModel : ReactiveObject
 
         RefreshVisibleUnits();
     }
-
-    // finds where the assets are placed depending if we are debugging or running production
-    // private string FindAsset(string filename)
-    // {
-    //     string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", filename);
-    //     if (File.Exists(rootPath)) return rootPath;
-
-    //     string debugPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", filename);
-    //     if (File.Exists(debugPath)) return debugPath;
-
-    //     return rootPath;
-    // }
 
     // pushes the bright or dark mode deep into Avalonia internal settings
     private void ApplyTheme()

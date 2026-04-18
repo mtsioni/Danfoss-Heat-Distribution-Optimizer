@@ -7,14 +7,11 @@ using OxyPlot.Legends;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 using ReactiveUI;
-
 using System.Collections.ObjectModel;
+using System;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 {
-    using System;
-
-    // small helper class to hold one legend row - the label and color
     public class LegendItem
     {
         public string Title { get; set; } = string.Empty;
@@ -30,7 +27,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _currentPlotModel, value);
         }
 
-        // legend list - ObservableCollection so UI updates automatically when items change
         private ObservableCollection<LegendItem> _activeLegendItems = new();
         public ObservableCollection<LegendItem> ActiveLegendItems
         {
@@ -38,33 +34,52 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             set => this.RaiseAndSetIfChanged(ref _activeLegendItems, value);
         }
 
+        private bool _isLegendExpanded = false;
+        public bool IsLegendExpanded
+        {
+            get => _isLegendExpanded;
+            set => this.RaiseAndSetIfChanged(ref _isLegendExpanded, value);
+        }
+
+        public void ToggleLegend()
+        {
+            IsLegendExpanded = !IsLegendExpanded;
+        }
+
+        public DataVisualizerModel Model { get; } = new();
+
         public DataVisualizerViewModel()
         {
             var model = new PlotModel();
 
-            // X-axis: DateTimeAxis to correctly display dates across multiple days
             model.Axes.Add(new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
-                StringFormat = "MM/dd",
+                StringFormat = "dd/MM",
                 Title = "Date",
                 Key = "TimeAxis",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
-                IntervalType = DateTimeIntervalType.Hours
+                IntervalType = DateTimeIntervalType.Days,
+                MinorIntervalType = DateTimeIntervalType.Hours,
+                IsPanEnabled = false,
+                IsZoomEnabled = false
             });
 
-            // left Y axis
             model.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Left,
                 Title = "Energy (MW, MWh)",
                 Key = "LeftAxis",
                 MinimumPadding = 0.1,
-                MaximumPadding = 0.1
+                MaximumPadding = 0.1,
+                IsPanEnabled = false,
+                IsZoomEnabled = false,
+                MajorStep = 1,
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot
             });
 
-            // right Y axis - used when two categories are active at once
             model.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Right,
@@ -72,24 +87,29 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                 Key = "RightAxis",
                 MinimumPadding = 0.1,
                 MaximumPadding = 0.1,
-                Minimum = 0,
-                Maximum = 3000
+                IsAxisVisible = false,
+                IsPanEnabled = false,
+                IsZoomEnabled = false
             });
 
             CurrentPlotModel = model;
         }
 
-        // rebuilds chart every time a checkbox is toggled
         public void UpdatePlot(IEnumerable<DataKind> activeKinds, Period period)
         {
             CurrentPlotModel.Series.Clear();
             ActiveLegendItems.Clear();
 
             var activeGroups = new List<string>();
-            if (activeKinds.Any(IsEnergy)) activeGroups.Add("Energy (MW, MWh)");
-            if (activeKinds.Any(IsFinancial)) activeGroups.Add("Financial (DKK)");
-            if (activeKinds.Any(IsCo2)) activeGroups.Add("CO2 Emissions (kg)");
-            if (activeKinds.Any(IsFuel)) activeGroups.Add("Fuel Consumption (MWh)");
+            bool hasEnergy = activeKinds.Any(k => k == DataKind.HeatDemand || k == DataKind.HeatProduction || k == DataKind.Electricity);
+            bool hasFinance = activeKinds.Any(k => k == DataKind.ProductionCosts || k == DataKind.ElectricityPrice);
+            bool hasCo2 = activeKinds.Any(k => k == DataKind.Co2Emissions);
+            bool hasFuel = activeKinds.Any(k => k == DataKind.FuelConsumption);
+
+            if (hasEnergy) activeGroups.Add("Energy (MW, MWh)");
+            if (hasFinance) activeGroups.Add("Financial (DKK)");
+            if (hasCo2) activeGroups.Add("CO2 Emissions (kg)");
+            if (hasFuel) activeGroups.Add("Fuel Consumption (MWh)");
 
             string leftTitle = "";
             string rightTitle = "";
@@ -106,33 +126,69 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                 
                 getAxisKey = k => 
                 {
-                    if (IsEnergy(k) && activeGroups[1] == "Energy (MW, MWh)") return "RightAxis";
-                    if (IsFinancial(k) && activeGroups[1] == "Financial (DKK)") return "RightAxis";
-                    if (IsCo2(k) && activeGroups[1] == "CO2 Emissions (kg)") return "RightAxis";
-                    if (IsFuel(k) && activeGroups[1] == "Fuel Consumption (MWh)") return "RightAxis";
-                    return "LeftAxis";
+                    string group = "";
+                    if (k == DataKind.HeatDemand || k == DataKind.HeatProduction || k == DataKind.Electricity) group = "Energy (MW, MWh)";
+                    else if (k == DataKind.ProductionCosts || k == DataKind.ElectricityPrice) group = "Financial (DKK)";
+                    else if (k == DataKind.Co2Emissions) group = "CO2 Emissions (kg)";
+                    else if (k == DataKind.FuelConsumption) group = "Fuel Consumption (MWh)";
+
+                    return group == activeGroups[1] ? "RightAxis" : "LeftAxis";
                 };
             }
 
-            // update axis labels based on what's selected
-            var leftAxis = CurrentPlotModel.Axes.FirstOrDefault(a => a.Key == "LeftAxis");
-            if (leftAxis != null) leftAxis.Title = leftTitle;
+            var timeAxis = CurrentPlotModel.Axes.FirstOrDefault(a => a.Key == "TimeAxis") as DateTimeAxis;
+            if (timeAxis != null) 
+            {
+                if (period == Period.Winter)
+                {
+                    timeAxis.Minimum = DateTimeAxis.ToDouble(new DateTime(2026, 1, 5));
+                    timeAxis.Maximum = DateTimeAxis.ToDouble(new DateTime(2026, 1, 19));
+                }
+                else
+                {
+                    timeAxis.Minimum = DateTimeAxis.ToDouble(new DateTime(2025, 9, 8));
+                    timeAxis.Maximum = DateTimeAxis.ToDouble(new DateTime(2025, 9, 22));
+                }
+            }
 
-            var rightAxis = CurrentPlotModel.Axes.FirstOrDefault(a => a.Key == "RightAxis");
-            if (rightAxis != null) rightAxis.Title = rightTitle;
+            var leftAxis = CurrentPlotModel.Axes.FirstOrDefault(a => a.Key == "LeftAxis") as LinearAxis;
+            if (leftAxis != null) 
+            {
+                leftAxis.Title = leftTitle;
+                leftAxis.IsAxisVisible = !string.IsNullOrEmpty(leftTitle);
+                leftAxis.Minimum = double.NaN; // Auto-scale (allow negative)
+                leftAxis.MajorStep = leftTitle.Contains("Energy") ? 1 : double.NaN;
+            }
 
-            foreach (var kind in activeKinds)
+            var rightAxis = CurrentPlotModel.Axes.FirstOrDefault(a => a.Key == "RightAxis") as LinearAxis;
+            if (rightAxis != null) 
+            {
+                rightAxis.Title = rightTitle;
+                rightAxis.IsAxisVisible = !string.IsNullOrEmpty(rightTitle);
+                rightAxis.Minimum = double.NaN; // Auto-scale (allow negative)
+                rightAxis.MajorStep = double.NaN;
+            }
+
+            // 1. First add the bars (to the back)
+            if (activeKinds.Contains(DataKind.HeatProduction))
+            {
+                AddStackedHeatProduction(period, getAxisKey(DataKind.HeatProduction));
+            }
+
+            // 2. Then add the lines (to the front)
+            foreach (var kind in activeKinds.Where(k => k != DataKind.HeatProduction))
             {
                 var data = GetAggregatedData(kind, period);
                 var series = CreateSeries(kind, getAxisKey(kind));
 
-                // create real DateTime points so X-axis shows the full span of days correctly
                 foreach (var point in data.OrderBy(p => p.Key))
-                    series.Points.Add(DateTimeAxis.CreateDataPoint(point.Key, point.Value));
+                {
+                    // Align points to center of bar (minute 30) for visual stability
+                    series.Points.Add(DateTimeAxis.CreateDataPoint(point.Key.AddMinutes(30), point.Value));
+                }
 
                 CurrentPlotModel.Series.Add(series);
 
-                // convert OxyPlot color to Avalonia brush for the legend swatch
                 var c = series.Color;
                 var brush = new Avalonia.Media.SolidColorBrush(
                     Avalonia.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
@@ -142,12 +198,79 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             CurrentPlotModel.InvalidatePlot(true);
         }
 
+        private void AddStackedHeatProduction(Period period, string yAxisKey)
+        {
+            var units = ResultDataManager.GetResultData();
+            if (units == null || units.Count == 0) return;
+
+            bool isCorrectPeriod(DateTime dt) => period == Period.Winter ? dt.Month == 1 : dt.Month == 9;
+
+            var timeStamps = units.SelectMany(u => u.HeatRecords.Values.Keys)
+                                 .Where(isCorrectPeriod)
+                                 .Distinct()
+                                 .OrderBy(t => t)
+                                 .ToList();
+
+            if (timeStamps.Count == 0) return;
+
+            var lastY = timeStamps.ToDictionary(t => t, t => 0.0);
+            int colorIndex = 0;
+            // Unit palette (avoids conflict with metric lines)
+            var coreColors = new[] 
+            { 
+                OxyColor.FromRgb(255, 105, 180), // Hot Pink
+                OxyColor.FromRgb(0, 191, 255),   // Deep Sky Blue
+                OxyColor.FromRgb(186, 85, 211),  // Medium Orchid
+                OxyColor.FromRgb(0, 206, 209),   // Dark Turquoise
+                OxyColor.FromRgb(123, 104, 238), // Medium Slate Blue
+                OxyColor.FromRgb(255, 0, 255),   // Magenta
+                OxyColor.FromRgb(175, 238, 238), // Pale Turquoise
+                OxyColor.FromRgb(218, 112, 214), // Orchid
+                OxyColor.FromRgb(70, 130, 180),  // Steel Blue
+                OxyColor.FromRgb(221, 160, 221)  // Plum
+            };
+
+            foreach (var unit in units)
+            {
+                var color = coreColors[colorIndex % coreColors.Length];
+                var series = new RectangleBarSeries { Title = unit.Name, FillColor = color, YAxisKey = yAxisKey, StrokeThickness = 0 };
+
+                foreach (var kvp in unit.HeatRecords.Values)
+                {
+                    var dt = kvp.Key;
+                    var val = kvp.Value;
+
+                    if (isCorrectPeriod(dt) && val > 0)
+                    {
+                        double y0 = lastY[dt];
+                        double y1 = y0 + val;
+                        // Center around minute 30, with a narrow 12-minute span (20%)
+                        double x0 = DateTimeAxis.ToDouble(dt.AddMinutes(24));
+                        double x1 = DateTimeAxis.ToDouble(dt.AddMinutes(36));
+
+                        series.Items.Add(new RectangleBarItem(x0, y0, x1, y1));
+                        lastY[dt] = y1;
+                    }
+                }
+
+                if (series.Items.Count > 0)
+                {
+                    CurrentPlotModel.Series.Add(series);
+                    var c = series.FillColor;
+                    ActiveLegendItems.Add(new LegendItem 
+                    { 
+                        Title = series.Title, 
+                        Brush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(c.A, c.R, c.G, c.B)) 
+                    });
+                }
+                
+                colorIndex++;
+            }
+        }
+
         public Dictionary<DateTime, double> GetAggregatedData(DataKind kind, Period period)
         {
             var dict = new Dictionary<DateTime, double>();
-
-            // Small helper to filter out dates belonging to the wrong period
-            // In our CSV, Winter is January (1), Summer is September (9)
             bool isCorrectPeriod(DateTime dt) => period == Period.Winter ? dt.Month == 1 : dt.Month == 9;
 
             if (kind == DataKind.ElectricityPrice)
@@ -155,70 +278,51 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                 try 
                 {
                     var priceSeries = SourceDataManager.GetElectricityPrice();
-                    foreach (var kvp in priceSeries.Values.Where(k => isCorrectPeriod(k.Key)))
-                        dict[kvp.Key] = kvp.Value;
+                    foreach (var kvp in priceSeries.Values)
+                    {
+                        if (isCorrectPeriod(kvp.Key))
+                            dict[kvp.Key] = kvp.Value;
+                    }
                 } 
                 catch { }
                 return dict;
             }
             
-            if (kind == DataKind.HeatConsumed)
+            if (kind == DataKind.HeatDemand)
             {
                 try 
                 {
                     var demandSeries = SourceDataManager.GetHeatDemand();
-                    foreach (var kvp in demandSeries.Values.Where(k => isCorrectPeriod(k.Key)))
-                        dict[kvp.Key] = kvp.Value;
+                    foreach (var kvp in demandSeries.Values)
+                    {
+                        if (isCorrectPeriod(kvp.Key))
+                            dict[kvp.Key] = kvp.Value;
+                    }
                 } 
                 catch { }
                 return dict;
             }
 
-            var units = ResultDataManager.GetResultData();
-            if (units == null || units.Count == 0 || units[0].HeatRecords == null) return dict;
-
-            foreach (var kvp in units[0].HeatRecords.Values.Where(k => isCorrectPeriod(k.Key)))
+            TimeSeries<double> targetSeries = kind switch
             {
-                DateTime dt = kvp.Key;
-                double sum = 0;
+                DataKind.Electricity => Model.ElectricityProduced,
+                DataKind.Co2Emissions => Model.Co2Emissions,
+                DataKind.FuelConsumption => Model.FuelConsumption,
+                DataKind.ProductionCosts => Model.ProductionCostRecords,
+                _ => new TimeSeries<double>()
+            };
 
-                foreach (var u in units)
+            if (targetSeries != null && targetSeries.Values != null)
+            {
+                foreach (var kvp in targetSeries.Values)
                 {
-                    double val = 0;
-                    switch (kind)
-                    {
-                        case DataKind.HeatProduced:
-                            if (u.HeatRecords.Values.TryGetValue(dt, out var hp)) val = hp;
-                            break;
-                        case DataKind.ElectricityProduced:
-                            if (u.ElectricityRecords.Values.TryGetValue(dt, out var ep) && ep > 0) val = ep;
-                            break;
-                        case DataKind.ElectricityConsumed:
-                            if (u.ElectricityRecords.Values.TryGetValue(dt, out var ec) && ec < 0) val = Math.Abs(ec);
-                            break;
-                        case DataKind.Expenses:
-                        case DataKind.MoneySpent:
-                            if(u.ProductionCostRecords.Values.TryGetValue(dt, out var ms) && ms > 0) val = ms;
-                            break;
-                        case DataKind.Profit:
-                        case DataKind.MoneyEarned:
-                            if(u.ProductionCostRecords.Values.TryGetValue(dt, out var me) && me < 0) val = Math.Abs(me);
-                            break;
-                        case DataKind.Co2Emissions:
-                            if (u.PollutionRecords.Values.TryGetValue(dt, out var co)) val = co;
-                            break;
-                        case DataKind.FuelConsumption:
-                            if (u.FuelConsumptionRecords.Values.TryGetValue(dt, out var fc)) val = fc;
-                            break;
-                    }
-                    sum += val;
+                    if (isCorrectPeriod(kvp.Key))
+                        dict[kvp.Key] = kvp.Value;
                 }
-                dict[dt] = sum;
             }
+
             return dict;
         }
-
-
 
         public void UpdateThemeColors(bool isDarkTheme)
         {
@@ -244,37 +348,17 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             var series = new LineSeries
             {
                 Title = SplitCamelCase(kind.ToString()),
-                StrokeThickness = 2,
+                XAxisKey = "TimeAxis",
+                YAxisKey = yAxisKey,
+                StrokeThickness = 4,
                 Color = GetColor(kind),
-                YAxisKey = yAxisKey
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2
             };
 
             return series;
         }
 
-        private bool IsEnergy(DataKind kind) => kind switch
-        {
-            DataKind.HeatProduced => true,
-            DataKind.HeatConsumed => true,
-            DataKind.ElectricityProduced => true,
-            DataKind.ElectricityConsumed => true,
-            _ => false
-        };
-
-        private bool IsFinancial(DataKind kind) => kind switch
-        {
-            DataKind.ElectricityPrice => true,
-            DataKind.MoneyEarned => true,
-            DataKind.MoneySpent => true,
-            DataKind.Profit => true,
-            DataKind.Expenses => true,
-            _ => false
-        };
-
-        private bool IsCo2(DataKind kind) => kind == DataKind.Co2Emissions;
-        private bool IsFuel(DataKind kind) => kind == DataKind.FuelConsumption;
-
-        // "HeatProduced" -> "Heat Produced"
         private string SplitCamelCase(string s)
         {
             return System.Text.RegularExpressions.Regex.Replace(s, "([A-Z])", " $1").Trim();
@@ -282,17 +366,13 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
         private OxyColor GetColor(DataKind kind) => kind switch
         {
-            DataKind.HeatProduced => OxyColors.Red,
-            DataKind.HeatConsumed => OxyColors.Black,
-            DataKind.ElectricityProduced => OxyColors.Blue,
-            DataKind.ElectricityConsumed => OxyColors.LightBlue,
-            DataKind.ElectricityPrice => OxyColors.DarkGoldenrod,
-            DataKind.MoneyEarned => OxyColors.Green,
-            DataKind.MoneySpent => OxyColors.DarkGreen,
-            DataKind.Profit => OxyColors.LimeGreen,
-            DataKind.Expenses => OxyColors.DarkRed,
-            DataKind.Co2Emissions => OxyColors.Gray,
-            DataKind.FuelConsumption => OxyColors.Brown,
+            DataKind.HeatDemand => OxyColors.Red,
+            DataKind.HeatProduction => OxyColors.Transparent, // Not used for lines
+            DataKind.Electricity => OxyColor.FromRgb(255, 255, 0), // Bright Yellow
+            DataKind.ElectricityPrice => OxyColors.Cyan,
+            DataKind.Co2Emissions => OxyColors.Black,
+            DataKind.FuelConsumption => OxyColor.FromRgb(139, 69, 19), // Brown
+            DataKind.ProductionCosts => OxyColors.Green,
             _ => OxyColors.Gray
         };
     }

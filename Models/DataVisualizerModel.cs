@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 
@@ -7,54 +8,86 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
     public class DataVisualizerModel
     {
-        public List<IOptimizedUnit> Units => ResultDataManager.GetResultData();
+        // Raw Aggregated TimeSeries properties corresponding to IOptimizedUnit fields
+        public TimeSeries<double> ProductionCostRecords { get; set; } = new();
+        public TimeSeries<double> HeatRecords { get; set; } = new();
+        public TimeSeries<double> ElectricityRecords { get; set; } = new();
+        public TimeSeries<double> PollutionRecords { get; set; } = new();
+        public TimeSeries<double> FuelConsumptionRecords { get; set; } = new();
 
-        public DataVisualizerModel()
+        // Specific aggregated properties for UI convenience
+        public TimeSeries<double> ElectricityProduced { get; set; } = new();
+        public TimeSeries<double> ElectricityConsumed { get; set; } = new();
+        public TimeSeries<double> MoneyEarned { get; set; } = new();
+        public TimeSeries<double> MoneySpent { get; set; } = new();
+        public TimeSeries<double> Co2Emissions { get; set; } = new();
+        public TimeSeries<double> FuelConsumption { get; set; } = new();
+        public TimeSeries<double> HeatProduced { get; set; } = new();
+
+        // HeatPerPriceRecords excluded from aggregation
+
+        /// <summary>
+        /// Refreshes the model by fetching latest result data and aggregating it.
+        /// </summary>
+        public void UpdateData()
         {
+            var units = ResultDataManager.GetResultData();
+            
+            // Clear existing aggregated data
+            ClearAll();
+
+            if (units == null || units.Count == 0) return;
+
+            foreach (var unit in units)
+            {
+                // Basic aggregation
+                AggregateByCondition(ProductionCostRecords, unit.ProductionCostRecords, v => true);
+                AggregateByCondition(HeatRecords, unit.HeatRecords, v => true);
+                AggregateByCondition(ElectricityRecords, unit.ElectricityRecords, v => true);
+                AggregateByCondition(PollutionRecords, unit.PollutionRecords, v => true);
+                AggregateByCondition(FuelConsumptionRecords, unit.FuelConsumptionRecords, v => true);
+
+                // Refined aggregation based on value signs (logic from ViewModel)
+                AggregateByCondition(HeatProduced, unit.HeatRecords, v => true); // All heat is produced
+                AggregateByCondition(ElectricityProduced, unit.ElectricityRecords, v => v > 0);
+                AggregateByCondition(ElectricityConsumed, unit.ElectricityRecords, v => v < 0, v => Math.Abs(v));
+                AggregateByCondition(MoneySpent, unit.ProductionCostRecords, v => v > 0);
+                AggregateByCondition(MoneyEarned, unit.ProductionCostRecords, v => v < 0, v => Math.Abs(v));
+                AggregateByCondition(Co2Emissions, unit.PollutionRecords, v => true);
+                AggregateByCondition(FuelConsumption, unit.FuelConsumptionRecords, v => true);
+            }
         }
 
-        public void PrintData()
+        private void ClearAll()
         {
-            Console.WriteLine("==========================================================");
-            Console.WriteLine("DataVisualizerModel: START");
-            Console.WriteLine("==========================================================");
+            ProductionCostRecords.Values.Clear();
+            HeatRecords.Values.Clear();
+            ElectricityRecords.Values.Clear();
+            PollutionRecords.Values.Clear();
+            FuelConsumptionRecords.Values.Clear();
 
-            if (Units == null || Units.Count == 0)
+            ElectricityProduced.Values.Clear();
+            ElectricityConsumed.Values.Clear();
+            MoneyEarned.Values.Clear();
+            MoneySpent.Values.Clear();
+            Co2Emissions.Values.Clear();
+            FuelConsumption.Values.Clear();
+            HeatProduced.Values.Clear();
+        }
+
+        private void AggregateByCondition(TimeSeries<double> target, TimeSeries<double> source, Func<double, bool> condition, Func<double, double>? transform = null)
+        {
+            if (source == null || source.Values == null) return;
+            foreach (var kvp in source.Values)
             {
-                Console.WriteLine("NO UNITS FOUND");
-            }
-            else
-            {
-                foreach (var unit in Units)
+                if (condition(kvp.Value))
                 {
-                    Console.WriteLine($"UNIT NAME: {unit.Name}");
-                    PrintSeries("Heat Produced (MWh)", unit.HeatRecords);
-                    PrintSeries("Production Cost (DKK)", unit.ProductionCostRecords);
-                    PrintSeries("Electricity (MWh)", unit.ElectricityRecords);
-                    PrintSeries("Pollution (kg CO2)", unit.PollutionRecords);
-                    PrintSeries("Fuel Consumption (MWh)", unit.FuelConsumptionRecords);
-                    PrintSeries("Heat Per Price", unit.HeatPerPriceRecords);
-                    Console.WriteLine("----------------------------------------------------------");
+                    double finalVal = transform != null ? transform(kvp.Value) : kvp.Value;
+                    if (target.Values.ContainsKey(kvp.Key))
+                        target.Values[kvp.Key] += finalVal;
+                    else
+                        target.Values[kvp.Key] = finalVal;
                 }
-            }
-
-            Console.WriteLine("==========================================================");
-            Console.WriteLine("END");
-            Console.WriteLine("==========================================================");
-        }
-
-        private void PrintSeries(string name, TimeSeries<double> series)
-        {
-            if (series == null || series.Values == null)
-            {
-                Console.WriteLine($"  [{name}] - NULL");
-                return;
-            }
-
-            Console.WriteLine($"  [{name}] - {series.Values.Count} entries:");
-            foreach (var kvp in series.Values)
-            {
-                Console.WriteLine($"    {kvp.Key:yyyy-MM-dd HH:mm} => {kvp.Value,7:F4}");
             }
         }
     }

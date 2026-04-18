@@ -15,16 +15,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
 
     public enum DataKind
     {
-        HeatProduced,
-        HeatConsumed,
-        ElectricityProduced,
-        ElectricityConsumed,
+        HeatDemand,
+        HeatProduction,
+        Electricity,
         ElectricityPrice,
-        MoneyEarned,
-        MoneySpent,
         Co2Emissions,
         FuelConsumption,
-        Profit,
-        Expenses
+        ProductionCosts
     }
 }

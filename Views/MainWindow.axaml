@@ -72,6 +72,10 @@
             <Setter Property="Background" Value="#4A0404"/>
             <Setter Property="Foreground" Value="#efebe5"/>
         </Style>
+
+        <Style Selector="Button.LegendButton:pressed">
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
     </Window.Styles>
 
     <!-- two column layout: 300px sidebar + rest of window -->
@@ -209,57 +213,64 @@
                         <!-- the oxyplot chart control -->
 
 
-                        <oxy:PlotView Grid.Row="0" Model="{Binding CurrentPlotModel}" Background="Transparent"/>
-                        
+                        <oxy:PlotView Grid.Row="0" Model="{Binding Visualizer.CurrentPlotModel}" Background="Transparent"/>
 
-                        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="40,15,20,10">
-                            <!-- Left: tightly packed metrics -->
-                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="40" HorizontalAlignment="Left">
-                                <!-- StackPanel stacks items vertically -->
-                                <StackPanel>
-                                    <TextBlock Text="Heat" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <!-- Binding links checkbox state to a property in the ViewModel -->
-                                    <CheckBox Content="Produced" IsChecked="{Binding ShowHeatProduced}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Demand" IsChecked="{Binding ShowHeatConsumed}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Electricity" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="Produced" IsChecked="{Binding ShowElectricityProduced}" IsEnabled="{Binding IsElecProdEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Consumption" IsChecked="{Binding ShowElectricityConsumed}" IsEnabled="{Binding IsElecConsEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsElecPriceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Finance" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="Profit" IsChecked="{Binding ShowProfit}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Expenses" IsChecked="{Binding ShowExpenses}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Real Earned" IsChecked="{Binding ShowMoneyEarned}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Real Spent" IsChecked="{Binding ShowMoneySpent}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Environment" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,5"/>
-                                    <CheckBox Content="CO2" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2Enabled}" Foreground="{DynamicResource MainText}"/>
-                                    <CheckBox Content="Fuel" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelEnabled}" Foreground="{DynamicResource MainText}"/>
-                                </StackPanel>
+                        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="40,15,40,25">
+                            <!-- Metric Selection Toggles -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="30" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <CheckBox Content="Heat Demand" IsChecked="{Binding ShowHeatDemand}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Heat Production" IsChecked="{Binding ShowHeatProduction}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Electricity" IsChecked="{Binding ShowElectricity}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Electricity Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="CO2 Emissions" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2Enabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Fuel Consumption" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Production Costs" IsChecked="{Binding ShowProductionCosts}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
                             </StackPanel>
 
-                            <!-- legend panel - ItemsControl loops through ActiveLegendItems and renders each one -->
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
-                                <TextBlock Text="Legend" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,10"/>
-                                <ItemsControl ItemsSource="{Binding Visualizer.ActiveLegendItems}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Vertical" MaxHeight="130" ItemWidth="190"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,10,8">
-                                                <Rectangle Width="20" Height="4" Fill="{Binding Brush}" VerticalAlignment="Center" RadiusX="2" RadiusY="2"/>
-                                                <TextBlock Text="{Binding Title}" Foreground="{DynamicResource MainText}" VerticalAlignment="Center" FontSize="13" TextWrapping="Wrap"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                            <!-- Legend Control (Bottom Right) -->
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <Button Classes="LegendButton"
+                                        Background="Transparent" 
+                                        BorderBrush="{DynamicResource MainText}"
+                                        BorderThickness="1"
+                                        Foreground="{DynamicResource MainText}"
+                                        CornerRadius="15"
+                                        Padding="12,6"
+                                        Command="{Binding Visualizer.ToggleLegend}">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="Legend" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                        <TextBlock Text="▲" VerticalAlignment="Center" IsVisible="{Binding Visualizer.IsLegendExpanded}"/>
+                                        <TextBlock Text="▼" VerticalAlignment="Center" IsVisible="{Binding !Visualizer.IsLegendExpanded}"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <!-- Legend Popup -->
+                                <Popup IsOpen="{Binding Visualizer.IsLegendExpanded, Mode=TwoWay}" 
+                                       Placement="Top" 
+                                       PlacementGravity="TopRight"
+                                       IsLightDismissEnabled="True">
+                                    <Border Background="{DynamicResource ChartAreaBg}" 
+                                            BorderBrush="{DynamicResource MainText}" 
+                                            BorderThickness="1" 
+                                            CornerRadius="10"
+                                            Padding="15"
+                                            Margin="0,0,0,10"
+                                            BoxShadow="0 4 10 0 #40000000">
+                                        <StackPanel>
+                                            <TextBlock Text="PRODUCTION UNITS" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,10" FontSize="12"/>
+                                            <ItemsControl ItemsSource="{Binding Visualizer.ActiveLegendItems}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+                                                            <Rectangle Width="16" Height="4" Fill="{Binding Brush}" VerticalAlignment="Center" RadiusX="2" RadiusY="2"/>
+                                                            <TextBlock Text="{Binding Title}" Foreground="{DynamicResource MainText}" VerticalAlignment="Center" FontSize="12"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
                             </StackPanel>
                         </Grid>
 
