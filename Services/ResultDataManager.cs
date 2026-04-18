@@ -14,10 +14,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static int TimeResolution { get; set; }
         private static List<IOptimizedUnit>? _resultData { get; set; }
 
-        // called by Optimizer
-        public static void ProcessResults(List<IOptimizedUnit> results)
+        
+        private static void ProcessResults()
         {
-            _resultData = results;
+            _resultData = Optimizer.GetResultData();
             SaveResultData();
         }
 
@@ -69,6 +69,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         // called by DataVisualizer
         public static List<IOptimizedUnit> GetResultData()
         {
+            ProcessResults();
+            
             if (_resultData == null)
                 return new List<IOptimizedUnit>();
 
