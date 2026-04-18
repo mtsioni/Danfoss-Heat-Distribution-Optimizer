@@ -23,7 +23,67 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
     /// </summary>
     public static class AssetManager
     {
-        #region OPTION 1: FACADE PATTERN (No Caching) - UNCOMMENT THIS IF WE WANT TO USE
+        #region OPTION 1: CACHE PATTERN (In-Memory Caching) - ACTIVE BY DEFAULT
+        
+        private static List<GenericUnit>? _genericUnits { get; set; }
+        private static Grid? _grid { get; set; }
+        private static string? _logoImagePath { get; set; }
+        private static bool _isInitialized { get; set; } = false;
+
+        /// <summary>
+        /// Initializes the AssetManager by discovering asset paths and loading data from JSON files.
+        /// This method loads data once and keeps it in memory for fast repeated access.
+        /// Can be called explicitly at startup for early error detection, but is automatically invoked on first use.
+        /// </summary>
+        public static void Initialize()
+        {
+            if (_isInitialized)
+                return;
+
+            try
+            {
+                AssetsLoader.Initialize();
+                
+                // Load all data once and cache it in memory AKA FASTER
+                var (units, grid, logo) = AssetsLoader.LoadGridData();
+                
+                _genericUnits = units;
+                _grid = grid;
+                _logoImagePath = logo;
+                _isInitialized = true;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to initialize AssetManager. Check that JSON files exist and are valid.", ex);
+            }
+        }
+
+        /// Gets production units for the Optimizer.
+        public static List<IOptimizedUnit> GetDataForOptimizer()
+        {
+            if (!_isInitialized)
+                Initialize();
+            if (_genericUnits == null)
+                throw new InvalidOperationException("AssetManager failed to load units. Check that JSON files exist and are valid.");
+            GenericToOptimizedAdapter adapter = new();
+            return adapter.GenericToOprimizedList(_genericUnits);
+        }
+
+        
+        /// Gets units, grid, and logo path for the DataVisualizer.
+        public static (List<GenericUnit>, Grid, string) GetDataForDataVisualizer()
+        {
+            if (!_isInitialized)
+                Initialize();
+            if (_genericUnits == null || _grid == null || _logoImagePath == null)
+                throw new InvalidOperationException("AssetManager failed to load data. Check that JSON files exist and are valid.");
+            
+            return (_genericUnits, _grid, _logoImagePath);
+        }
+
+        #endregion
+
+        #region OPTION 2: FACADE PATTERN (No Caching) - UNCOMMENT THIS IF WE WANT TO USE
         /*
         private static bool _isInitialized { get; set; } = false;
 
@@ -62,94 +122,5 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         }
         */
         #endregion
-
-        #region OPTION 2: CACHE PATTERN (In-Memory Caching) - ACTIVE BY DEFAULT
-        
-        private static List<GenericUnit>? _genericUnits { get; set; }
-        private static Grid? _grid { get; set; }
-        private static string? _logoImagePath { get; set; }
-        private static bool _isInitialized { get; set; } = false;
-
-        /// <summary>
-        /// Initializes the AssetManager by loading and caching all data from JSON files.
-        /// This method loads data once and keeps it in memory for fast repeated access.
-        /// Must be called before GetDataForOptimizer or GetDataForDataVisualizer.
-        /// </summary>
-        public static void Initialize(string unitsPath, string gridPath, string logoPath)
-        {
-            try
-            {
-                AssetsLoader.SetPaths(unitsPath, gridPath, logoPath);
-                
-                // Load all data once and cache it in memory AKA FASTER
-                var (units, grid, logo) = AssetsLoader.LoadGridData();
-                
-                _genericUnits = units;
-                _grid = grid;
-                _logoImagePath = logo;
-                _isInitialized = true;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Failed to initialize AssetManager. Check that JSON files exist and are valid.", ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets production units for the Optimizer.
-        /// Returns cached data (loaded during Initialize).
-        /// </summary>
-        public static List<IOptimizedUnit> GetDataForOptimizer()
-        {
-            if (!_isInitialized || _genericUnits == null)
-                throw new InvalidOperationException("AssetManager not initialized. Call Initialize(unitsPath, gridPath, logoPath) first.");
-            GenericToOptimizedAdapter adapter = new();
-            return adapter.GenericToOprimizedList(_genericUnits);
-        }
-
-        /// <summary>
-        /// Gets units, grid, and logo path for the DataVisualizer.
-        /// Returns cached data (loaded during Initialize).
-        /// </summary>
-        public static (List<GenericUnit>, Grid, string) GetDataForDataVisualizer()
-        {
-            if (!_isInitialized || _genericUnits == null || _grid == null || _logoImagePath == null)
-                throw new InvalidOperationException("AssetManager not initialized. Call Initialize(unitsPath, gridPath, logoPath) first.");
-            
-            return (_genericUnits, _grid, _logoImagePath);
-        }
-
-        #endregion
     }
 }
-
-
-        #region HOW TO USE IT
-
-        /// ... in Main or startup method eg.
-
-        //AssetManager.Initialize(
-        //     unitsPath: "Assets/ProductionUnits.json",
-        //     gridPath: "Assets/ProductionUnits.json", 
-        //     logoPath: "Assets/Images/DanfossLogo.png"
-        // );
-
-
-        /// ... anywhere else ...
-        
-        // 1. Get data for the Optimizer module
-
-        // var units = AssetManager.GetDataForOptimizer();
-        // foreach (var unit in units)
-        // {
-        //     Console.WriteLine($"Unit: {unit.Name}, Max Heat: {unit.MaxHeat} MW");
-        // }
-        
-        // 2. Get data for the Visualizer module
-
-        // var (allUnits, gridInfo, logoPath) = AssetManager.GetDataForDataVisualizer();
-        // Console.WriteLine($"Grid: {gridInfo.Name}");
-        // Console.WriteLine($"Logo: {logoPath}");
-
-
-        #endregion

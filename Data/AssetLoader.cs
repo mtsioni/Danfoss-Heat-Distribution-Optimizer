@@ -12,11 +12,22 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
         private static string? GridPath { get; set; }
         private static string? LogoImagePath { get; set; }
 
-        public static void SetPaths(string unitsPath, string gridPath, string logoPath)
+public static void Initialize()
+    {
+        UnitsPath = FindAsset("ProductionUnits.json");
+        GridPath = FindAsset("ProductionUnits.json");
+        LogoImagePath = FindAsset("Assets/Images/DanfossLogo.png");
+    }
+
+    private static string FindAsset(string filename)
         {
-            UnitsPath = unitsPath;
-            GridPath = gridPath;
-            LogoImagePath = logoPath;
+            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", filename);
+            if (File.Exists(rootPath)) return rootPath;
+
+            string debugPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "Assets", filename);
+            if (File.Exists(debugPath)) return debugPath;
+
+            return rootPath;
         }
 
         /// <summary>
