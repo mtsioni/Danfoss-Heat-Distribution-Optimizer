@@ -25,24 +25,21 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
             if ((electric == true) && (fueled == true))
             {
-                HybridUnit outputUnit = new HybridUnit(inputUnit.UnitID, inputUnit.Name, inputUnit.MaxElectricity, inputUnit.FuelName,
-                                                       inputUnit.FuelConsumption, inputUnit.Emissions, inputUnit.MaxHeat, inputUnit.ProductionCost);
+                HybridUnit outputUnit = new HybridUnit(inputUnit.UnitID, inputUnit.Name, inputUnit.MaxElectricity, inputUnit.FuelName, inputUnit.FuelConsumption, inputUnit.Emissions, inputUnit.MaxHeat, inputUnit.ProductionCost);
 
                 return outputUnit;
             }
 
             if ((electric == true) && (fueled != true))
             {
-                ElectricUnit outputUnit = new ElectricUnit(inputUnit.UnitID, inputUnit.Name, inputUnit.MaxElectricity,
-                                                           inputUnit.MaxHeat, inputUnit.ProductionCost);
+                ElectricUnit outputUnit = new ElectricUnit(inputUnit.UnitID, inputUnit.Name, inputUnit.MaxElectricity, inputUnit.MaxHeat, inputUnit.ProductionCost);
 
                 return outputUnit;
             }
            
             if ((electric != true) && (fueled == true))
             {
-                CombustionUnit outputUnit = new CombustionUnit(inputUnit.UnitID, inputUnit.Name, inputUnit.FuelName,
-                                                               inputUnit.FuelConsumption, inputUnit.Emissions, inputUnit.MaxHeat, inputUnit.ProductionCost);
+                CombustionUnit outputUnit = new CombustionUnit(inputUnit.UnitID, inputUnit.Name, inputUnit.FuelName, inputUnit.FuelConsumption, inputUnit.Emissions, inputUnit.MaxHeat, inputUnit.ProductionCost);
 
                 return outputUnit;
             }

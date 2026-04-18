@@ -2,29 +2,30 @@ using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphicalUnit
-{
-    // From IUnit
-    public int UnitID { get; set; }
-    public string Name { get; set; }
+    public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphicalUnit
+    {
+        // From IUnit
+        public int UnitID { get; set; }
+        public string Name { get; set; }
     
-    // From IElectricUnit
-    public double MaxElectricity { get; set; }
+        // From IElectricUnit
+        public double MaxElectricity { get; set; }
     
-    // From IFueledUnit  
-    public string FuelName { get; set; }
-    public double FuelConsumption { get; set; }
-    public double Emissions { get; set; }
+        // From IFueledUnit  
+        public string FuelName { get; set; }
+        public double FuelConsumption { get; set; }
+        public double Emissions { get; set; }
     
-    // From IHeatUnit
-    public double MaxHeat { get; set; }
-    public double ProductionCost { get; set; }
+        // From IHeatUnit
+        public double MaxHeat { get; set; }
+        public double ProductionCost { get; set; }
 
-    // From IGraphicalUnit
-    public string ImagePath { get; set; }
+        // From IGraphicalUnit
+        public string ImagePath { get; set; }
 
-    // Constructer Generic
-    public GenericUnit(int unitID, string name,
+
+        // Constructer Generic
+        public GenericUnit(int unitID, string name,
                         double maxElectricity, 
                         string fuelName, double fuelConsumption, double emissions, 
                         double maxHeat, double productionCost, 
@@ -44,5 +45,17 @@ public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphi
 
             ImagePath = imagePath;
         }
-}
+        public GenericUnit()
+        {
+            UnitID = 0;
+            Name = "";
+            MaxElectricity = 0.0;
+            FuelName = "";
+            FuelConsumption = 0.0;
+            Emissions = 0.0;
+            MaxHeat = 0.0;
+            ProductionCost = 0.0;
+            ImagePath = "";
+        }
+    }
 }

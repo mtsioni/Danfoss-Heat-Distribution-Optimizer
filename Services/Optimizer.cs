@@ -40,7 +40,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             //List<double> heatPerPrice = new List<double>();  
             RetrieveUnits();
             RetriveSourceData();
-            
             // Optimization hour by hour
             for (DateTime i = OptimizationPeriodStart; i <= OptimizationPeriodEnd; i = i.AddHours(TimeResolution))
             {
@@ -66,7 +65,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                         {
                             throw new Exception("Electricity prices not available");
                         }
-
                         if(_availableUnits[c].HeatPerPriceRecords.Values.ContainsKey(i)) // check if it needs to be reassigned or added
                         {
                             _availableUnits[c].HeatPerPriceRecords[i] = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice);
@@ -96,7 +94,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static List<IOptimizedUnit> GetResultData()
         {
             Optimize();
-            return ResultDataManager.GetResultData();
+            return _availableUnits ?? throw new Exception("AvailableUnits not available");
         }
 
     }

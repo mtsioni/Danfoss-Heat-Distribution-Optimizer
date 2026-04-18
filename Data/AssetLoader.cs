@@ -53,7 +53,7 @@ public static void Initialize()
                     foreach (var u in unitsArray.EnumerateArray())
                     {
                         // MAYBE DO DIFFERENT NOTATION TO NOT DECLARE VARIABLE EACH TIME
-                        int unitId = u.TryGetProperty("unitID", out var id) ? id.GetInt32() : 0;
+                        /*int unitId = u.TryGetProperty("unitID", out var id) ? id.GetInt32() : 0;
                         string name = u.TryGetProperty("name", out var n) ? n.GetString() ?? "Unknown" : "Unknown";
                         double maxHeat = u.TryGetProperty("maxHeat", out var heat) ? heat.GetDouble() : 0.0;
                         string fuelName = u.TryGetProperty("fuelName", out var fuel) ? fuel.GetString() ?? "Unknown" : "Unknown";
@@ -63,6 +63,19 @@ public static void Initialize()
                         double emissions = u.TryGetProperty("emissions", out var em) ? em.GetDouble() : 0.0;
                         string imagePath = u.TryGetProperty("imagePath", out var img) ? img.GetString() ?? "" : "";
                         var unit = new GenericUnit(unitId, name, maxHeat, fuelName, maxElectricity, productionCost, fuelConsumption, emissions, imagePath);
+                        */
+                        GenericUnit unit = new GenericUnit
+                        {
+                            UnitID = u.TryGetProperty("unitID", out var id) ? id.GetInt32() : 0,
+                            Name = u.TryGetProperty("name", out var n) ? n.GetString() ?? "Unknown" : "Unknown",
+                            MaxHeat = u.TryGetProperty("maxHeat", out var heat) ? heat.GetDouble() : 0.0,
+                            FuelName = u.TryGetProperty("fuelName", out var fuel) ? fuel.GetString() ?? "Unknown" : "Unknown",
+                            MaxElectricity = u.TryGetProperty("maxElectricity", out var elec) ? elec.GetDouble() : 0.0,
+                            ProductionCost = u.TryGetProperty("productionCosts", out var cost) ? cost.GetDouble() : 0.0,
+                            FuelConsumption = u.TryGetProperty("fuelConsumption", out var cons) ? cons.GetDouble() : 0.0,
+                            Emissions = u.TryGetProperty("emissions", out var em) ? em.GetDouble() : 0.0,
+                            ImagePath = u.TryGetProperty("imagePath", out var img) ? img.GetString() ?? "" : ""
+                        };
                         units.Add(unit);
                     }
                     return units;
