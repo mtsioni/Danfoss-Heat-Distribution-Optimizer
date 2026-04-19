@@ -135,6 +135,12 @@ public partial class MainWindowViewModel : ReactiveObject
     private bool _isFuelEnabled = true;
     public bool IsFuelEnabled { get => _isFuelEnabled; set => this.RaiseAndSetIfChanged(ref _isFuelEnabled, value); }
 
+    private bool _isElectricityEnabled = true;
+    public bool IsElectricityEnabled { get => _isElectricityEnabled; set => this.RaiseAndSetIfChanged(ref _isElectricityEnabled, value); }
+
+    private bool _isElectricityPriceEnabled = true;
+    public bool IsElectricityPriceEnabled { get => _isElectricityPriceEnabled; set => this.RaiseAndSetIfChanged(ref _isElectricityPriceEnabled, value); }
+
     private void RefreshDataAndChart()
     {
         SyncOptimizationPeriod();
@@ -158,6 +164,11 @@ public partial class MainWindowViewModel : ReactiveObject
         IsFinanceEnabled = (activeGroups < 2) || hasFinance;
         IsCo2Enabled = (activeGroups < 2) || hasCo2;
         IsFuelEnabled = (activeGroups < 2) || hasFuel;
+
+        // Electricity options are only enabled in Heat & Electricity scenario
+        bool isElectricityScenario = SelectedScenario == Scenario.HeatAndElectricity;
+        IsElectricityEnabled = isElectricityScenario && IsEnergyEnabled;
+        IsElectricityPriceEnabled = isElectricityScenario && IsFinanceEnabled;
 
         var activeKinds = new List<DataKind>();
         if (ShowHeatDemand) activeKinds.Add(DataKind.HeatDemand);

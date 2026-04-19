@@ -220,8 +220,8 @@
                             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="30" HorizontalAlignment="Left" VerticalAlignment="Center">
                                 <CheckBox Content="Heat Demand" IsChecked="{Binding ShowHeatDemand}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
                                 <CheckBox Content="Heat Production" IsChecked="{Binding ShowHeatProduction}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                <CheckBox Content="Electricity" IsChecked="{Binding ShowElectricity}" IsEnabled="{Binding IsEnergyEnabled}" Foreground="{DynamicResource MainText}"/>
-                                <CheckBox Content="Electricity Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Electricity" IsChecked="{Binding ShowElectricity}" IsEnabled="{Binding IsElectricityEnabled}" Foreground="{DynamicResource MainText}"/>
+                                <CheckBox Content="Electricity Price" IsChecked="{Binding ShowElectricityPrice}" IsEnabled="{Binding IsElectricityPriceEnabled}" Foreground="{DynamicResource MainText}"/>
                                 <CheckBox Content="CO2 Emissions" IsChecked="{Binding ShowCo2Emissions}" IsEnabled="{Binding IsCo2Enabled}" Foreground="{DynamicResource MainText}"/>
                                 <CheckBox Content="Fuel Consumption" IsChecked="{Binding ShowFuelConsumption}" IsEnabled="{Binding IsFuelEnabled}" Foreground="{DynamicResource MainText}"/>
                                 <CheckBox Content="Production Costs" IsChecked="{Binding ShowProductionCosts}" IsEnabled="{Binding IsFinanceEnabled}" Foreground="{DynamicResource MainText}"/>
