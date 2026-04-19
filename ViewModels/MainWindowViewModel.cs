@@ -238,6 +238,7 @@ public partial class MainWindowViewModel : ReactiveObject
 
     public MainWindowViewModel()
     {
+        ApplyTheme();
         Visualizer.UpdateThemeColors(IsDarkTheme);
         LoadUnits();
         RefreshDataAndChart();

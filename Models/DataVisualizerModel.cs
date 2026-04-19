@@ -49,10 +49,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
 
                 // Refined aggregation based on value signs (logic from ViewModel)
                 AggregateByCondition(HeatProduced, unit.HeatRecords, v => true); // All heat is produced
-                AggregateByCondition(ElectricityProduced, unit.ElectricityRecords, v => v > 0);
-                AggregateByCondition(ElectricityConsumed, unit.ElectricityRecords, v => v < 0, v => Math.Abs(v));
-                AggregateByCondition(MoneySpent, unit.ProductionCostRecords, v => v > 0);
-                AggregateByCondition(MoneyEarned, unit.ProductionCostRecords, v => v < 0, v => Math.Abs(v));
+                AggregateByCondition(ElectricityProduced, unit.ElectricityRecords, v => v >= 0);
+                AggregateByCondition(ElectricityConsumed, unit.ElectricityRecords, v => v <= 0, v => Math.Abs(v));
+                AggregateByCondition(MoneySpent, unit.ProductionCostRecords, v => v >= 0);
+                AggregateByCondition(MoneyEarned, unit.ProductionCostRecords, v => v <= 0, v => Math.Abs(v));
                 AggregateByCondition(Co2Emissions, unit.PollutionRecords, v => true);
                 AggregateByCondition(FuelConsumption, unit.FuelConsumptionRecords, v => true);
             }

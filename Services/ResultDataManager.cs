@@ -34,9 +34,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                 int totalHours = (int)(OptimizationPeriodEnd - OptimizationPeriodStart).TotalHours;
 
                 // Extract hourly data from TimeSeries properties
-                for (int i = 0; i < totalHours; i++)
+                for (int i = 0; i <= totalHours; i++)
                 {
-                    DateTime currentTime = OptimizationPeriodStart.AddMinutes(i * TimeResolution);
+                    DateTime currentTime = OptimizationPeriodStart.AddHours(i * TimeResolution);
 
                     var dto = new ResultDataDTO
                     {
