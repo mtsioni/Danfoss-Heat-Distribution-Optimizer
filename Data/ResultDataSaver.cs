@@ -25,7 +25,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
         {
             StringBuilder sb = new StringBuilder();
             
-            sb.AppendLine("Time,HeatMWh,Electricity,ProductionCost,FuelConsumption,Co2Emissions,NetCost");
+            sb.AppendLine("Time,HeatMWh,Electricity,ProductionCost,FuelConsumption,Co2Emissions");
 
             foreach (var spec in data)
             {
