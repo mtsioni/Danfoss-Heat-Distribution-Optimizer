@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
-using Danfoss_Heat_Distribution_Optimizer.ViewModels;
 
 
 namespace Danfoss_Heat_Distribution_Optimizer.Services
@@ -15,7 +12,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static TimeSeries<double>? HeatDemand { get; set; }
         public static int TimeResolution { get; set; } = 1;
         
-        public static string MaintainedUnitName { get; set; }
+        public static string MaintainedUnitName { get; set; } = "";
         public static DateTime WinterMaintenanceStart { get; set; }
         public static DateTime SummerMaintenanceStart { get; set; }
         public static double MaintenanceLength { get; set; }
@@ -134,7 +131,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                     {
                         if (_availableUnits[c].Name == MaintainedUnitName)
                         {
-                            if ((i >= SummerMaintenanceStart && i < SummerMaintenanceStart.AddHours(MaintenanceLength)) || (i >= WinterMaintenanceStart && i < WinterMaintenanceStart.AddHours(MaintenanceLength)))
+                            if (((i >= SummerMaintenanceStart) && (i < SummerMaintenanceStart.AddHours(MaintenanceLength))) || ((i >= WinterMaintenanceStart) && (i < WinterMaintenanceStart.AddHours(MaintenanceLength))))
                             {
                                 continue;
                             }
