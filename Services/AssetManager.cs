@@ -61,11 +61,23 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         /// Gets production units for the Optimizer.
         public static List<IOptimizedUnit> GetDataForOptimizer()
         {
+            // Dear team TS, 
+            // I hope this comment finds you in a good state of mind
+            // this is an example of Scenario implementation
+            // Yours team TI
+            /*
+            ScenarioDTO scenario = new()
+            {
+                NameList = {"Electric Boiler 1", "Gas Motor 1"}
+            }
+            */
             if (!_isInitialized)
                 Initialize();
             if (_genericUnits == null)
                 throw new InvalidOperationException("AssetManager failed to load units. Check that JSON files exist and are valid.");
             GenericToOptimizedAdapter adapter = new();
+            
+            //return adapter.GenericToOprimizedList(scenario.GetScenario(_genericUnits));
             return adapter.GenericToOprimizedList(_genericUnits);
         }
 
