@@ -38,6 +38,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             double heatDemand = 0;
             double producedHeat = 0;
             double workload = 1;
+            double heatPerPrice = 0;
             //List<double> heatPerPrice = new List<double>();  
             RetrieveUnits();
             RetriveSourceData();
@@ -66,19 +67,21 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                         {
                             throw new Exception("Electricity prices not available");
                         }
+                        
+                        heatPerPrice = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice);
+
                         if(_availableUnits[c].HeatPerPriceRecords.Values.ContainsKey(i)) // check if it needs to be reassigned or added
                         {
-                            _availableUnits[c].HeatPerPriceRecords[i] = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice);
+                            _availableUnits[c].HeatPerPriceRecords[i] = Math.Abs((heatPerPrice < 0) ? (heatPerPrice * 10) : heatPerPrice);
                         }
                         else
                         {
-                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice));
+                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, Math.Abs((heatPerPrice < 0) ? (heatPerPrice * 10) : heatPerPrice));
                         }
                     }
 
-                    // sort units in ascending order by cost efficiency (most heat per money to least)
-                    _availableUnits.Sort((left, right) => left.HeatPerPriceRecords[i].CompareTo(right.HeatPerPriceRecords[i])); 
-
+                    // sort units in descending order by cost efficiency (most heat per money to least)
+                    _availableUnits.Sort((left, right) => right.HeatPerPriceRecords[i].CompareTo(left.HeatPerPriceRecords[i]));
                     // Decide on which units to use, and record the usage (add values to records when used)
                     for (int c = 0; (c < _availableUnits.Count) && (producedHeat < heatDemand); c++) 
                     {
