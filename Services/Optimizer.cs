@@ -15,7 +15,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static int TimeResolution { get; set; }
 
 
-        private static List<IOptimizedUnit>? _availableUnits;
+        private static List<IOptimizedUnit> _availableUnits = new();
 
 
 

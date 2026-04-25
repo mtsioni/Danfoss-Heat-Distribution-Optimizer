@@ -70,12 +70,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
         public static List<GenericUnit> GetFilteredList(List<GenericUnit> inputList)
         {
+            LoadScenarios();
             if (_scenarioJsonMapping == null || !_scenarioJsonMapping.ContainsKey(CurrentScenario))
                 return inputList;
-            
+
             _scenarioDTO.NameList = _scenarioJsonMapping[CurrentScenario];
             return _scenarioDTO.GetScenario(inputList);
-
         }
     }
 }

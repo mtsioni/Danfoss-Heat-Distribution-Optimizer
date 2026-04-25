@@ -151,7 +151,6 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         UpdateScenario();
         SyncOptimizationPeriod();
-        ResultDataManager.GetResultData();
         Visualizer.Model.UpdateData();
         UpdateChart();
     }
