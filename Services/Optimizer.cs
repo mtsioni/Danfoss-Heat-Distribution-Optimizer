@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 using System;
@@ -73,14 +74,53 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             HeatDemand = SourceDataManager.GetHeatDemand();
 
         }
+        private static void CalculateHeatPerPrice(DateTime hour, double electricityPrice)
+        {
+            double heatPerPriceCrude; 
+            double heatPerPrice;
+            for (int i = 0; i < _availableUnits.Count; i++)
+            {    
+                heatPerPriceCrude = _availableUnits[i].MaxHeat / _availableUnits[i].CalculateNetProductionCost(electricityPrice);
+                heatPerPrice = Math.Abs((heatPerPriceCrude < 0) ? (heatPerPriceCrude * 10) : heatPerPriceCrude);
+
+                if(_availableUnits[i].HeatPerPriceRecords.Values.ContainsKey(hour)) // check if it needs to be reassigned or added
+                    _availableUnits[i].HeatPerPriceRecords[hour] = heatPerPrice;
+                else
+                    _availableUnits[i].HeatPerPriceRecords.Values.Add(hour, heatPerPrice);
+            }
+        }
+        private static void ChooseAndRecordUsage(DateTime hour, double heatDemand, double electricityPrice)
+        {
+            // sort units in descending order by cost efficiency (most heat per money to least)
+            _availableUnits.Sort((left, right) => right.HeatPerPriceRecords[hour].CompareTo(left.HeatPerPriceRecords[hour]));
+            
+            double producedHeat = 0;
+            double workload;
+            for (int i = 0; (i < _availableUnits.Count) && (producedHeat < heatDemand); i++) 
+            {
+                if (_availableUnits[i].Name == MaintainedUnitName)
+                {
+                    if (((hour >= SummerMaintenanceStart) && (hour < SummerMaintenanceStart.AddHours(MaintenanceLength))) || ((hour >= WinterMaintenanceStart) && (hour < WinterMaintenanceStart.AddHours(MaintenanceLength))))
+                    {
+                        continue;
+                    }
+                }
+                if (_availableUnits[i].MaxHeat > (heatDemand - producedHeat))
+                    workload = (heatDemand - producedHeat) / _availableUnits[i].MaxHeat;
+                else workload = 1;
+
+                producedHeat += _availableUnits[i].MaxHeat * workload;
+
+                // update records (effectively use the unit)
+                _availableUnits[i].UpdateRecords(workload, _availableUnits[i].CalculateNetProductionCost(electricityPrice), hour);
+            }
+        }
         private static void Optimize()
         {
             // preparing for optimization
-            double heatDemand = 0;
-            double producedHeat = 0;
-            double workload = 1;
-            double heatPerPrice = 0;
-            //List<double> heatPerPrice = new List<double>();  
+            double heatDemand;
+            double electricityPrice;
+            
             RetrieveUnits();
             RetrieveSourceData();
             GetSummerMaintenanceStart();
@@ -93,62 +133,20 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             {
                 // reset variables
                 if (HeatDemand != null)
-                {
                     heatDemand = HeatDemand[i];
-                }
-                producedHeat = 0; 
+                else
+                    throw new Exception("Heat demand not available");
 
-                double electricityPrice = 0;
+                if (ElectricityPrices != null)
+                    electricityPrice = ElectricityPrices[i];
+                else
+                    throw new Exception("Electricity prices not available");
 
-                if (_availableUnits != null)
-                {
-                    // Calculate heat/price ratio for this hour for every unit
-                    for (int c = 0; c < _availableUnits.Count; c++)
-                    {
-                        if (ElectricityPrices != null)
-                        {
-                            electricityPrice = ElectricityPrices[i];
-                        }
-                        else
-                        {
-                            throw new Exception("Electricity prices not available");
-                        }
-                        
-                        heatPerPrice = _availableUnits[c].MaxHeat / _availableUnits[c].CalculateNetProductionCost(electricityPrice);
-
-                        if(_availableUnits[c].HeatPerPriceRecords.Values.ContainsKey(i)) // check if it needs to be reassigned or added
-                        {
-                            _availableUnits[c].HeatPerPriceRecords[i] = Math.Abs((heatPerPrice < 0) ? (heatPerPrice * 10) : heatPerPrice);
-                        }
-                        else
-                        {
-                            _availableUnits[c].HeatPerPriceRecords.Values.Add(i, Math.Abs((heatPerPrice < 0) ? (heatPerPrice * 10) : heatPerPrice));
-                        }
-                    }
-
-                    // sort units in descending order by cost efficiency (most heat per money to least)
-                    _availableUnits.Sort((left, right) => right.HeatPerPriceRecords[i].CompareTo(left.HeatPerPriceRecords[i]));
-                    // Decide on which units to use, and record the usage (add values to records when used)
-                    for (int c = 0; (c < _availableUnits.Count) && (producedHeat < heatDemand); c++) 
-                    {
-                        if (_availableUnits[c].Name == MaintainedUnitName)
-                        {
-                            if (((i >= SummerMaintenanceStart) && (i < SummerMaintenanceStart.AddHours(MaintenanceLength))) || ((i >= WinterMaintenanceStart) && (i < WinterMaintenanceStart.AddHours(MaintenanceLength))))
-                            {
-                                continue;
-                            }
-                        }
-                        if (_availableUnits[c].MaxHeat > (heatDemand - producedHeat))
-                            workload = (heatDemand - producedHeat) / _availableUnits[c].MaxHeat;
-                        else workload = 1;
-
-                        producedHeat += _availableUnits[c].MaxHeat * workload;
-
-                        // update records (effectively use the unit)
-                        _availableUnits[c].UpdateRecords(workload, _availableUnits[c].CalculateNetProductionCost(electricityPrice), i);
-                    }
-                }
-                else throw new Exception("AvailableUnits not available");
+                // Calculate heat/price ratio for this hour for every unit
+                CalculateHeatPerPrice(i, electricityPrice);
+                
+                // Decide on which units to use, and record the usage (add values to records when used)
+                ChooseAndRecordUsage(i, heatDemand, electricityPrice);
             }
         }
 
