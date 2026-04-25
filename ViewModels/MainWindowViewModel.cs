@@ -9,6 +9,7 @@ using ReactiveUI;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 using OxyPlot;
+using System.Xml.Serialization;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels;
 
@@ -141,8 +142,14 @@ public partial class MainWindowViewModel : ReactiveObject
     private bool _isElectricityPriceEnabled = true;
     public bool IsElectricityPriceEnabled { get => _isElectricityPriceEnabled; set => this.RaiseAndSetIfChanged(ref _isElectricityPriceEnabled, value); }
 
+    private void UpdateScenario()
+    {
+        ScenarioManager.CurrentScenario = _selectedScenario;
+    }
+
     private void RefreshDataAndChart()
     {
+        UpdateScenario();
         SyncOptimizationPeriod();
         Optimizer.SetMaintenanceData(SelectedUnit?.Name ?? string.Empty, MaintenanceHours);
         ResultDataManager.GetResultData();

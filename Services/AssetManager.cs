@@ -30,6 +30,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         private static string? _logoImagePath { get; set; }
         private static bool _isInitialized { get; set; } = false;
 
+
         /// <summary>
         /// Initializes the AssetManager by discovering asset paths and loading data from JSON files.
         /// This method loads data once and keeps it in memory for fast repeated access.
@@ -65,8 +66,16 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                 Initialize();
             if (_genericUnits == null)
                 throw new InvalidOperationException("AssetManager failed to load units. Check that JSON files exist and are valid.");
+            
+            List<GenericUnit> filteredList;
+            List<IOptimizedUnit> outputList;
+
             GenericToOptimizedAdapter adapter = new();
-            return adapter.GenericToOprimizedList(_genericUnits);
+            
+            filteredList = ScenarioManager.GetFilteredList(_genericUnits);
+            outputList = adapter.GenericToOprimizedList(filteredList);
+            
+            return outputList;
         }
 
         

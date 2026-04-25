@@ -17,9 +17,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static DateTime WinterMaintenanceStart { get; set; }
         public static DateTime SummerMaintenanceStart { get; set; }
         public static double MaintenanceLength { get; set; }
-            
-            
-        private static List<IOptimizedUnit>? _availableUnits;
+        private static List<IOptimizedUnit> _availableUnits = new();
 
 
         
