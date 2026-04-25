@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Danfoss-Heat-Project.Tests/Danfoss-Heat-Project.Tests.csproj" />
+  <Project Path="Danfoss-Heat-Project/Danfoss_Heat_Distribution_Optimizer.csproj" />
+</Solution>
