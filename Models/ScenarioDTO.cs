@@ -30,7 +30,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             }
             return outputUnits;
             */
-            return inputUnits.FindAll(unit => _nameList.Contains(unit.Name));
+            List<GenericUnit> outputUnits = inputUnits.FindAll(unit => _nameList.Contains(unit.Name));
+            return outputUnits;
         }
     }
 }
