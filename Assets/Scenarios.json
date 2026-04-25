@@ -1,0 +1,22 @@
+{
+    "scenarios": [
+        {
+            "scenario": "Heat",
+            "units": [
+                "Gas Boiler 1",
+                "Gas Boiler 2",
+                "Gas Boiler 3",
+                "Oil Boiler 1"
+            ]
+        },
+        {
+            "scenario": "HeatAndElectricity",
+            "units": [
+                "Gas Boiler 1",
+                "Gas Boiler 3",
+                "Gas Motor 1",
+                "Electric Boiler 1"
+            ]
+        }
+    ]
+}

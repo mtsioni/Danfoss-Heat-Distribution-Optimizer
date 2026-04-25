@@ -144,7 +144,7 @@ public partial class MainWindowViewModel : ReactiveObject
 
     private void UpdateScenario()
     {
-        ScenarioManager.Scenario = _selectedScenario;
+        ScenarioManager.CurrentScenario = _selectedScenario;
     }
 
     private void RefreshDataAndChart()
