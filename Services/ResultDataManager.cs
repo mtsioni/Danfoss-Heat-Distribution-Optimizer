@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Data;
+using Danfoss_Heat_Distribution_Optimizer.ViewModels;
 using System;
 using System.Linq;
 using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
@@ -13,7 +14,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static DateTime OptimizationPeriodEnd { get; set; }
         public static int TimeResolution { get; set; }
         private static List<IOptimizedUnit>? _resultData { get; set; }
-
         
         private static void ProcessResults()
         {

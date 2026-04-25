@@ -93,8 +93,8 @@ public partial class MainWindowViewModel : ReactiveObject
         ResultDataManager.TimeResolution = Optimizer.TimeResolution;
     }
 
-    public bool IsWinterSelected { get => SelectedPeriod == Period.Winter; set { if (value) SelectedPeriod = Period.Winter; } }
-    public bool IsSummerSelected { get => SelectedPeriod == Period.Summer; set { if (value) SelectedPeriod = Period.Summer; } }
+    public bool IsWinterSelected { get => SelectedPeriod == Period.Winter; set { if (value) SelectedPeriod = Period.Winter; RefreshDataAndChart();} }
+    public bool IsSummerSelected { get => SelectedPeriod == Period.Summer; set { if (value) SelectedPeriod = Period.Summer; RefreshDataAndChart(); } }
 
     private double _maintenanceHours = 30;
     public double MaintenanceHours { get => _maintenanceHours; set { this.RaiseAndSetIfChanged(ref _maintenanceHours, value); RefreshDataAndChart(); } }
@@ -144,6 +144,7 @@ public partial class MainWindowViewModel : ReactiveObject
     private void RefreshDataAndChart()
     {
         SyncOptimizationPeriod();
+        Optimizer.SetMaintenanceData(SelectedUnit?.Name ?? string.Empty, MaintenanceHours);
         ResultDataManager.GetResultData();
         Visualizer.Model.UpdateData();
         UpdateChart();
