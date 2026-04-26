@@ -23,6 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
+  <Content Include="..\Danfoss-Heat-Project\Assets\SourceData.csv">
+    <Link>Assets\SourceData.csv</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+
+
+  <ItemGroup>
     <ProjectReference Include="..\Danfoss-Heat-Project\Danfoss_Heat_Distribution_Optimizer.csproj" />
   </ItemGroup>
 
