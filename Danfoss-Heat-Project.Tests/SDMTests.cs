@@ -3,6 +3,7 @@ using Danfoss_Heat_Distribution_Optimizer.Services;
 
 namespace Danfoss_Heat_Project.Tests.Integration
 {
+    [Collection("Sequential")]
     public class SourceDataManagerIntegrationTests
     {
         [Fact]
