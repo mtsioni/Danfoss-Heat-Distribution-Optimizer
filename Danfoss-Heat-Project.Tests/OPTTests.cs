@@ -40,7 +40,7 @@ public class OptimizerIntegrationTests
         //Arrange
         AssetManager.Initialize();
         ScenarioManager.CurrentScenario = Scenario.Heat;
-        List<string> names = new(){"Gas Boiler 1", "Gas Bolier 2", "Gas Boiler 3", "Oil Boiler 1"};
+        List<string> names = new(){"Gas Boiler 1", "Gas Boiler 2", "Gas Boiler 3", "Oil Boiler 1"};
         Optimizer.OptimizationPeriodStart = new DateTime(2026, 01, 05);
         Optimizer.OptimizationPeriodEnd = new DateTime(2026, 01, 18);
         //Act
@@ -64,8 +64,10 @@ public class OptimizerIntegrationTests
         List<string> names = new(){"Gas Boiler 1", "Gas Boiler 3", "Gas Motor 1", "Electric Boiler 1"};
         Optimizer.OptimizationPeriodStart = new DateTime(2026, 01, 05);
         Optimizer.OptimizationPeriodEnd = new DateTime(2026, 01, 18);
+
         //Act
         var result = Optimizer.GetResultData();
+        
         //Assert
         Assert.Equal(4, result.Count);
         for (int i = 0; i < result.Count; i++)

@@ -2,14 +2,16 @@ using Danfoss_Heat_Distribution_Optimizer.Services;
 using Danfoss_Heat_Distribution_Optimizer.Data;
 
 [Collection("Sequential")]
-public class AssetManagerTest
+public class AssetManagerIntegrationTests
 {
     //Positive case
     [Fact]
     public void Initialize_ValidJson_LoadsData()
     {
-        //Act
+        //Arrange
         AssetManager.Initialize();
+        
+        //Act
         var units = AssetManager.GetDataForOptimizer();
 
         //Assert
