@@ -8,15 +8,15 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
 {
     public static class AssetsLoader
     {
-        private static string? UnitsPath { get; set; }
-        private static string? GridPath { get; set; }
-        private static string? LogoImagePath { get; set; }
+        private static string? _unitsPath { get; set; }
+        private static string? _gridPath { get; set; }
+        private static string? _logoImagePath { get; set; }
 
 public static void Initialize()
     {
-        UnitsPath = FindAsset("ProductionUnits.json");
-        GridPath = FindAsset("ProductionUnits.json");
-        LogoImagePath = FindAsset("Assets/Images/DanfossLogo.png");
+        _unitsPath = FindAsset("ProductionUnits.json");
+        _gridPath = FindAsset("ProductionUnits.json");
+        _logoImagePath = FindAsset("Assets/Images/DanfossLogo.png");
     }
 
     private static string FindAsset(string filename)
@@ -39,10 +39,10 @@ public static void Initialize()
             try
             {
                 /// The whole process of parsing JSON
-                if (string.IsNullOrEmpty(UnitsPath) || !File.Exists(UnitsPath))
+                if (string.IsNullOrEmpty(_unitsPath) || !File.Exists(_unitsPath))
                     return new List<GenericUnit>();
 
-                string jsonContent = File.ReadAllText(UnitsPath);
+                string jsonContent = File.ReadAllText(_unitsPath);
                 using (JsonDocument doc = JsonDocument.Parse(jsonContent))
                 {
                     var root = doc.RootElement;
@@ -100,9 +100,9 @@ public static void Initialize()
 
                 // Load grid from the JSON file
                 Grid grid = new Grid { GridID = 1 };
-                if (!string.IsNullOrEmpty(UnitsPath) && File.Exists(UnitsPath))
+                if (!string.IsNullOrEmpty(_gridPath) && File.Exists(_gridPath))
                 {
-                    string jsonContent = File.ReadAllText(UnitsPath);
+                    string jsonContent = File.ReadAllText(_gridPath);
                     using (JsonDocument doc = JsonDocument.Parse(jsonContent))
                     {
                         var root = doc.RootElement;
@@ -119,12 +119,12 @@ public static void Initialize()
                     }
                 }
 
-                return (units, grid, LogoImagePath ?? "");
+                return (units, grid, _logoImagePath ?? "");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading grid data: {ex.Message}");
-                return (new List<GenericUnit>(), new Grid(), LogoImagePath ?? "");
+                return (new List<GenericUnit>(), new Grid(), _logoImagePath ?? "");
             }
         }
     }
