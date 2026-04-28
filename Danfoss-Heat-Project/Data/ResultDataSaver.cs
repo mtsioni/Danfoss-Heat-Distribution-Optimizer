@@ -11,7 +11,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
 
         public static void SaveToCSV (string unitName, List<ResultDataDTO> data)
         {
-            _resultDataPath = Path.Combine("Assets", "ResultData");
+            string pathBeginning = Directory.GetCurrentDirectory();
+            if (!File.Exists(Path.Combine(pathBeginning, "Assets", "Paths.json")))
+                pathBeginning = Path.Combine(pathBeginning, "..", "..", "..");
+            _resultDataPath = Path.Combine(pathBeginning, "Assets", "ResultData");
             string fileName = $"{unitName}.csv";
             string fullPath = Path.Combine(_resultDataPath, fileName);
             
