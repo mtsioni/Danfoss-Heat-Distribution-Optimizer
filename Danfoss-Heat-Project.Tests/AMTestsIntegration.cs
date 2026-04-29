@@ -15,7 +15,7 @@ public class AssetManagerIntegrationTests
         var units = AssetManager.GetDataForOptimizer();
 
         //Assert
-        Assert.NotNull(units);
+        Assert.NotEmpty(units);
     }
 
     //Negative
