@@ -7,7 +7,7 @@ using System;
 public class FunctionalTests
 {
     [Fact]
-    public void AssetManager_WhenHeatScenarioIsSelected_GivesCorrectDataToOptimizer()
+    public void ScenarioManager_WhenHeatScenarioIsSelected_GivesCorrectDataToOptimizer()
     {
         //Arrange
         AssetManager.Initialize();
@@ -28,7 +28,7 @@ public class FunctionalTests
     }
 
     [Fact]
-    public void AssetManager_WhenHeatAndElectricityScenarioIsSelected_GivesCorrectDataToOptimizer()
+    public void ScenarioManager_WhenHeatAndElectricityScenarioIsSelected_GivesCorrectDataToOptimizer()
     {
         //Arrange
         AssetManager.Initialize();
