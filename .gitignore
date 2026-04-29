@@ -16,6 +16,7 @@ bld/
 [Ll]og/
 [Ll]ogs/
 Danfoss-Heat-Project/Assets/ResultData/*
+Danfoss-Heat-Project.Tests/Assets/ResultData/*
 
 # Visual Studio specific
 .vs/
