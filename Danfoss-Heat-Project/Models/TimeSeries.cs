@@ -11,10 +11,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             get {return _values;}
             set {_values = value;}
         }
-
+/*
         // Compatibility helper for list-based iteration
         public List<DateTime> Timestamps => new List<DateTime>(_values.Keys);
-
+*/
         public T this[DateTime index]
         {
             get 
@@ -24,7 +24,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
             }
             set { _values[index] = value; }
         }
-
+/*
         public TimeSeries()
         {
         } 
@@ -39,7 +39,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
                 }
             }
         } 
-
+*/
 
         /*
         private List<DateTime> _timestamps;

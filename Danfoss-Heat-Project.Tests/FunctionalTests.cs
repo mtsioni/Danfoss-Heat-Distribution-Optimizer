@@ -55,9 +55,9 @@ public class FunctionalTests
         var allHeatDemand = SourceDataManager.GetHeatDemand();
         var allElectricityPrices = SourceDataManager.GetElectricityPrice();
 
-        var winterDates = allHeatDemand.Timestamps.Where(dt => dt.Month == 1).OrderBy(dt => dt).ToList();
-        DateTime periodStart = winterDates.First();
-        DateTime periodEnd = winterDates.Last();
+        var winterDates = allHeatDemand.Values.Where(kvp => kvp.Key.Month == 1).OrderBy(kvp => kvp.Key).ToList();
+        DateTime periodStart = winterDates.First().Key;
+        DateTime periodEnd = winterDates.Last().Key;
 
         SourceDataManager.OptimizationPeriodStart = periodStart;
         SourceDataManager.OptimizationPeriodEnd = periodEnd;
