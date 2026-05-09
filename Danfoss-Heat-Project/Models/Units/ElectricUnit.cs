@@ -1,11 +1,10 @@
 using System;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    public class ElectricUnit : OptimizedUnit, IElectricUnit
+    public class ElectricUnit : OptimizedUnit
     {
-        // From IElectricUnit
+        // ElectricUnit
         public double MaxElectricity { get; set; }
 
         public ElectricUnit(int unitID, string name, double maxElectricity, double maxHeat, 

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Data;
 using Danfoss_Heat_Distribution_Optimizer.Services;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 using System;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Services

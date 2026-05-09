@@ -4,7 +4,6 @@ using Danfoss_Heat_Distribution_Optimizer.Data;
 using Danfoss_Heat_Distribution_Optimizer.ViewModels;
 using System;
 using System.Linq;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Services
 {

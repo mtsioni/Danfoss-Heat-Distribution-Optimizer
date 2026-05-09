@@ -1,9 +1,8 @@
 using System;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    public class CombustionUnit : OptimizedUnit, IFueledUnit
+    public class CombustionUnit : OptimizedUnit
     {
         // From IFueledUnit  
         public string FuelName { get; set; }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Danfoss_Heat_Distribution_Optimizer.Models;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Services
 {

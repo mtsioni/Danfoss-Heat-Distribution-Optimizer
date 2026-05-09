@@ -1,18 +1,16 @@
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
-
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    public class GenericUnit : Unit, IElectricUnit, IFueledUnit, IGraphicalUnit
+    public class GenericUnit : Unit
     {
-        // From IElectricUnit
+        // ElectricUnit
         public double MaxElectricity { get; set; }
     
-        // From IFueledUnit  
+        // FueledUnit  
         public string FuelName { get; set; }
         public double FuelConsumption { get; set; }
         public double Emissions { get; set; }
 
-        // From IGraphicalUnit
+        // GraphicalUnit
         public string ImagePath { get; set; }
 
 

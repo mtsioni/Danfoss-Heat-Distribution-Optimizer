@@ -1,14 +1,13 @@
 using System;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    public class HybridUnit : OptimizedUnit, IElectricUnit, IFueledUnit
+    public class HybridUnit : OptimizedUnit
     {
-        // From IElectricUnit
+        // ElectricUnit
         public double MaxElectricity { get; set; }
 
-        // From IFueledUnit  
+        // FueledUnit  
         public string FuelName { get; set; }
         public double FuelConsumption { get; set; }
         public double Emissions { get; set; }

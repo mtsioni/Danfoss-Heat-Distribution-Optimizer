@@ -1,6 +1,5 @@
 using Danfoss_Heat_Distribution_Optimizer.Services;
 using Danfoss_Heat_Distribution_Optimizer.Models;
-using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 [Collection("Sequential")]
 public class OptimizerIntegrationTests
