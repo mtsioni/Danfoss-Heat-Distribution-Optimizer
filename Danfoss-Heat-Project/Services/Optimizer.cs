@@ -17,7 +17,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static DateTime WinterMaintenanceStart { get; set; }
         public static DateTime SummerMaintenanceStart { get; set; }
         public static double MaintenanceLength { get; set; }
-        private static List<IOptimizedUnit> _availableUnits = new();
+        private static List<OptimizedUnit> _availableUnits = new();
 
 
         
@@ -149,7 +149,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             }
         }
 
-        public static List<IOptimizedUnit> GetResultData()
+        public static List<OptimizedUnit> GetResultData()
         {
             Optimize();
             return _availableUnits ?? throw new Exception("AvailableUnits not available");

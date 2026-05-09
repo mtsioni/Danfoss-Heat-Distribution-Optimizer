@@ -13,7 +13,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static DateTime OptimizationPeriodStart { get; set; }
         public static DateTime OptimizationPeriodEnd { get; set; }
         public static int TimeResolution { get; set; }
-        private static List<IOptimizedUnit>? _resultData { get; set; }
+        private static List<OptimizedUnit>? _resultData { get; set; }
         
         private static void ProcessResults()
         {
@@ -67,12 +67,12 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         }
 
         // called by DataVisualizer
-        public static List<IOptimizedUnit> GetResultData()
+        public static List<OptimizedUnit> GetResultData()
         {
             ProcessResults();
             
             if (_resultData == null)
-                return new List<IOptimizedUnit>();
+                return new List<OptimizedUnit>();
 
             return _resultData;
         }

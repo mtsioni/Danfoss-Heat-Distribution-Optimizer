@@ -15,7 +15,7 @@ public class OptimizerIntegrationTests
         //Act
         var result = Optimizer.GetResultData();
         //Assert
-        Assert.True(result is List<IOptimizedUnit>);
+        Assert.True(result is List<OptimizedUnit>);
         //Cleanup
         Optimizer.OptimizationPeriodStart = new();
         Optimizer.OptimizationPeriodEnd = new();
@@ -31,7 +31,7 @@ public class OptimizerIntegrationTests
         //Act
         var result = Optimizer.GetResultData();
         //Assert
-        Assert.True(result is List<IOptimizedUnit>);
+        Assert.True(result is List<OptimizedUnit>);
         //Cleanup
         ScenarioManager.CurrentScenario = Scenario.Heat;
         Optimizer.OptimizationPeriodStart = new();

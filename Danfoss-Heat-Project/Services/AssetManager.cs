@@ -60,7 +60,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         }
 
         /// Gets production units for the Optimizer.
-        public static List<IOptimizedUnit> GetDataForOptimizer()
+        public static List<OptimizedUnit> GetDataForOptimizer()
         {
             if (!_isInitialized)
                 Initialize();
@@ -68,7 +68,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
                 throw new InvalidOperationException("AssetManager failed to load units. Check that JSON files exist and are valid.");
             
             List<GenericUnit> filteredList;
-            List<IOptimizedUnit> outputList;
+            List<OptimizedUnit> outputList;
 
             GenericToOptimizedAdapter adapter = new();
             

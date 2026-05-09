@@ -2,12 +2,8 @@ using Danfoss_Heat_Distribution_Optimizer.Services.Interfaces;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models
 {
-    public class GenericUnit : IUnit, IElectricUnit, IFueledUnit, IHeatUnit, IGraphicalUnit
+    public class GenericUnit : Unit, IElectricUnit, IFueledUnit, IGraphicalUnit
     {
-        // From IUnit
-        public int UnitID { get; set; }
-        public string Name { get; set; }
-    
         // From IElectricUnit
         public double MaxElectricity { get; set; }
     
@@ -15,10 +11,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public string FuelName { get; set; }
         public double FuelConsumption { get; set; }
         public double Emissions { get; set; }
-    
-        // From IHeatUnit
-        public double MaxHeat { get; set; }
-        public double ProductionCost { get; set; }
 
         // From IGraphicalUnit
         public string ImagePath { get; set; }

@@ -7,7 +7,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 {
     public class GenericToOptimizedAdapter()
     {
-        public IOptimizedUnit GenericToOptimized(GenericUnit inputUnit)
+        public OptimizedUnit GenericToOptimized(GenericUnit inputUnit)
         {
             bool electric = false;
             bool fueled = false;
@@ -46,9 +46,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 
             throw new Exception ("Invalid type");
         }
-        public List<IOptimizedUnit> GenericToOprimizedList(List<GenericUnit> inputList)
+        public List<OptimizedUnit> GenericToOprimizedList(List<GenericUnit> inputList)
         {
-            List<IOptimizedUnit> ans = new();
+            List<OptimizedUnit> ans = new();
             foreach(GenericUnit genericUnit in inputList)
             {
                 ans.Add(GenericToOptimized(genericUnit));
