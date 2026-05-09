@@ -1,0 +1,201 @@
+% -------------------------------------------------------------
+% Suggested template for the SDU Software Engineering Course, 2025
+%
+% -------------------------------------------------------------
+
+\documentclass[12pt,                                          % Main text font size
+               a4paper,                                       % Paper size
+               openright,                                     % Chapters start on odd pages (right)
+               twoside]{report}                               % Print two-sided, LaTeX 'report' template
+
+% -------------------------------------------------------------
+% PACKAGES - Only load if necessary / used
+% -------------------------------------------------------------
+\usepackage{microtype}                                        % Tweak font spacing for aesthetics
+\usepackage{cmbright}                                         % SS font - Comment this line for LaTeX base font
+\usepackage[utf8]{inputenc}                                   % Includes letters with accents
+\usepackage[T1]{fontenc}                                      % 8-bit encoding with 256 glyphs
+\usepackage[colorlinks=true, allcolors=black]{hyperref}       % Hyper-references in PDF (e.g. urlcolor=blue)
+\usepackage{fancyhdr}                                         % Headers and footers
+\usepackage{subfigure}                                        % Multiple figures environment
+\usepackage{amsmath}                                          % Standard maths
+\usepackage{amssymb}                                          % Standard maths symbols
+\usepackage{graphicx}                                         % Include graphics
+\usepackage{booktabs}                                         % Professional tables
+\usepackage[english]{babel}                                   % Babel and language definitions
+\usepackage[a4paper,                                          % Paper size
+            top = 35mm,                                       % Top margin
+            bottom = 30mm,                                    % Bottom margin
+            left = 35mm,                                      % Left margin
+            right = 25mm]{geometry}                           % Right margin
+\usepackage{nomencl}                                          % Include nomenclature
+\usepackage[page,toc,titletoc,title]{appendix}                % Include appendixes
+\usepackage{csquotes}                                         % For inline and display quotations
+\usepackage{lipsum}                                           % Generate automatic text - Lorem Ipsum
+\usepackage{moreverb}                                         % Output for word and character count
+\usepackage{tcolorbox}                                        % Coloured boxes
+\usepackage{xcolor}                                           % Advanced colours
+\usepackage{soul}                                             % Highlight text and other text things
+\usepackage{caption}                                          % Manage captions in floats
+\usepackage{chemfig,chemformula}                              % Use chemistry formulae
+\usepackage{pgfgantt}                                         % Use a Gantt chart
+\usepackage{pdflscape}                                        % Landscape pages
+\usepackage{cite}                                             % Compressed and sorted lists of citations
+\usepackage{listings}                                         % Displayed code
+\usepackage{siunitx}                                          % Easy unit control
+\usepackage{titlesec}
+
+% -------------------------------------------------------------
+% USER VARIABLES AND DEFINITIONS                              % EDIT THIS SECTION
+% -------------------------------------------------------------
+%\newcommand{}{}
+\newcommand{\theTitle}{Second Semester Project: Development of Software Systems (F26)}            % Thesis title
+\newcommand{\runningTitle}{Semester Project (F26)}                % Short title for headers
+\newcommand{\thegroup}{\textbf{Group 11}}                  % Author name
+
+\newcommand{\subtitle}[1]{%
+  \\[0.5em] % adjust vertical space as needed
+  {\Large\textit{\textcolor{mygrey}{#1}}}%
+}
+
+
+\definecolor{mygrey}{RGB}{64,64,64}
+                      % Define your own colours
+\definecolor{ocre}{RGB}{45,105,145} 
+\definecolor{barblue}{RGB}{153,204,254}                       % Used in Gantt chart
+\definecolor{groupblue}{RGB}{51,102,254}                      % Used in Gantt chart
+\definecolor{linkred}{RGB}{165,0,33}                          % Used in Gantt chart
+
+\captionsetup[table]{skip=6pt}                                % Gap between captions and tables
+\graphicspath{{Images/}}                                      % Path to folder where pictures are stored
+\makenomenclature                                             % Create a nomenclature
+\setlength{\nomlabelwidth}{10mm}                              % Set width of nomenclature label
+\setlength{\headheight}{14pt}                                 % Minimum hadhight length
+
+% -------------------------------------------------------------
+% START DOCUMENT CONTENT
+% -------------------------------------------------------------
+\begin{document}                                              % Start document
+
+% -------------------------------------------------------------
+% COVER PAGE
+% -------------------------------------------------------------
+\begin{titlepage}                                             % Create cover page
+\pagestyle{empty}                                             % No headers or footers on cover
+\centering                                                    % Centre all contents on cover page
+\includegraphics[width=0.7\textwidth]{Images/SDULogo-uk.png} \\ % UoE-SoE logo
+\vspace{40mm}                                                 % Vertical space
+\hrule\vspace{5mm}                                            % Horizontal rule above title
+
+{\LARGE \textbf{\textcolor{mygrey}{\theTitle}}} \subtitle{Your subtitle here}\\           % The title of the report
+
+\vspace{5mm}\hrule\vspace{20mm}                               % Horizontal rule below title
+
+{\large \thegroup} \\ \vspace{2mm} 
+{\large Daniel Falat dafal25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Dominik Bežo dobez25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Maria Thalia Tsioni matsi25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Pavel Seliavko pasel25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Zoe Elea Schiwi zozei25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Zoja Angelovicova zoang25@student.sdu.dk} \\ \vspace{2mm} % The author
+
+\vfill                                                        % Fill space down to bottom of page
+{\small \today}               
+
+\end{titlepage}
+
+% -------------------------------------------------------------
+% FRONT
+% -------------------------------------------------------------
+\pagenumbering{roman}                                         % Roman page numbering for preamble
+\setcounter{page}{1}                                          % Start page counter
+
+% -------------------------------------------------------------
+% TABLE OF CONTENTS, LISTS OF TABLES AND FIGURES
+% -------------------------------------------------------------
+\tableofcontents                                              % Add table of contents
+\listoftables                                                 % Add list of tables
+\listoffigures                                                % Add list of figures
+
+% -------------------------------------------------------------
+% ABSTRACT
+% -------------------------------------------------------------
+\input{Chapters/Abstract}                                     % Call abstract file
+
+% -------------------------------------------------------------
+% INTRODUCTION
+% -------------------------------------------------------------
+\pagestyle{fancy}                                             % Include fancy headers and footers
+\chapter[Introduction]{Introduction}                          % Short and long title versions
+\label{chap:intro}                                            % Chapter label
+\pagenumbering{arabic}                                        % Change age numbering to arabic
+\input{Chapters/Introduction.tex}                             % Call file with chapter
+
+% -------------------------------------------------------------
+% SCRUM IMPLEMENTATION
+% -------------------------------------------------------------
+\chapter[Scrum Implementation]{Scrum Implementation}           % Short and long title versions
+\label{chap:scrumimplementation}
+% Chapter label
+\input{Chapters/ScrumImplementation}                           % Call file with chapter
+
+% -------------------------------------------------------------
+% SPRINTS
+% -------------------------------------------------------------
+\chapter{Sprints}                                              % Short and long title versions
+\label{chap:sprints}                                           % Chapter label
+\input{Chapters/Sprints}                                       % Call file with chapter
+
+% -------------------------------------------------------------
+% SOLUTION
+% -------------------------------------------------------------
+\chapter{Solution}                                             % Chapter title
+\label{chap:solution}                                          % Chapter label
+
+\input{Chapters/Solution}                                      % Call file 
+
+% -------------------------------------------------------------
+% IMPLEMENTATION AND TECHNICAL REALIZATION
+% -------------------------------------------------------------
+\chapter{Implementation and Technical Realization}
+\label{chap:implementation}
+
+\input{Chapters/Implementation}   
+
+% -------------------------------------------------------------
+% DISCUSSION AND REFLECTION
+% -------------------------------------------------------------
+\chapter{Discussion and Reflection}\label{chap:discussion} 
+
+\input{Chapters/Discussion}    
+
+% -------------------------------------------------------------
+% CONCLUSION
+% -------------------------------------------------------------
+\chapter{Conclusion}                                           % Chapter title
+\label{chap:conclusion} % Chapter label
+
+\input{Chapters/Conclusion}    
+
+% -------------------------------------------------------------
+% APPENDIX
+% -------------------------------------------------------------
+\appendix                                                       % Start appendices
+\chapter{Appendix A}                                            % Title of first appendix
+\input{Chapters/Appendix.tex}                                   % Call file with appendix
+
+% -------------------------------------------------------------
+% BIBLIOGRAPHY 
+% -------------------------------------------------------------
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+
+% -------------------------------------------------------------
+% END DOCUMENT CONTENT
+% -------------------------------------------------------------
+\end{document}
+
+
+
+
