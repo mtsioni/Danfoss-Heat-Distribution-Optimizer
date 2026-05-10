@@ -285,21 +285,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
         public void UpdateThemeColors(bool isDarkTheme)
         {
-            var textColor = isDarkTheme ? OxyColor.Parse("#efebe5") : OxyColor.Parse("#5E0006");
-            var axisColor = isDarkTheme ? OxyColor.Parse("#efebe5") : OxyColor.Parse("#5E0006");
-
-            CurrentPlotModel.TextColor = textColor;
-            CurrentPlotModel.PlotAreaBorderColor = axisColor;
-
-            foreach (var axis in CurrentPlotModel.Axes)
-            {
-                axis.TextColor = textColor;
-                axis.TitleColor = textColor;
-                axis.TicklineColor = axisColor;
-                axis.AxislineColor = axisColor;
-            }
-
-            CurrentPlotModel.InvalidatePlot(false);
+            var themeColors = new ThemeColors();
+            themeColors.UpdateThemeColors(CurrentPlotModel, isDarkTheme);
         }
 
         private LineSeries CreateSeries(DataKind kind, string yAxisKey)
