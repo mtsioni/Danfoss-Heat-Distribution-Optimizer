@@ -12,7 +12,7 @@ public class DataVisualizerViewModelTests
     public void ToggleLegend_FlipsIsLegendExpanded_Correctly()
     {
         // Arrange
-        var viewModel = new DataVisualizerViewModel();
+        var viewModel = new ChartLegendViewModel();
         Assert.False(viewModel.IsLegendExpanded);
 
         // Act
