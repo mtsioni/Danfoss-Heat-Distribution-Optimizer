@@ -14,7 +14,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static int Counter { get; set; } = 0;
         
         public static string MaintainedUnitName { get; set; } = "";
-        public static DateTime WinterMaintenanceStart { get; set; }
+        // public static DateTime WinterMaintenanceStart { get; set; }
         public static DateTime SummerMaintenanceStart { get; set; }
         public static double MaintenanceLength { get; set; }
         private static List<OptimizedUnit> _availableUnits = new();
@@ -49,7 +49,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             
             return SummerMaintenanceStart;
         }
-
+        
+        // initially we have implemented winter maintenance, but we found out it is not needed
+        /*
         private static DateTime GetWinterMaintenanceStart()
         {
             Random genWinter = new Random();
@@ -65,6 +67,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             
             return WinterMaintenanceStart;
         }
+        */
 
         private static void RetrieveSourceData()
         {
@@ -99,7 +102,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             {
                 if (_availableUnits[i].Name == MaintainedUnitName)
                 {
-                    if (((hour >= SummerMaintenanceStart) && (hour < SummerMaintenanceStart.AddHours(MaintenanceLength))) || ((hour >= WinterMaintenanceStart) && (hour < WinterMaintenanceStart.AddHours(MaintenanceLength))))
+                    if (((hour >= SummerMaintenanceStart) && (hour < SummerMaintenanceStart.AddHours(MaintenanceLength)))) // || ((hour >= WinterMaintenanceStart) && (hour < WinterMaintenanceStart.AddHours(MaintenanceLength))))
                     {
                         continue;
                     }
@@ -126,7 +129,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
             RetrieveUnits();
             RetrieveSourceData();
             GetSummerMaintenanceStart();
-            GetWinterMaintenanceStart(); 
+            // GetWinterMaintenanceStart(); 
             
             if (TimeResolution <= 0) TimeResolution = 1;
             
