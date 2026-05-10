@@ -33,7 +33,7 @@ public partial class MainWindowViewModel : ReactiveObject
         get => SelectedScenario == Scenario.Heat;
         set
         {
-            if (value) 
+            if (value && SelectedScenario != Scenario.Heat) 
             {
                 SelectedScenario = Scenario.Heat;
                 ShowElectricity = false;
@@ -50,7 +50,7 @@ public partial class MainWindowViewModel : ReactiveObject
         get => SelectedScenario == Scenario.HeatAndElectricity;
         set
         {
-            if (value) 
+            if (value && SelectedScenario != Scenario.HeatAndElectricity) 
             {
                 SelectedScenario = Scenario.HeatAndElectricity;
                 RefreshDataAndChart();
@@ -66,10 +66,13 @@ public partial class MainWindowViewModel : ReactiveObject
         get => _selectedPeriod;
         set
         {
-            this.RaiseAndSetIfChanged(ref _selectedPeriod, value);
-            RefreshDataAndChart();
-            this.RaisePropertyChanged(nameof(IsWinterSelected));
-            this.RaisePropertyChanged(nameof(IsSummerSelected));
+            if (_selectedPeriod != value)
+            {
+                this.RaiseAndSetIfChanged(ref _selectedPeriod, value);
+                RefreshDataAndChart();
+                this.RaisePropertyChanged(nameof(IsWinterSelected));
+                this.RaisePropertyChanged(nameof(IsSummerSelected));
+            }
         }
     }
 
@@ -94,14 +97,14 @@ public partial class MainWindowViewModel : ReactiveObject
         ResultDataManager.TimeResolution = Optimizer.TimeResolution;
     }
 
-    public bool IsWinterSelected { get => SelectedPeriod == Period.Winter; set { if (value) SelectedPeriod = Period.Winter; RefreshDataAndChart();} }
-    public bool IsSummerSelected { get => SelectedPeriod == Period.Summer; set { if (value) SelectedPeriod = Period.Summer; RefreshDataAndChart(); } }
+    public bool IsWinterSelected { get => SelectedPeriod == Period.Winter; set { if (value && SelectedPeriod != Period.Winter) { SelectedPeriod = Period.Winter; } } }
+    public bool IsSummerSelected { get => SelectedPeriod == Period.Summer; set { if (value && SelectedPeriod != Period.Summer) { SelectedPeriod = Period.Summer; } } }
 
     private double _maintenanceHours = 30;
-    public double MaintenanceHours { get => _maintenanceHours; set { this.RaiseAndSetIfChanged(ref _maintenanceHours, value); RefreshDataAndChart(); } }
+    public double MaintenanceHours { get => _maintenanceHours; set { if (_maintenanceHours != value) { this.RaiseAndSetIfChanged(ref _maintenanceHours, value); RefreshDataAndChart(); } } }
 
     private UnitViewModel? _selectedUnit;
-    public UnitViewModel? SelectedUnit { get => _selectedUnit; set { this.RaiseAndSetIfChanged(ref _selectedUnit, value); RefreshDataAndChart(); } }
+    public UnitViewModel? SelectedUnit { get => _selectedUnit; set { if (_selectedUnit != value) { this.RaiseAndSetIfChanged(ref _selectedUnit, value); RefreshDataAndChart(); } } }
 
     private bool _showHeatDemand = true;
     public bool ShowHeatDemand { get => _showHeatDemand; set { this.RaiseAndSetIfChanged(ref _showHeatDemand, value); UpdateChart(); } }
@@ -152,7 +155,6 @@ public partial class MainWindowViewModel : ReactiveObject
         UpdateScenario();
         SyncOptimizationPeriod();
         Optimizer.SetMaintenanceData(SelectedUnit?.Name ?? string.Empty, MaintenanceHours);
-        ResultDataManager.GetResultData();
         Visualizer.Model.UpdateData();
         UpdateChart();
     }

@@ -11,6 +11,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static TimeSeries<double>? ElectricityPrices { get; set; }
         public static TimeSeries<double>? HeatDemand { get; set; }
         public static int TimeResolution { get; set; } = 1;
+        public static int Counter { get; set; } = 0;
         
         public static string MaintainedUnitName { get; set; } = "";
         public static DateTime WinterMaintenanceStart { get; set; }
@@ -115,6 +116,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         }
         private static void Optimize()
         {
+            // checking how many times optimizer ran
+            Counter++;
+            Console.WriteLine($"Optimizer ran: {Counter}");
             // preparing for optimization
             double heatDemand;
             double electricityPrice;
