@@ -12,12 +12,6 @@ using System;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 {
-    public class LegendItem
-    {
-        public string Title { get; set; } = string.Empty;
-        public Avalonia.Media.IBrush? Brush { get; set; }
-    }
-
     public class DataVisualizerViewModel : ViewModelBase
     {
         private PlotModel _currentPlotModel = new PlotModel();
@@ -27,24 +21,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _currentPlotModel, value);
         }
 
-        private ObservableCollection<LegendItem> _activeLegendItems = new();
-        public ObservableCollection<LegendItem> ActiveLegendItems
-        {
-            get => _activeLegendItems;
-            set => this.RaiseAndSetIfChanged(ref _activeLegendItems, value);
-        }
-
-        private bool _isLegendExpanded = false;
-        public bool IsLegendExpanded
-        {
-            get => _isLegendExpanded;
-            set => this.RaiseAndSetIfChanged(ref _isLegendExpanded, value);
-        }
-
-        public void ToggleLegend()
-        {
-            IsLegendExpanded = !IsLegendExpanded;
-        }
+        public ChartLegendViewModel Legend { get; } = new();
 
         public DataVisualizerModel Model { get; } = new();
 
@@ -57,7 +34,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
         public void UpdatePlot(IEnumerable<DataKind> activeKinds, Period period)
         {
             CurrentPlotModel.Series.Clear();
-            ActiveLegendItems.Clear();
+            Legend.ActiveLegendItems.Clear();
 
             var activeGroups = new List<string>();
             bool hasEnergy = activeKinds.Any(k => k == DataKind.HeatDemand || k == DataKind.HeatProduction || k == DataKind.Electricity);
@@ -151,7 +128,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                 var c = series.Color;
                 var brush = new Avalonia.Media.SolidColorBrush(
                     Avalonia.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
-                ActiveLegendItems.Add(new LegendItem { Title = series.Title, Brush = brush });
+                Legend.ActiveLegendItems.Add(new LegendItem { Title = series.Title, Brush = brush });
             }
 
             CurrentPlotModel.InvalidatePlot(true);
@@ -201,7 +178,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                 {
                     CurrentPlotModel.Series.Add(series);
                     var c = series.FillColor;
-                    ActiveLegendItems.Add(new LegendItem 
+                    Legend.ActiveLegendItems.Add(new LegendItem 
                     { 
                         Title = series.Title, 
                         Brush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(c.A, c.R, c.G, c.B)) 
@@ -294,7 +271,5 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
         {
             return System.Text.RegularExpressions.Regex.Replace(s, "([A-Z])", " $1").Trim();
         }
-
-
     }
 }

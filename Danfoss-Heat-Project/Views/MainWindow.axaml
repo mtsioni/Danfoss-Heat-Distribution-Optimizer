@@ -236,16 +236,16 @@
                                         Foreground="{DynamicResource MainText}"
                                         CornerRadius="15"
                                         Padding="12,6"
-                                        Command="{Binding Visualizer.ToggleLegend}">
+                                        Command="{Binding Visualizer.Legend.ToggleLegend}">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <TextBlock Text="Legend" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                                        <TextBlock Text="▲" VerticalAlignment="Center" IsVisible="{Binding Visualizer.IsLegendExpanded}"/>
-                                        <TextBlock Text="▼" VerticalAlignment="Center" IsVisible="{Binding !Visualizer.IsLegendExpanded}"/>
+                                        <TextBlock Text="▲" VerticalAlignment="Center" IsVisible="{Binding Visualizer.Legend.IsLegendExpanded}"/>
+                                        <TextBlock Text="▼" VerticalAlignment="Center" IsVisible="{Binding !Visualizer.Legend.IsLegendExpanded}"/>
                                     </StackPanel>
                                 </Button>
                                 
                                 <!-- Legend Popup -->
-                                <Popup IsOpen="{Binding Visualizer.IsLegendExpanded, Mode=TwoWay}" 
+                                <Popup IsOpen="{Binding Visualizer.Legend.IsLegendExpanded, Mode=TwoWay}" 
                                        Placement="Top" 
                                        PlacementGravity="TopRight"
                                        IsLightDismissEnabled="True">
@@ -258,7 +258,7 @@
                                             BoxShadow="0 4 10 0 #40000000">
                                         <StackPanel>
                                             <TextBlock Text="PRODUCTION UNITS" FontWeight="Bold" Foreground="{DynamicResource MainText}" Margin="0,0,0,10" FontSize="12"/>
-                                            <ItemsControl ItemsSource="{Binding Visualizer.ActiveLegendItems}">
+                                            <ItemsControl ItemsSource="{Binding Visualizer.Legend.ActiveLegendItems}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
