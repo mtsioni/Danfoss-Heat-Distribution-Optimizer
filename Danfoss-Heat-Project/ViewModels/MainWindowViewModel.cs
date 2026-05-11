@@ -258,7 +258,7 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         var noneVm = new UnitViewModel("None", "", 0, 0, 0, 0, 0, "");
         Units.Add(noneVm);
-        SelectedUnit = noneVm;
+        _selectedUnit = noneVm;
 
         // just ask AssetManager for the units, it loads them from json automatically
         var units = AssetManager.GetDataForDataVisualizer().Item1;
