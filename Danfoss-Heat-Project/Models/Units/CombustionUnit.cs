@@ -31,7 +31,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         }
         public override double CalculateNetProductionCost(double electricityPrice)
         {
-            return ProductionCost;
+            return ProductionCost * MaxHeat;
         }
         public override void UpdateRecords(double workload, double netProductionCost, DateTime hour)
         {
