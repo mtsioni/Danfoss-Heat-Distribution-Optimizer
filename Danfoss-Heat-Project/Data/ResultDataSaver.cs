@@ -7,7 +7,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
 {
     public class ResultDataSaver
     {
-        private static string? _resultDataPath {get;set;}
+        private static string? _resultDataPath;
 
         public static void SaveToCSV (string unitName, List<ResultDataDTO> data)
         {
