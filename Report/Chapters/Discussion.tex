@@ -10,7 +10,7 @@ Transparency and responsibility were ensured by rotating the role of Scrum Maste
 
 In the first sprint, the workload distribution was underestimated. As a solution, a story points system was introduced, using a scale of 1–10 based on the sum of difficulty (1–5) and importance (1–5). This system greatly improved our planning and monitoring of burn-down charts. Later, also deadlines for tasks were used to help review them on the go, so that there always was enough time to fix issues the development team or pair might have missed.
 
-Throughout the development phase, team and pair programming were utilized. The first three sprints were pair-based, with pairs changed twice. In sprints 4–6, workload was divided between 2 teams of three (team Slovaks and team Internationals). This technique proved effective and helped us eliminate technical problems from the early sprints, particularly those related to time management.
+Throughout the development phase, team and pair programming were utilized. The first three sprints were pair-based, with pairs changed twice. In sprints 4–6, workload was divided between 2 teams of three (team Slovaks and team Internationals). This technique proved effective and helped us eliminate technical problems from the early sprints, especially those that were related to time management.
 
 \subsubsection*{Observed changes in behaviour and code quality}
 By implementing code reviews and coding principles in the second sprint, a higher consistency was reached, also a cleaner and easier-to-read code was produced to help understand everything for those who had not written that part.
@@ -20,7 +20,7 @@ After facing difficulties in the initial phase such as missing feedback from eac
 \subsubsection*{Difficulties and issues}
 During the development, the team faced several issues, for example, in Sprint 2, tickets needed to be added in the middle of the process because the technical difficulty was not estimated correctly. Team’s response was implementing more detailed sprint planning, dividing large and important tasks into smaller tickets that were more predictable.
 
-Duplicity and assumptions were also challenges that were faced. In the fourth sprint, miscommunication and assumptions led the team to produce the same part of the code twice. This experience was very beneficial for learning and implemented stricter coordination between the Slovak and International teams in the later phase of project development.
+Duplicity and assumptions were also problems that were faced during the development. In the fourth sprint, miscommunication and assumptions led the team to produce the same part of the code twice. This experience was very beneficial for learning and implemented stricter coordination between the Slovak and International teams in the later phase of project development.
 
 During development, the team experienced issues with Jira, where tickets were sometimes not marked as done even after being moved to the ``Done'' column. This was later fixed, but the charts still did not reflect reality. There was another issue – the presence of subtasks within each ticket. It was addressed by transitioning to separate tickets in order to have the chart displayed correctly. Despite these solutions, the chart remained problematic although it was more realistic than in the beginning.
 
@@ -84,23 +84,23 @@ Instead of authoritarian approach, the team conducted constructive dialogue duri
 Another habit that team took on was ensuring code quality. During review, if the produced code did not meet team’s standards, tickets remained in Review category and were not moved to Done until final approval by whole team or even put back to backlog and worked on in the future sprints.
 
 \section{Testing}
-Testing was important part of the project development to make sure heat distribution optimization system works as expected. We decided to go with testing strategy that included unit, integration and functional tests.
+Testing was an important part of the project development to make sure the heat distribution optimization system works as expected. We decided to go with a testing strategy that included unit, integration, and functional tests.
 
-Before diving into the details, it has to be mentioned that team had faced quite a challenge with unit testing. Since a large part of code was written using static and private classes and methods, it was very difficult to isolate individual components for pure unit tests. Because of this static architecture and how specific the logic was, team realized that traditional unit testing would not be suitable for our architecture. Instead of forcing tests that didn't fit the current structure, after consultation with the professor it was decided to focus our energy on integration and functional tests. This way, it could better be ensured that the different modules worked correctly together.
+Before diving into the details, it has to be mentioned that the team faced quite a challenge with unit testing. Since a large part of the code was written using static and private classes and methods, it was very difficult to isolate individual components for pure unit tests. Because of this static architecture and how specific the logic was, the team realized that traditional unit testing would not be suitable for our architecture. Instead of forcing tests that didn't fit the current structure, after consultation with the professor, it was decided to focus our energy on integration and functional tests. This way, it could better be ensured that the different modules worked correctly together.
 
 \subsubsection*{Test implementation}
-All the tests were built on xUnit framework. For testing the GUI, Avalonia.Headless.XUnit extension was used, which allows to test the project without need to physically open application window.
+All the tests were built on the xUnit framework. For testing the GUI, the \texttt{Avalonia.Headless.XUnit} extension was used, which allows testing the project without the need to physically open the application window.
 
-As mentioned before, we agreed on using a strict naming format for tests - Object_Method_ExpectedOutcome. A good example of the test naming format can be ToggleLegend_FlipsIsLegendExpanded_Correctly. This simple rule made all of the test reports much easier to read and understand.
+As mentioned before, we agreed on using a strict naming format for tests: Object\_Method\_ExpectedOutcome. A good example of the test naming format can be \texttt{ToggleLegend\_FlipsIsLegendExpanded\_Correctly}. This simple rule made all of the test reports much easier to read and understand.
 
-Because some of tests interacted with static resources and shared states (like Optimizer or AssetManager), "[Collection("Sequential")]" attribute had to be used. This prevented conflicts and crashes during parallel execution.
+Because some tests interacted with static resources and shared states (like Optimizer or AssetManager), the ``[Collection(``Sequential'')]'' attribute had to be used. This prevented conflicts and crashes during parallel execution.
 
 \subsubsection*{The scope of tests}
-For unit tests, those were focused on the logic inside ViewModels and auxiliary services. Good example are tests for DataVisualizerViewModel, where it was tested whether theme colours switch correctly or if data aggregates correctly for summer and winter periods.
+For unit tests, those were focused on the logic inside ViewModels and auxiliary services. A good example are tests for \texttt{DataVisualizerViewModel}, where it was tested whether theme colours switch correctly or if data aggregates correctly for summer and winter periods.
 
-Integration tests checked whether all managers interacted with external files correctly. Teams verified if AssetManager and SourceDataManager correctly load data from both JSON and CSV files and if ResultDataManager produces results that are not empty, right after optimization runs.
+Integration tests checked whether all managers interacted with external files correctly. The team verified if \texttt{AssetManager} and \texttt{SourceDataManager} correctly load data from both JSON and CSV files and if \texttt{ResultDataManager} produces results that are not empty, right after optimization runs.
 
-Functional tests were there to check whole business processes. For instance, tests confirmed that when selecting Heat scenario, units like Gas Motor 1 or Electric Boiler 1 are correctly excluded from calculation.
+Functional tests were there to check whole business processes. For instance, tests confirmed that when selecting a Heat scenario, units like Gas Motor 1 or Electric Boiler 1 are correctly excluded from the calculation.
 
 \subsubsection*{Pros and cons of testing}
 Thanks to the implemented tests, bugs were found much faster during refactoring, especially in complex math inside optimizer and when processing time series in SourceDataManager.
