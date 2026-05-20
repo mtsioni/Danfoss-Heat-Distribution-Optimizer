@@ -12,7 +12,7 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         public static DateTime OptimizationPeriodStart { get; set; }
         public static DateTime OptimizationPeriodEnd { get; set; }
         public static int TimeResolution { get; set; }
-        private static List<OptimizedUnit>? _resultData { get; set; }
+        private static List<OptimizedUnit>? _resultData;
         
         private static void ProcessResults()
         {

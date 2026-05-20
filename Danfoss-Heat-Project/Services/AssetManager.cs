@@ -24,10 +24,10 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
     {
         #region OPTION 1: CACHE PATTERN (In-Memory Caching) - ACTIVE BY DEFAULT
         
-        private static List<GenericUnit>? _genericUnits { get; set; }
-        private static Grid? _grid { get; set; }
-        private static string? _logoImagePath { get; set; }
-        private static bool _isInitialized { get; set; } = false;
+        private static List<GenericUnit>? _genericUnits;
+        private static Grid? _grid;
+        private static string? _logoImagePath;
+        private static bool _isInitialized = false;
 
 
         /// <summary>

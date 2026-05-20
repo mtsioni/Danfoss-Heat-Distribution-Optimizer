@@ -8,9 +8,9 @@ namespace Danfoss_Heat_Distribution_Optimizer.Data
 {
     public static class AssetsLoader
     {
-        private static string? _unitsPath { get; set; }
-        private static string? _gridPath { get; set; }
-        private static string? _logoImagePath { get; set; }
+        private static string? _unitsPath;
+        private static string? _gridPath;
+        private static string? _logoImagePath;
 
 public static void Initialize()
     {
