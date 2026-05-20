@@ -3,4 +3,58 @@
 %    Implementation
 % -------------------------------------------------------------
 
-\noindent
+\section{Implementation}
+\subsection{Implementation Frontend}
+
+\subsection{Implenemtation Backend}
+
+The core algorithm of the application is the Optimization-process, which calculates, based on given Data from the Asset Manager
+and the Source Data Manager, the most optimal time schedule for the production units, with focus on the most cost-efficient outcome. 
+Those calculations are affected by the choice of Scenarios and the maintenance of the production unit. 
+
+\subsubsection*{Data from Asset Manager}
+
+For the calculation of the time schedule, first the Scenario Manager provides a list of Generic units for the Asset Manager.
+The Asset Manager passes the list to the GenericToOptimizedAdapter, which identifies each unit in the given list as one of three
+types of units:  HybridUnit, ElectricUnit or CombustionUnit. And creates a new list with the identified units. 
+This list gets passed back to the Asset Manager, which provides it for the Optimizer request.  
+
+\subsubsection*{Data from Source Data Manager}
+
+Next to the list of units the Optimizer also depends on the Data of the heat demand, and for the second scenario the
+electricity prices, as well as the current period, summer or winter. 
+Those Data get provided by the Source Data Manager, which first loads Data from a given from the Source Data Loader 
+in form of Time series objects. These Objects contain a Date and time, the period and the value for the heat demand 
+or the value for the electricity price and can be indexed by the DateTime value. The Source Data Manager contains two
+functions, one to load the electricity price and one to load the heat demand. Those functions get called by the 
+Optimizer to obtain the required Data for the calculation. 
+
+\subsubsection*{Calculation for Optimization}
+
+For the optimization process the Optimizer contains a function that first calculates the value of heat per price for
+each available unit and adds it to the unit’s properties as HeatPerPriceRecords. 
+With these values the next function sorts through the list of available units and sorts for the HeatPerPriceRecords 
+value, form most heat per cost to least money. It also calculates if the Unit can produce the required heat demand on 
+its own or if additional units are required, by comparing the heat demand to the maximum of heat the unit can produce. 
+
+\subsubsection*{Optimization function}
+
+In the optimize function itself, the application calculates heat per price and sorts the list of available units for
+each hour in the selected duration. 
+The optimization function gets called when the Result Data Manger requests the optimized data. 
+
+\subsubsection*{ResultDataManager}
+
+After calling the optimized data from the Optimizer, the Result Data Manager adds the number of used hours for each 
+unit and safes the Data as CSV file. 
+Those Data can be requested by the Data Visualizer. 
+
+\subsubsection*{Maintenance}
+
+The Optimizer Class contains a function that sets a selected unit on maintenance for a chosen number of hours. The 
+start of the maintenance will be selected randomly by the program and is only possible during summer period due to 
+less heat demand. 
+During the sorting process, of the available units the function checks if each unit is on maintenance, if its true 
+the loop continues with the next unit of the list and doesn’t add the maintenance unit to the optimized list. 
+
+\subsection{Implementation Data Management}
