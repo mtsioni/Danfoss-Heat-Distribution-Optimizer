@@ -89,21 +89,21 @@ Testing was important part of the project development to make sure heat distribu
 Before diving into the details, it has to be mentioned that team had faced quite a challenge with unit testing. Since a large part of code was written using static and private classes and methods, it was very difficult to isolate individual components for pure unit tests. Because of this static architecture and how specific the logic was, team realized that traditional unit testing would not be suitable for our architecture. Instead of forcing tests that didn't fit the current structure, after consultation with the professor it was decided to focus our energy on integration and functional tests. This way, it could better be ensured that the different modules worked correctly together.
 
 \subsubsection*{Test implementation}
-All the tests were built on xUnit framework. For testing graphical user interface, Avalonia.Headless.XUnit extension was used, which allows to test the project without need to physically open application window.
+All the tests were built on xUnit framework. For testing the GUI, Avalonia.Headless.XUnit extension was used, which allows to test the project without need to physically open application window.
 
-As mentioned before, the team has also agreed on using a strict naming format for tests - Object\_Method\_ExpectedOutcome. A good example of the test naming format can be ToggleLegend\_FlipsIsLegendExpanded\_Correctly. This simple rule made all of the test reports much easier to read and understand.
+As mentioned before, we agreed on using a strict naming format for tests - Object_Method_ExpectedOutcome. A good example of the test naming format can be ToggleLegend_FlipsIsLegendExpanded_Correctly. This simple rule made all of the test reports much easier to read and understand.
 
-Because some of our tests interacted with static resources and shared states (like Optimizer or AssetManager), [Collection(``Sequential'')] attribute had to be used. This prevented conflicts and crashes during parallel execution.
+Because some of tests interacted with static resources and shared states (like Optimizer or AssetManager), "[Collection("Sequential")]" attribute had to be used. This prevented conflicts and crashes during parallel execution.
 
 \subsubsection*{The scope of tests}
-For unit tests, those were mainly focused on logic inside ViewModels and auxiliary services. Good example are tests for DataVisualizerViewModel, where it was checked whether theme colours switch correctly or if data aggregates correctly for summer and winter periods.
+For unit tests, those were focused on the logic inside ViewModels and auxiliary services. Good example are tests for DataVisualizerViewModel, where it was tested whether theme colours switch correctly or if data aggregates correctly for summer and winter periods.
 
-Integration tests checked whether all managers interacted with external files correctly. Teams verified if AssetManager and SourceDataManager correctly load data from JSON and CSV files and if ResultDataManager produces non-empty results after optimization runs.
+Integration tests checked whether all managers interacted with external files correctly. Teams verified if AssetManager and SourceDataManager correctly load data from both JSON and CSV files and if ResultDataManager produces results that are not empty, right after optimization runs.
 
 Functional tests were there to check whole business processes. For instance, tests confirmed that when selecting Heat scenario, units like Gas Motor 1 or Electric Boiler 1 are correctly excluded from calculation.
 
 \subsubsection*{Pros and cons of testing}
-Thanks to tests bugs were found much faster during refactoring, especially in complex math inside optimizer and when processing time series in SourceDataManager.
+Thanks to the implemented tests, bugs were found much faster during refactoring, especially in complex math inside optimizer and when processing time series in SourceDataManager.
 
 However, testing GUI was quite hard and intellectually demanding because it had to simulate how user navigates between pages using CanGoNext and CanGoPrev. Development teams also lost some time and productivity in Sprint 4 having to figure out what to do with duplicate tests caused by misunderstanding and assumptions from team Slovaks.
 
@@ -122,9 +122,8 @@ As mentioned in testing section, current architecture relies heavily on static m
 To fix our issue with file paths, future version should use database to save data instead of files.
 \begin{itemize}
     \item Since current system works with historical 14-days winter and summer periods from Excel/CSV files, an API client could be implemented. This client would call API from Energinet.dk to directly read electricity prices from their web server. Furthermore, it will be possible to implement APIs for communication between the modules instead of calling methods directly.
-    \item Another feature that was thought of is ability to activate (allow) and deactivate (prohibit) units, change their statistics and add create new units to be part of optimization directly from UI. This would make it much easier to simulate real maintenance periods of 30 to 60 hours. It could then directly compare results in terms of revenue, CO2 emissions and other metrics directly in our data visualization.
-    \item Other than that, it is definitely possible to add map of the city into the application, with heating units and district heating network visually displayed.
-    \item Weather forecast integration could be added by connecting to external meteorological API. Since heat demand heavily depends on outside temperature, fetching real-time weather data would make optimization much more realistic than relying strictly on historical time series.
-    \item Exporting functionality is another logical step for future development. Adding option to export generated graphs and optimization results into PDF or CSV formats would be highly useful for utility company management and stakeholder presentations.
-    \item User authentication and roles could be implemented. Since application would be used by different employees, having basic login system with roles (like Admin who can edit production units and Viewer who can only see charts) would improve security.
+    \item Another feature that was thought of is ability to activate (allow) and deactivate (prohibit) units, change their statistics and add create new units to be part of optimization directly from UI. This would make it much easier to simulate real maintenance periods. It could then directly compare results in terms of revenue, CO2 emissions and other metrics directly in our data visualization.
+    \item Other than that, it is definitely possible to add map of the city into the application, with heating units and district heating network visually displayed as well as weather forecast by using meteorological API. Since heat demand usually depends on the temperature outside, using live weather data would make optimization much more realistic.
+    \item Exporting is another step for future development. Adding an option to generate and export graphs and optimization results in various formats would be useful for company management and for presentations.
+    \item Another feature that was thought of was user authentication and roles. Since application would be used by different employees, having basic login system with roles (like Admin who can edit production units and Viewer who can only see charts) would help with improving the security of the optimizer application.
 \end{itemize}
