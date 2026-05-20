@@ -1,5 +1,428 @@
 % -------------------------------------------------------------
-%    Sprints
+%   Sprints
+% -------------------------------------------------------------
+%
+% NOTE: This chapter requires the following packages in main.tex
+% (add them in the PACKAGES block of main.tex if not already present):
+%
+%   \usepackage{pgfplots}
+%   \pgfplotsset{compat=1.18}
+%   \usepgfplotslibrary{dateplot}
+%
+% All other packages used here (booktabs, csquotes, graphicx, array)
+% are already loaded by the SDU template.
+%
+% Images referenced below must be placed in the Images/ folder
+% (the path is already set by \graphicspath{{Images/}} in main.tex).
 % -------------------------------------------------------------
 
 \noindent
+This chapter documents the work carried out during each of the project's
+six sprints. For every sprint the goal, the team composition, the major
+events of the Daily Standups, the outcome of the Sprint Review and the
+conclusions drawn during the Sprint Retrospective are reported.
+
+% =============================================================
+\section{Sprint 1}
+\label{sec:sprint1}
+% =============================================================
+
+The first sprint focused on establishing the ground of the project. The
+sprint goal was \enquote{Create design tools for all of the modules and
+establish the project infrastructure}, which consisted of the Noun--Verb
+analysis, CRC cards and UML diagrams for each of the 5 modules (Asset
+Manager, Source Data Manager, Result Data Manager, Optimizer and the
+Data Visualizer). Alongside was established the project infrastructure
+work: linking Jira with GitHub, creating the initial Avalonia project,
+converting the XLSX file with data into a CSV file and storing it in the
+assets folder.
+
+Due to differences in experience and skillset levels inside the group,
+the team was split into three pairs:
+\begin{itemize}
+    \item Maria Tsioni and Zoja Angelovicova
+    \item Pavel Seliavko and Zoe Elea Zeilmann
+    \item Dominik Bezo and Daniel Falat
+\end{itemize}
+
+Dominik Bezo acted as the Scrum Master, Pavel Seliavko acted as the
+Meeting Coordinator and after discussion with the supervisor, Radoslaw
+Marek Chylak, the role of the Product Owner was assigned to Radoslaw
+Marek Chylak.
+
+During the first Daily Standup it became clear there was space for
+adding more tasks to the sprint. After consulting with the supervisor a
+Figma prototype was added to the Sprint Backlog.
+
+Throughout the Sprint Review, all of the design tools tickets had the
+Noun--Verb analysis approved and marked as done, several CRC cards and
+UML diagrams required further improvements, therefore these items were
+moved back to the Product Backlog.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint1-backlog-end.png}
+    \caption{Screenshot of the backlog before closing the 1st sprint.}
+    \label{fig:sprint1-backlog-end}
+\end{figure}
+
+The main conflicts were discussed during the Sprint Retrospective:
+\begin{itemize}
+    \item Dismissiveness and resistance to different ideas
+    \item Inactivity, mainly during online meetings
+    \item Lack of immediate feedback
+    \item Underestimation of the workload
+\end{itemize}
+
+These issues were resolved by trying to adopt a more receptive approach,
+agreeing on turning on cameras during online meetings, raising issues
+immediately rather than waiting for the Sprint Retrospective and adding
+a custom story point system (Difficulty 1--5 + Importance 1--5) to
+better collaborate and estimate workload in future sprints.
+
+% =============================================================
+\section{Sprint 2}
+\label{sec:sprint2}
+% =============================================================
+
+With a clearer picture of the workflow, and after improving certain
+design tools, Sprint~2 focused on the actual implementation of the
+first two modules: the Asset Manager and the Source Data Manager.
+Building on the Figma prototype completed in Sprint~1, the first
+version of the GUI was also built during this sprint. Each task was
+further divided into smaller subtasks.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint2-backlog-start.png}
+    \caption{Screenshot of the backlog after starting the 2nd sprint.}
+    \label{fig:sprint2-backlog-start}
+\end{figure}
+
+Pavel Seliavko obtained the role of the Scrum Master while also keeping
+the role of the Meeting Coordinator. The original three pairs from
+Sprint~1 remained unchanged and the agreed story point system was
+applied to each ticket by each team (e.g.\ the Source Data Manager was
+rated 5 for importance and 4 for difficulty).
+
+Early in the sprint, during the first Daily Standup, it was recognised
+that the initial plan -- which focused on the Data Visualizer -- was
+not realistic, therefore the task was replaced with the implementation
+of the Source Data Manager. This exchange showed that the initial
+planning did not account for the full complexity of the whole
+implementation.
+
+The Sprint Retrospective concluded that one of the pairs assigned for
+pair-programming struggled to find common working hours due to a
+difference in time schedules, which slowed down the progression of
+tickets assigned to this team. This issue was resolved by rotation of
+the pair-programming partners in the following sprint, purposefully
+pairing up teammates with more aligned schedules.
+
+Sprint~2 successfully delivered the Asset Manager, the Source Data
+Manager and the first version of the GUI. The initial burndown chart
+appeared incorrect because Jira did not register the completed
+subtasks until the whole tickets were moved to the \enquote{DONE}
+category. This issue was realised at the very end of the sprint.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint2-backlog-end.png}
+    \caption{Screenshot of the backlog before closing the 2nd sprint.}
+    \label{fig:sprint2-backlog-end}
+\end{figure}
+
+% -------- Burnup chart rebuilt natively in pgfplots ----------
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.95\textwidth,
+            height=7cm,
+            date coordinates in=x,
+            xticklabel={\day~\month},
+            xticklabel style={rotate=45, anchor=north east, font=\small},
+            date ZERO=2026-03-15,
+            xmin=2026-03-15, xmax=2026-03-29,
+            ymin=0, ymax=60,
+            ylabel={Story points},
+            xlabel={Date},
+            legend pos=north west,
+            legend style={font=\small, draw=none, fill=none},
+            grid=both,
+            grid style={line width=.1pt, draw=gray!20},
+            major grid style={line width=.2pt, draw=gray!40},
+            tick align=outside,
+        ]
+            % --- Work Scope (red, step function) ---
+            \addplot+[
+                const plot,
+                mark=*, mark size=1.4pt,
+                color=red!80!black, thick,
+            ] coordinates {
+                (2026-03-15, 45)
+                (2026-03-18, 46)
+                (2026-03-27, 54)
+                (2026-03-29, 54)
+            };
+            \addlegendentry{Work scope}
+
+            % --- Guideline (ideal burn-up) ---
+            \addplot+[
+                no marks,
+                color=gray, thick, dashed,
+            ] coordinates {
+                (2026-03-15, 0)
+                (2026-03-29, 54)
+            };
+            \addlegendentry{Guideline}
+
+            % --- Completed work (green, step function) ---
+            \addplot+[
+                const plot,
+                mark=*, mark size=1.4pt,
+                color=green!55!black, thick,
+            ] coordinates {
+                (2026-03-15, 0)
+                (2026-03-18, 12)
+                (2026-03-22, 21)
+                (2026-03-26, 30)
+                (2026-03-27, 21)
+                (2026-03-29, 21)
+            };
+            \addlegendentry{Completed work}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Sprint 2 burnup chart. The drop in completed story points
+             on 27~Mar reflects the Jira reporting issue described
+             above, where points were re-attributed once parent
+             tickets were closed.}
+    \label{fig:sprint2-burnup}
+\end{figure}
+
+% =============================================================
+\section{Sprint 3}
+\label{sec:sprint3}
+% =============================================================
+
+Sprint~3 focused on the remaining modules: the Optimizer, the Result
+Data Manager and the Data Visualizer. Zoja Angelovicova acted as the
+Scrum Master and Dominik Bezo as the Meeting Coordinator, while Pavel
+Seliavko transitioned into the role of internal Product Owner. To
+address the mid-sprint creation and replacement of tickets, a problem
+identified in Sprint~2, the planning style was changed. Each pair
+created its own detailed subtickets for the assigned module before
+starting development. Because of the issue with the burndown chart from
+Sprint~2, every subtask was created as a separate ticket so that Jira
+would track progress correctly.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint3-backlog-start-1.png}\\[2pt]
+    \includegraphics[width=0.95\textwidth]{sprint3-backlog-start-2.png}\\[2pt]
+    \includegraphics[width=0.95\textwidth]{sprint3-backlog-start-3.png}
+    \caption{Screenshot of the backlog after starting the 3rd sprint.}
+    \label{fig:sprint3-backlog-start}
+\end{figure}
+
+The pairs were also rearranged based on schedule compatibility:
+\begin{itemize}
+    \item Maria Tsioni and Dominik Bezo
+    \item Zoja Angelovicova and Daniel Falat
+    \item Pavel Seliavko and Zoe Elea Zeilmann
+\end{itemize}
+
+Sprint~3 delivered a working Optimizer, the Result Data Manager and a
+Data Visualizer, but during the merging of parallel branches integration
+errors occurred and forced the sprint to be extended until the 19th of
+April instead of the 16th of April as initially planned. A few of the
+tickets remained outside the DONE column at the official end of the
+sprint because of this. The conflicts were resolved by a full team
+merge. All of the branches were merged into a single branch
+\texttt{SCRUM-81-Version-1}. Furthermore several tickets had to be
+renamed to reflect what had actually been implemented.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint3-backlog-16apr-1.png}\\[2pt]
+    \includegraphics[width=0.95\textwidth]{sprint3-backlog-16apr-2.png}\\[2pt]
+    \includegraphics[width=0.95\textwidth]{sprint3-backlog-16apr-3.png}
+    \caption{Screenshot of the backlog on the 16th of April.}
+    \label{fig:sprint3-backlog-16apr}
+\end{figure}
+
+The Retrospective used a \textsc{Start} / \textsc{Stop} / \textsc{Continue}
+board with silent writing and round-robin sharing methods. The outcome
+is summarised in Table~\ref{tab:sprint3-retro}.
+
+\begin{table}[h!]
+    \centering
+    \caption{\textsc{Start} / \textsc{Stop} / \textsc{Continue} table for the
+             3rd Sprint Retrospective.}
+    \label{tab:sprint3-retro}
+    \small
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}p{0.23\textwidth} p{0.23\textwidth} p{0.23\textwidth} p{0.23\textwidth}@{}}
+        \toprule
+        \textbf{Start} & \textbf{Stop} & \textbf{Continue} & \textbf{Solutions} \\
+        \midrule
+        Implement ticket IDs &
+        Having too long standup meetings; monitor with a timer so they do not exceed the 15\,min limit &
+        Pair programming (but also work individually) &
+        Next sprint keep work in groups of 3 \\
+
+        Update UML while coding, do not wait for next Sprint &
+        Test the code before the end of the sprint so it is ready for the merge &
+        If unable to test thoroughly, review &
+        Documenting \\
+
+        More breaks during the meeting, e.g.\ 10\,min break every hour &
+        Leaving work for the last days &
+        Ceremonies &
+        \\
+
+        Stricter deadlines on finishing the PI &
+        &
+        Keep the more detailed sprint planning phase &
+        Make a schedule for the whole sprint in a meeting after sprint planning \\
+
+        Work planning before sprint planning for each individual team &
+        &
+        Keep the good engagement and initiative &
+        Make a schedule for the whole sprint in a meeting after sprint planning \\
+
+        Clear communication &
+        &
+        Contact other people when in doubt &
+        When receiving information, double-check to avoid confusion; do not make assumptions \\
+
+        Check what has already been agreed in meeting logs before acting &
+        Assumptions in communication &
+        &
+        \\
+
+        Use the team calendar &
+        &
+        &
+        \\
+
+        Assign reviewers &
+        &
+        &
+        \\
+
+        Suggestion: team of 3 people for the next sprint &
+        &
+        &
+        Teams of 3 for unit tests in Sprint 4 \\
+
+        Update each other when things happen, do not wait for the meetings &
+        &
+        &
+        \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% =============================================================
+\section{Sprint 4}
+\label{sec:sprint4}
+% =============================================================
+
+The main goal of Sprint~4 was to finalise and test the product. The
+nature of the tasks aligned better with two teams of three group
+members instead of the previous division into three pairs, which
+matched the suggestion from the previous Sprint Retrospective:
+\begin{itemize}
+    \item \textbf{Team Slovaks} -- Daniel Falat, Dominik Bezo and Zoja Angelovicova
+    \item \textbf{Team International} -- Maria Tsioni, Pavel Seliavko and Zoe Elea Zeilmann
+\end{itemize}
+
+Daniel Falat took the Scrum Master role and Dominik Bezo took the role
+of the Meeting Coordinator. Planned work included switching between
+Scenario~1 and Scenario~2, refactoring of the Optimizer, removing
+redundancy in the \texttt{TimeSeries}, implementing maintenance
+selection, updating the Result Data Manager headers, applying the UML
+feedback from the lecturer, and writing unit, functional and
+integration tests for every module. Time estimation and the time
+actually spent were also added to the tickets for the first time.
+
+Because the focus was heavily directed at making the technical product
+fully working, the tickets regarding report-writing originally planned
+for this sprint had to be returned to the backlog at the end of the
+sprint.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint4-completed-1.png}\\[2pt]
+    \includegraphics[width=0.95\textwidth]{sprint4-completed-2.png}
+    \caption{Completed work items from Sprint 4.}
+    \label{fig:sprint4-completed}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint4-incomplete.png}
+    \caption{Incompleted work items from Sprint 4.}
+    \label{fig:sprint4-incomplete}
+\end{figure}
+
+The main conflict of the sprint surfaced during the Task Review: the
+two teams had independently produced very similar solutions for
+different tasks (SCRUM-117 \& 118 and SCRUM-128 \& 131), creating
+duplicate code. The conflict was resolved through a discussion among
+the whole team where it was decided that, for documentation reasons,
+the best resolution was to keep the duplicate implementation while
+only keeping one solution active. By the Sprint Review on the 1st of
+May the Minimum Viable Product was complete and verified through
+testing. Report writing had to be transferred to Sprint~5. The team
+agreed that a heavyweight \textsc{Start} / \textsc{Stop} /
+\textsc{Continue} retrospective was unnecessary this sprint because
+collaboration inside both teams had worked well.
+
+% =============================================================
+\section{Sprint 5}
+\label{sec:sprint5}
+% =============================================================
+
+Sprint~5 focused mainly on the division of the report tasks,
+report-writing and refactoring of the code. Because of the
+Math~2 exam on the 8th of May, a thorough Sprint Planning meeting was
+held before that on the 3rd of May. The sprint was formally started on
+the 9th of May, with the end date moved to the 17th of May. Maria
+became Scrum Master and Zoja the Meeting Coordinator, while Pavel
+remained the Product Owner. The two teams from Sprint~4 were kept.
+
+On the code side, Team Slovaks took the task of making the Data
+Visualizer call the Optimizer only once with a clearer separation of
+concerns, and Team International took the refactoring of the Unit
+models to use more abstraction/inheritance and fewer interfaces. For
+the report, every chapter was assigned to an individual writer and
+reviewer (see Appendix), except for Chapter~5 (Implementation), which
+is co-written by both teams. A dedicated meeting was scheduled for the
+16th of May to produce the final Class, Activity and Sequence diagrams
+used in the report.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sprint5-backlog-start.png}
+    \caption{Screenshot of the backlog after starting the 5th sprint.}
+    \label{fig:sprint5-backlog-start}
+\end{figure}
+
+During the Sprint Review and Retrospective, no major issues were
+identified, but the report-writing tickets had to be moved again to the
+next sprint, with the tickets already being in progress.
+
+% =============================================================
+\section{Sprint 6}
+\label{sec:sprint6}
+% =============================================================
+
+% TODO: Sprint 6 content was not yet written in the source document.
+% The note in the original file reads:
+%   "Note to myself: after creating the appendix reference the product
+%    increments"
+% Replace this section with the final Sprint 6 narrative once it is
+% available, and reference the product increments via the Appendix
+% (e.g.\ \texttt{see Appendix~\ref{chap:appendix-products}}).
