@@ -1,5 +1,130 @@
-% -------------------------------------------------------------
-%    Discussion and Reflection
-% -------------------------------------------------------------
+% =============================================================
+%    Chapter 6: Discussion and Reflection
+% =============================================================
 
-\noindent
+\section{Scrum}
+During the development of the project, a Scrum agile was implemented to deliver structured and transparent software development. Over the semester, six sprints were completed. Each sprint contributed to the team’s development, working methods, and the quality of the final semester project.
+
+\subsubsection*{Reflection on Scrum practices and their benefits}
+Transparency and responsibility were ensured by rotating the role of Scrum Master each sprint (Dominik in S1, Pavel in S2, Zoja in S3, Daniel in S4, Maria in S5, Zoe in S6). This allowed each team member to take responsibility for all processes and sprint coordination. Using Jira provided a clear overview of task status, with each ticket having a clearly defined assignee or team and a reviewer to ensure quality.
+
+In the first sprint, the workload distribution was underestimated. As a solution, a story points system was introduced, using a scale of 1–10 based on the sum of difficulty (1–5) and importance (1–5). This system greatly improved our planning and monitoring of burn-down charts. Later, also deadlines for tasks were used to help review them on the go, so that there always was enough time to fix issues the development team or pair might have missed.
+
+Throughout the development phase, team and pair programming were utilized. The first three sprints were pair-based, with pairs changed twice. In sprints 4–6, workload was divided between 2 teams of three (team Slovaks and team Internationals). This technique proved effective and helped us eliminate technical problems from the early sprints, particularly those related to time management.
+
+\subsubsection*{Observed changes in behaviour and code quality}
+By implementing code reviews and coding principles in the second sprint, a higher consistency was reached, also a cleaner and easier-to-read code was produced to help understand everything for those who had not written that part.
+
+After facing difficulties in the initial phase such as missing feedback from each other during meetings and passivity, the team implemented a rule to use webcams. This solution also proved to be effective and improved the sense of presence and teamwork.
+
+\subsubsection*{Difficulties and issues}
+During the development, the team faced several issues, for example, in Sprint 2, tickets needed to be added in the middle of the process because the technical difficulty was not estimated correctly. Team’s response was implementing more detailed sprint planning, dividing large and important tasks into smaller tickets that were more predictable.
+
+Duplicity and assumptions were also challenges that were faced. In the fourth sprint, miscommunication and assumptions led the team to produce the same part of the code twice. This experience was very beneficial for learning and implemented stricter coordination between the Slovak and International teams in the later phase of project development.
+
+During development, the team experienced issues with Jira, where tickets were sometimes not marked as done even after being moved to the ``Done'' column. This was later fixed, but the charts still did not reflect reality. There was another issue – the presence of subtasks within each ticket. It was addressed by transitioning to separate tickets in order to have the chart displayed correctly. Despite these solutions, the chart remained problematic although it was more realistic than in the beginning.
+
+\section{Requirements Engineering}
+The engineering process in the project was important in transforming the task into functional and professional software. This process helped maintain the correct scope of the user requirements and the technical implementation of the solution.
+
+\subsubsection*{Impact of adopted practices on work quality}
+In the beginning, a noun-verb analysis was conducted. This technique helped in the early development stage by identifying important entities and their desired behaviour. As a result, the key responsibilities of each module (for example, Asset Manager, Source Data Manager) were precisely defined, which led to a clearer architecture and separation of concerns.
+
+Creating the product backlog based on user stories helped with dividing the complex system into smaller, more testable functions. This ensured that during the development we remained focused on our goal: optimising heating expenses.
+
+Before starting application development, the UI was prototyped. Each team member sketched their vision of the UI, after which the best design was picked and then improved by incorporating better ideas from other sketches. After creating final sketch, a proper Figma prototype for the GUI was created, which served as source of truth for UI. This process eliminated uncertainties in front-end development with Avalonia and saved time otherwise spent discussing design.
+
+A decision to use UML diagrams and CRC cards as dynamic documents that evolved with the code development enabled the team to react more flexibly to new discoveries during implementation.
+
+\subsubsection*{Important takeaways for future projects}
+In the future, it would be beneficial to keep the practice of reconsidering requirements in the beginning of each sprint. For example, in the second sprint it was discovered that in order to solve Data Visualizer module, a Source Data Manager had to be developed prior, which helped prevent blocking the progress of other teams.
+
+Another takeaway is collaboration with Product Owner. During development, it proved to be necessary for clearing up uncertainties in some tickets. In the future team would plan to use this role even further and more intensively in agreeing acceptance criteria in certain tasks and in avoiding assumptions.
+
+\section{Refactoring}
+Refactoring in our project was one of the key processes, which continued in parallel with the development of new application features. Its goal was not only to clean up the code, but also to keep the code more maintainable and readable when different teams worked on the same parts of the project.
+
+\subsubsection*{Effects of refactoring on our code quality}
+As mentioned in 6.1, a set of strict coding principles was developed, which were later applied in each refactoring. These principles mainly included reducing nesting to a maximum of 3 layers and extraction of duplicate code into separate methods.
+
+The most important phase of refactoring occurred in Sprints 4 and 5, where after merging branches, the team had to clear up redundancies in TimeSeries which enabled easier data access and processing across different modules. We also refactored DataVisualizerViewModel for better maintainability and made changes to interfaces which were removed and the code was simplified with the same functionality.
+
+\subsubsection*{Skills balance and teamwork}
+Refactoring was used as a tool to balance technical skills across group. Through the pair programming, less experienced members were able to learn best practices and coding standards from their peers while working on code clean-up.
+
+Rotating work between teams, for example having Team Slovaks refactor modules initially developed by Team International, ensured that everyone understood overall architecture rather than just single module.
+
+Furthermore, establishing the English as standard for all comments and naming (after listening to feedback from each other based on previous semester project) during our refactoring sessions significantly improved collaboration and understanding within an international team.
+
+\subsubsection*{Challenges during refactoring}
+One of biggest challenges was keeping our documentation in sync with the code. As project evolved, UML diagrams and CRC cards had to be constantly updated to reflect latest refactored state, which was demanding to manage alongside development.
+
+Another significant hurdle that was encountered was that the code was written in quite complicated way, even though it followed the coding principles that were agreed on. This complexity meant that the refactoring took much more time than initially expected. The team had to spend the extra effort to simplify the logic and make it more readable without breaking any of functionality we already implemented.
+
+\section{Code review}
+Code review was a necessary step before merging changes into active development branches (for example, ``Version-1'' and ``Version-2'' branches) and to confirm code quality. This process served not only for discovering mistakes, but also as a very important tool for peer learning.
+
+\subsubsection*{Good effects for code quality and knowledge sharing}
+In the first sprint, a review system was introduced, where teams checked each other’s work (for example team Daniel \& Dominik reviewed Zoe’s \& Pavel’s work). This approach was later refined since we transitioned to 2 teams consisting of 3 members – Team Slovaks and Team Internationals. This approach improved collaboration and technical understanding within the team and ensured that code would be understandable even for someone who did not write certain parts of code directly.
+
+During revisions, it was checked whether the code follows the guidelines set up in the second sprint, such as using guard clauses, avoiding nesting and correctly naming variables and methods.
+
+Code reviews allowed all members to understand functionality of individual managers (Asset Manager, Optimizer etc.), which facilitated later integration in Sprint 3 and 4.
+
+\subsubsection*{Challenges and our solutions}
+In Sprint 3, the team realized that we forgot to assign reviewers to some tickets, which led to less transparent history of changes. In the following sprint, we corrected this by strictly assigning reviewers directly in Jira.
+
+The review process in Sprint 4 helped with identifying a loss of productivity, when two teams developed similar solutions due to misunderstanding and assumptions that occurred during planning. Review helped to consolidate these solutions in time and proceed with the better solution.
+
+Initial challenge was that commits in GitHub did not always include ticket ID from Jira. During retrospective a rule was introduced to use ticket code (in format of SCRUM-XX) in every commit name, which significantly helped with tracking of changes during reviews.
+
+\subsubsection*{Overcoming obstacles}
+Instead of authoritarian approach, the team conducted constructive dialogue during reviews. Reviews were almost always done with presence of both teams and if problem occurred, it was solved immediately, therefore, members did not have to wait for final sprint meeting and could continue working on other tickets and use time more effectively.
+
+Another habit that team took on was ensuring code quality. During review, if the produced code did not meet team’s standards, tickets remained in Review category and were not moved to Done until final approval by whole team or even put back to backlog and worked on in the future sprints.
+
+\section{Testing}
+Testing was important part of the project development to make sure heat distribution optimization system works as expected. We decided to go with testing strategy that included unit, integration and functional tests.
+
+Before diving into the details, it has to be mentioned that team had faced quite a challenge with unit testing. Since a large part of code was written using static and private classes and methods, it was very difficult to isolate individual components for pure unit tests. Because of this static architecture and how specific the logic was, team realized that traditional unit testing would not be suitable for our architecture. Instead of forcing tests that didn't fit the current structure, after consultation with the professor it was decided to focus our energy on integration and functional tests. This way, it could better be ensured that the different modules worked correctly together.
+
+\subsubsection*{Test implementation}
+All the tests were built on xUnit framework. For testing graphical user interface, Avalonia.Headless.XUnit extension was used, which allows to test the project without need to physically open application window.
+
+As mentioned before, the team has also agreed on using a strict naming format for tests - Object\_Method\_ExpectedOutcome. A good example of the test naming format can be ToggleLegend\_FlipsIsLegendExpanded\_Correctly. This simple rule made all of the test reports much easier to read and understand.
+
+Because some of our tests interacted with static resources and shared states (like Optimizer or AssetManager), [Collection(``Sequential'')] attribute had to be used. This prevented conflicts and crashes during parallel execution.
+
+\subsubsection*{The scope of tests}
+For unit tests, those were mainly focused on logic inside ViewModels and auxiliary services. Good example are tests for DataVisualizerViewModel, where it was checked whether theme colours switch correctly or if data aggregates correctly for summer and winter periods.
+
+Integration tests checked whether all managers interacted with external files correctly. Teams verified if AssetManager and SourceDataManager correctly load data from JSON and CSV files and if ResultDataManager produces non-empty results after optimization runs.
+
+Functional tests were there to check whole business processes. For instance, tests confirmed that when selecting Heat scenario, units like Gas Motor 1 or Electric Boiler 1 are correctly excluded from calculation.
+
+\subsubsection*{Pros and cons of testing}
+Thanks to tests bugs were found much faster during refactoring, especially in complex math inside optimizer and when processing time series in SourceDataManager.
+
+However, testing GUI was quite hard and intellectually demanding because it had to simulate how user navigates between pages using CanGoNext and CanGoPrev. Development teams also lost some time and productivity in Sprint 4 having to figure out what to do with duplicate tests caused by misunderstanding and assumptions from team Slovaks.
+
+In future projects, it would be nice to try mocking (for example with Moq library) to isolate tested logic from file system, which would make tests even faster and more stable.
+
+\section{Future Work}
+In this final section of chapter 6, we reflect on overall outcome of the project compared to initial requirements and identify areas that have potential for future development and improvements of the system.
+
+\subsubsection*{Fulfilment of requirements and problem solving}
+Our project successfully implemented all key managers (Asset, Source Data, Result Data) and functional algorithm in Optimizer. Product solves the main problem, which is defining heat schedules for all production units with lowest possible expenses and highest profit on electricity market. Switching between Scenario 1 (Heat) and Scenario 2 (Heat and Electricity) were fully implemented and tested. This allows system to dynamically respond to availability of technologies like electric boilers and gas motors. The resulting Data Visualization module presents time series representations of heat demand, production values, expenses, profit and CO2 emissions.
+
+\subsubsection*{Identified problems and limitations}
+As mentioned in testing section, current architecture relies heavily on static methods and classes in managers. This led to need for sequential test execution to prevent conflicts. In future development, it might be better to transition to Dependency Injection architecture. Currently, Asset Manager and Source Data Manager rely on holding data in local files. This manual configuration with file paths makes it difficult to deploy application in different environment.
+
+\subsubsection*{Suggestions for future development}
+To fix our issue with file paths, future version should use database to save data instead of files.
+\begin{itemize}
+    \item Since current system works with historical 14-days winter and summer periods from Excel/CSV files, an API client could be implemented. This client would call API from Energinet.dk to directly read electricity prices from their web server. Furthermore, it will be possible to implement APIs for communication between the modules instead of calling methods directly.
+    \item Another feature that was thought of is ability to activate (allow) and deactivate (prohibit) units, change their statistics and add create new units to be part of optimization directly from UI. This would make it much easier to simulate real maintenance periods of 30 to 60 hours. It could then directly compare results in terms of revenue, CO2 emissions and other metrics directly in our data visualization.
+    \item Other than that, it is definitely possible to add map of the city into the application, with heating units and district heating network visually displayed.
+    \item Weather forecast integration could be added by connecting to external meteorological API. Since heat demand heavily depends on outside temperature, fetching real-time weather data would make optimization much more realistic than relying strictly on historical time series.
+    \item Exporting functionality is another logical step for future development. Adding option to export generated graphs and optimization results into PDF or CSV formats would be highly useful for utility company management and stakeholder presentations.
+    \item User authentication and roles could be implemented. Since application would be used by different employees, having basic login system with roles (like Admin who can edit production units and Viewer who can only see charts) would improve security.
+\end{itemize}
