@@ -2,47 +2,59 @@
 %    Solution
 %----------------------------------------------------------------------------------------
 \section{UML Diagrams}
-
 \subsection{Activity Diagrams:}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{ActivityDiagram.png}
+    \includegraphics[width=1\textwidth]{ActivityDiagram.png}
     \label{fig:ActivityDiagrams}
 \end{figure}
-\noindent These diagrams represent optimization algorithm. The process happens inside of the optimizer class, it starts when GetResultData method of the optimizer is called. That calls Optimize method, which proceeds to retrieve all data necessary for optimization to happen.
-\noindent When data is gathered it enters a loop, going through every hour of every day of the optimization period. In the loop it checks if the gathered data is workable, after, if data is correct, the weighted ratio of heat to price of each unit is calculated, then optimal units get selected to be used in heat production and usage gets recorded, this happens on a per hour basis by calling CalculateHeatPerPrice and ChooseAndRecordUsage methods.
-\noindent CalculateHeatPerPrice method loops through the units, for each unit the ratio is calculated by first getting crude heat divided by price, then the crude ratio is weighted by a factor of ten if it is negative. The weighting is done so that in the next step these units would be prioritized, because negative heat per price means that the unit is making money instead of costing money. 
-\noindent The ChooseAndRecordUsage method first sorts units by their heat per price ratio. When the list is sorted it enters a loop going through the sorted list, keeping track of heat demand, how much heat has been produced, how many units are available and stopping if loop runs out of units or if the heat demand is reached. At the start of the loop it checks if the current unit is on maintenance, if unit is on maintenance it is skipped, otherwise loop proceeds to check if unit’s maximum heat production exceeds remaining heat demand, which is the difference of total heat demand and produced heat. This is done to calculate workload - a coefficient from 0 to 1 that represents how much unit is used. If heat production is not exceeded the workload is 1, otherwise it is calculated by dividing remaining heat demand by the current unit's maximum heat production. After calculating workload, produced heat is increased by current unit’s maximum heat production multiplied by workload, and then all unit’s relevant characteristics, such as pollution, heat, fuel consumption, are recorded multiplied by workload.
+\noindent These diagrams represent the optimization algorithm. The process happens inside the optimizer class, it starts when the GetResultData method of the optimizer is called. That calls the Optimize method, which proceeds to retrieve all data necessary for optimization to commence. 
+
+\noindent When data has been gathered it enters a loop, going through every hour of every day of the optimization period. In the loop it checks if the gathered data is workable, after, if data is correct, the process continues. The weighted ratio of heat to price of each unit is calculated, then the optimal unit is selected to be used in heat production and usage is recorded. This happens on a per hour basis by calling CalculateHeatPerPrice and ChooseAndRecordUsage methods.
+
+\noindent CalculateHeatPerPrice method loops through the units, for each unit the ratio is calculated by first getting a crude heat divided by price, then the crude ratio is weighted by a factor of ten if it is negative. The weighting is performed to increase the unit's priority, because negative heat per price means that the unit is making money instead of costing money. 
+
+\noindent The ChooseAndRecordUsage method first sorts units by their heat per price ratio. When the list is sorted it enters a loop going through the sorted list, keeping track of heat demand, how much heat has been produced and how many units are available. Loop stops if it runs out of units or if the heat demand is reached. At the start of the loop it checks if the current unit is on maintenance, if unit is on maintenance it is skipped, otherwise loop proceeds. The next step is to check if the unit's maximum heat production exceeds remaining heat demand, which is the difference of total heat demand and produced heat. This is done to calculate workload - a coefficient from 0 to 1 that represents how much unit is used. If heat production is not exceeded the workload is 1, otherwise it is calculated by dividing remaining heat demand by the current unit's maximum heat production. After calculating workload, produced heat is increased by current unit’s maximum heat production multiplied by workload, and then all unit’s relevant characteristics, such as pollution, heat, fuel consumption, are recorded multiplied by workload.
 
 \subsection{Sequence Diagram:}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{SequenceDiagram.png}
+    \includegraphics[width=1\textwidth]{SequenceDiagram.png}
     \label{fig:SequenceDiagram}
 \end{figure}
 \noindent This sequence diagram represents how service classes interact when result data is requested.
-\noindent Requests can come from several places in the Presentation layer, that is represented as a found message.
-\noindent The Result Data Manager makes a self-call, which then calls Optimizer, after that is resolved, within the same self-call another self-call is made to save Optimization results in local .csv files, for data management a call to a separate class is made, represented as a lost message. After that, the Result Data Manager’s sequence ends. 
-\noindent The Optimizer makes a self-call that makes three self-calls, first resulting in a call to the Asset Manager and second in two calls to the Source Data Manager, then it enters a loop of two self-calls. After that Optimizer’s sequence ends.
-\noindent The Asset Manager makes a self-call to initialize, this uses a separate class for data management, this is represented as a lost message. After that is resolved Asset Manager uses two separate classes to provide the correct scenario and units of correct classes, those are represented as lost messages. After that Asset Manager’s sequence ends.
-\noindent The Source Data Manager sequence starts receiving the first call from Optimizer, doing a self-call that uses a separate class for data manipulation represented as two lost messages. Then a second call from the optimizer following the same sequence. After that Source Data Manager’s sequence ends.
+
+\noindent Requests can come from several parts of the Presentation layer, which is represented as a found message.
+
+\noindent The Result Data Manager makes a self-call, which then calls Optimizer. After that is resolved, within the same self-call another self-call is made to save Optimization results in local .csv files. For data management a call to a separate class is made, represented as a lost message. After that, the Result Data Manager’s sequence ends. 
+
+\noindent The Optimizer makes a self-call that then makes three self-calls, first resulting in a call to the Asset Manager and second in two calls to the Source Data Manager. It then enters a loop of two self-calls. After that Optimizer’s sequence ends.
+
+\noindent The Asset Manager makes a self-call to initialize. Initialization uses a separate class for data management, this is represented as a lost message. After that is resolved Asset Manager uses two separate classes to provide the correct scenario, and units of correct classes - those are represented as lost messages. After that Asset Manager’s sequence ends.
+
+\noindent Source Data Manager sequence starts when it receives the first call from Optimizer. This results in a self-call that uses a separate class for data manipulation represented as two lost messages. Then a second call from the optimizer results in following the same sequence. After that Source Data Manager’s sequence ends.
 
 \subsection{Class Diagram:}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{ClassDiagram.png}
+    \includegraphics[width=1\textwidth]{ClassDiagram.png}
     \label{fig:ClassDiagram}
 \end{figure}
-\noindent This class diagram represents the core of the solution: services doing the work of optimization and managing data, and models representing real life counterparts.
-\noindent AssetManager has a one way association with the Optimizer, and aggregation relationship with the GenericUnit and Grid classes. This means that Optimizer calls AssetManager, but not the other way around, and AssetManager has instances of GenericUnit and Grid belonging to it, but it is not a composition relationship since GenericUnit and Grid are independent classes.
-\noindent SourceDataManager has a one way association with the Optimizer, and it aggregates the TimeSeries<T> class. This shows that Optimizer can call SourceDataManger, but SourceDataManager doesn’t call Optimizer, and SourceDataManger has instances of TimeSeries<T> belonging to it, but TimeSeries<T> is an independent class so it is not a composition relationship.
-\noindent Optimizer has one way associations with AssetManager, SourceDataManager and ResultDataManager, as well as aggregation relationships with TimeSeries<T> and OptimizedUnit. This represents that Optimizer calls AssetManager and SourceDataManager, and is called by ResultDataManager; it contains instances of TimeSeries<T> and OptimizedUnit, but because both are independent classes, it is aggregation and not a composition relationship.
-\noindent ResultDataManager has a one way association with the Optimizer and aggregation relationship with OptimizedUnit. This shows that Optimizer is called by ResultDataManager, but ResultDataManager is not called by Optimizer, and ResultDataManager has a field of type OptimizedUnit, which is not composition because OptimizedUnit is an independent class.
-\noindent Unit models form an inheritance tree. Base abstract class Unit is inherited from by the GenericUnit class and abstract OptimizedUnit class. GenericUnit represents unit’s characteristics including its image, while OptimizedUnit represents unit with only its performance characteristics, as well as records of usage. From the abstract OptimizedUnit class three classes: CombustionUnit, HybridUnit and ElectricUnit, inherit to allow for the differences in how they calculate price and how they record usage.
+\noindent This class diagram represents the core of the solution: services and models.
+
+\noindent AssetManager has a one-way association with the Optimizer. This one-way association shows that AssetManager is called by the Optimizer, but doesn’t call it. AssetManager aggregates instances of GenericUnit and Grid. This aggregation relationship shows that those are independent concepts.
+
+\noindent SourceDataManager has a one-way association with the Optimizer. This shows that Optimizer can call SourceDataManger, but SourceDataManager doesn’t call Optimizer. It aggregates the TimeSeries<T> class. This represents that TimeSeries<T> is an independent class.
+
+\noindent Optimizer has one-way associations with AssetManager, SourceDataManager and ResultDataManager. Those represent that Optimizer calls AssetManager and SourceDataManager, but is not called by them. And that shows that Optimizer is called by ResultDataManager, but doesn’t call it. Optimizer aggregates TimeSeries<T> and OptimizedUnit. The aggregation relationship shows that both are independent concepts.
+
+\noindent ResultDataManager has a one way association with the Optimizer. This shows that Optimizer is called by ResultDataManager, but ResultDataManager is not called by Optimizer. ResultDataManager  aggregates OptimizedUnit. This aggregation relationship shows that this is an independent class.
+
+\noindent Unit models form an inheritance tree. GenericUnit class and abstract OptimizedUnit classes inherit from the base abstract class Unit. GenericUnit represents units with characteristics including an image, while OptimizedUnit represents units with only performance specifications, and records of usage. From the abstract OptimizedUnit class three classes: CombustionUnit, HybridUnit and ElectricUnit, inherit to allow for the differences in how they calculate price and how they record usage.
 
 \section{Technical Architecture}
+\noindent Project was coded in C\# in .NET framework, using Avalonia UI in combination with OxyPlot, ReactiveUI and CommunityToolkit.Mvvm for Data Visualization. All input and output data, specifically: images, units' specifications and resulting schedule are stored locally, file manipulation is performed by use of System library and CsvHelper library. Tests were implemented in the xUnit framework.
 
-\noindent Project is coded in C# in .NET framework, using Avalonia UI in combination with OxyPlot and ReactiveUI, with CommunityToolkit.Mvvm for Data Visualization. All input and output data is stored locally, file manipulation is done by use of System library and CsvHelper library. Unit tests are implemented in the xUnit framework.
 \noindent Solution is separated in following layers:
 \begin{itemize}
 
@@ -63,8 +75,12 @@
     \end{itemize}
 
 \end{itemize}
-\noindent The project's architecture is a combination of MVVM pattern and micro-service architecture approach.
+\noindent The project's architecture is a combination of the MVVM pattern and micro-service architecture approach.
+
 \noindent Data Handling layer includes: Data - classes that handle file manipulation; Assets - static data storage consisting of .json, .csv and .png files.
-\noindent Business Logic includes: Models - classes that model real life objects such as production units and grid itself, and parts of UI; Services - classes that manage classes from Data, and control the process of optimization; ViewModels - classes that provide functionality to the UI and allow for a connection between Models, Services and Presentation layer.
+
+\noindent Business Logic includes: Models - classes that: model real life objects and concepts, transfer data, represent UI components; Services - classes that manage classes from Data, and control the process of optimization; ViewModels - classes that provide functionality to the UI and establish connection between Models, Services and Presentation layer.
+
 \noindent Presentation layer includes: Views - partial classes that control the appearance of the UI.
-\noindent This structure was chosen because it follows SOLID principles allowing for great opportunities to extend and improve the solution without a need for a complete refactor. MVVM pattern is used for the overall structure of the project, great for UI improvements because of the separation of responsibilities, and microservice architecture is most represented by Services, where it allows for both easy scaling and debugging.
+
+\noindent This structure was chosen because it follows SOLID principles which facilitate flexibility and scalability, by significantly reducing required amount of refactoring in development process. MVVM pattern was implemented in the overall structure of this project. Core benefit of MVVM is separation of responsibilities. Microservice architecture is most represented by Services and it follows the Open/Closed principle.
