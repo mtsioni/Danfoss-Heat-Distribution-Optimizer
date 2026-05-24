@@ -1,4 +1,3 @@
-
 % -------------------------------------------------------------
 %    Implementation
 % -------------------------------------------------------------
@@ -6,7 +5,40 @@
 \section{Implementation}
 \subsection{Implementation Frontend}
 
-\subsection{Implenemtation Backend}
+% ZOJA and DOMINIK
+% put your chapters here
+
+\subsubsection{5.1.1 Chapter name}
+\subsubsection{5.1.2 Chapter name}
+\subsubsection{5.1.3 Chapter name}
+
+\subsubsection{5.1.4 Data Flow}
+During the architecture design phase, the main goal of the team was to clearly separate the presentation layer (frontend) from the complex mathematics of the optimisation algorithms (backend). This was achieved by implementing a strict data flow structure.
+
+\begin{enumerate}
+    \sloppy
+    \item \textbf{Initialisation} 
+    
+    After the app is launched, \texttt{MainWindow}\allowbreak\texttt{ViewModel} becomes the most important class, since it essentially controls the app flow. This ViewModel requests a list of all available production units using the Asset Manager's \texttt{AssetManager.}\allowbreak\texttt{GetDataForDataVisualizer()} method. In order for the app to load quickly and remain smooth, the \texttt{AssetManager} class is designed to cache all loaded data. When the app is launched for the first time, it uses the \texttt{AssetsLoader} class to read and parse the data from JSON files. Whenever the \texttt{AssetManager} is called again, it does not need to read the data from disk, but rather returns the data directly from the cache. This approach helps to decrease latency as much as possible and ensures that the UI loads more quickly, even with a growing number of production units.
+
+    \item \textbf{Optimisation} 
+    
+    The optimisation data cycle begins whenever the operator uses the control panel to change the configuration. It can be initiated by either changing the scenario, switching the optimisation period between summer and winter, or adjusting the maintenance settings.
+    
+    \begin{itemize}
+        \item \texttt{MainWindow}\allowbreak\texttt{ViewModel} detects changes in the configuration and launches the \texttt{RefreshData}\allowbreak\texttt{AndChart()} method. This method handles synchronisation of the scenario configuration using the \texttt{ScenarioManager.}\allowbreak\texttt{CurrentScenario} method. Afterwards, the \texttt{SyncOptimization}\allowbreak\texttt{Period()} method is called, which defines clear time boundaries for both the winter and summer periods. The summer period ranges from 8 September to 22 September, while the winter period ranges from 5 January to 19 January. Maintenance settings are sent to the Optimizer module using the \texttt{Optimizer.}\allowbreak\texttt{SetMaintenanceData()} method.
+        \item After all configuration data is saved, \texttt{MainWindow}\allowbreak\texttt{ViewModel} instructs \texttt{DataVisualizer}\allowbreak\texttt{Model} to update the data using \texttt{Visualizer.}\allowbreak\texttt{Model.}\allowbreak\texttt{UpdateData()}. At this stage, \texttt{DataVisualizer}\allowbreak\texttt{Model} requests data from \texttt{ResultData}\allowbreak\texttt{Manager}, which starts the optimisation process. The goal of the optimisation is to meet the heat demand using the available production units. The \texttt{Optimizer} calculates workload and then selects the most profitable configuration of units to activate.
+        \item When the optimisation process is complete, \texttt{ResultData}\allowbreak\texttt{Manager} saves the result data into CSV files using the \texttt{SaveResultData()} method. These records serve as a debugging tool if the optimisation does not run correctly or for occasional audits.
+        \item In the end, the \texttt{DataVisualizer}\allowbreak\texttt{Model} receives the result data in form of \texttt{OptimizedUnit}. It prepares the data for the \texttt{DataVisualizer}\allowbreak\texttt{ViewModel}, where the resulting \texttt{TimeSeries} data are converted into curves and bars on the chart. The \texttt{UpdatePlot()} method links units with the correct colours from \texttt{ChartColors.cs}, sets up axes using \texttt{Axes.cs}, the legend using \texttt{Legend.cs}, and calls \texttt{InvalidatePlot(true)} to ensure that the updated graph is displayed immediately within the GUI.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\noindent\textbf{Conclusion of the Data Flow}
+
+\noindent Due to this strictly engineered data architecture, the entire 14-day optimisation, including exporting data into CSV files and rendering of complex graph usually takes less than 100 milliseconds. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
+
+\subsection{Implementation Backend}
 
 The core algorithm of the application is the Optimization-process, which calculates, based on given Data from the Asset Manager
 and the Source Data Manager, the most optimal time schedule for the production units, with focus on the most cost-efficient outcome. 
