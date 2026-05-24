@@ -5,10 +5,28 @@
 \section{Implementation}
 \subsection{Implementation Frontend}
 
-% ZOJA and DOMINIK
+% DOMINIK
 % put your chapters here
 
-\subsubsection{5.1.1 Chapter name}
+\subsubsection{Architecture and Technology Stack (MVVM in Avalonia UI)}
+\label{sec:architecture-mvvm-avalonia}
+
+The client application is built on the .NET platform using the Avalonia UI framework. Avalonia was chosen for its consistency with the Advanced Object-Oriented Programming course curriculum. The layout is described in XAML, so the structure of the interface is kept in markup files and the C\# code-behind only contains what cannot be expressed declaratively.
+
+The internal structure follows the Model--View--ViewModel (MVVM) pattern. MVVM was selected because the user interface and the optimization logic had to be developed in parallel by two sub-teams, and the pattern enforces a clear boundary between them. Keeping the View independent from the optimization code also made it possible to test the ViewModels in isolation, without instantiating any Avalonia controls. The three layers are organised as follows:
+
+\begin{itemize}
+    \item \textbf{View:} The interface is defined in \texttt{MainWindow.axaml}. The file contains only XAML --- layouts, styles, themes and bindings to the corresponding ViewModels. Its code-behind, \texttt{MainWindow.axaml.cs}, is intentionally kept minimal and only handles operations that cannot be expressed through bindings, such as loading the logo asset and switching between the application's pages.
+
+    \item \textbf{ViewModel:} \texttt{MainWindowViewModel.cs} acts as the root ViewModel and owns the nested ViewModels used by the rest of the application. The two main ones are \texttt{DataVisualizerViewModel.cs}, which holds the state and configuration of the interactive charts, and \texttt{UnitViewModel.cs}, which exposes the parameters and operational constraints of an individual heat production unit to the View.
+
+    \item \textbf{Model:} The data layer is represented by the \texttt{DataVisualizerModel.cs} class, which contains time series data, data on previous operations, and data from the optimizer. This class provides access to the data needed for further visualization in the form convenient for use in the ViewModels.
+\end{itemize}
+
+Interaction between all three layers in the architecture is provided via the ReactiveUI library. The observable properties of both Models and ViewModels are created using the \texttt{RaiseAndSetIfChanged} method, which raises the property changed event each time the corresponding value changes. Thus, any change in the View, such as changing the slider to maintain a particular heat-producing unit, changes the value in the ViewModel that in turn recalculates the results of the Optimizer and the plot. Therefore, there is no need to explicitly call refreshing in the View.
+
+% DOMINIK
+% put your chapters here
 \subsubsection{5.1.2 Chapter name}
 \subsubsection{5.1.3 Chapter name}
 
