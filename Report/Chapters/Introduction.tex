@@ -3,15 +3,22 @@
 % -------------------------------------------------------------
 
 \section{Problem Statement}
-Manual scheduling of heat generation and its distribution is very inefficient and costly. The utility company
-\textit{Danfoss} is currently seeking a heat distribution optimization tool, that would automize
-the heat distribution effectively, for the lowest price possible, with biggest possible
-profit from electricity generation, in two distinct scenarios, and for two distinct time periods, while also
-implementing scheduling maintenance for the units.
+The utility company \textit{Danfoss} currently schedules their heat generation and distribution manually.
+Operators have to do all the calculations, compare every parameter for each production unit,
+track the electricity market prices hourly, plan the maintenance period, and schedule the heat
+generation and distribution all by themselves. As a result, the selection of unit can be non-optimal,
+the comapny misses on possible revenue from electricity production, they have greater expenses than needed,
+and there is a high risk and a great room for error that was influenced by the human factor.
+In addition, the manual system requires an overwhelming amount of time for the scheduling to be executed.
+
+\textit{Danfoss} seeks an automated software system that optimizes the heat generation and distribution hourly,
+aiming to obtain the grestest revenue possible, while minimizing the expenses. The proposed solution is a
+modular software system consisting of \textbf{Asset Manager}, \textbf{Source Data Manager}, \textbf{Result Data Manager},
+\textbf{Optimizer}, and \textbf{Data Visualization}, developed in C\# using the .NET framework and the MVVM architecture.
 
 \subsection{Background}
-\textit{Danfoss} company is facing a significant challenge with scheduling the heat distribution among
-approximately 1600 buildings in the city \textit{Heatington} via single district heating network, taking
+\textit{Danfoss} company is facing a significant challenge with scheduling the heat distribution to
+approximately 1600 buildings in the city \textit{Heatington} through single district heating network. taking
 two different scenarios and two different periods into consideration when scheduling.
 
 \begin{figure}[H]
@@ -23,15 +30,14 @@ two different scenarios and two different periods into consideration when schedu
 
 \vspace{0.5cm}
 
-\noindent There are six available production units in total, namely: \textbf{Gas Boiler 1}, \textbf{Gas Boiler 2}, \textbf{Gas Boiler 3},
-\textbf{Oil Boiler 1}, \textbf{Gas Motor 1}, and \textbf{Electric Boiler 1}. Each scenario has different combination of the units available.
-The first scenario is as follows: heat is distributed across one heating area, but only three gas boilers
-and one oil boiler are available from all the production units. In the second scenario the heat is also distributed
-across the same singular heating area, but now there are only two gas boilers, one gas motor, and one electric boiler
-available from all the production units. As for the periods, there is the Summer period and the Winter period, where both
-of these periods have specific values per each full hour for what the heat demand is, and what is the electricity cost
-at that time. The Summer period starts on 8\textsuperscript{th} of September 2025 at 00:00 and ends on 21\textsuperscript{st}
-of September at midnight, and the winter period starts on 5\textsuperscript{th} of January 2026 at 00:00 and ends on
+\noindent The system includes total of six production units, namely: \textbf{Gas Boiler 1}, \textbf{Gas Boiler 2}, \textbf{Gas Boiler 3},
+\textbf{Oil Boiler 1}, \textbf{Gas Motor 1}, and \textbf{Electric Boiler 1}. Each operational scenario is defined by a different combination of the units available.
+In Scenario one, heat distribution is performed across one heating area by three gas boilers
+and one oil boiler. In Scenario two, heat distribution is performed acroos the same heating area, however, by using
+only two gas boilers, one gas motor, and one electric boiler. The system supports two seasonal operational periods, where both
+of these periods have specific values per each full hour for what the heat demand is, and what is the electricity cost at that time.
+The Summer period begins on 8\textsuperscript{th} of September 2025 at 00:00 and ends on 21\textsuperscript{st}
+of September at midnight, while the Winter period begins on 5\textsuperscript{th} of January 2026 at 00:00 and ends on
 18\textsuperscript{th} of January at midnight.
 
 \begin{figure}[H]
@@ -52,94 +58,134 @@ of September at midnight, and the winter period starts on 5\textsuperscript{th} 
 
 \vspace{1cm}
 
-\noindent The company has been shceduling the distribution manually. They have to compare every aspect of all the
-production units, that depends also on the scenario and season, such as: the maximal heat that the unit
-can produce, the cost of producing heat using this unit, the CO\textsubscript{2} emissions produced by
-the unit, the amount of fuel needed for generating the heat, and the maximal amount of electricity that
-could be produced. There is also a need to check all of the information for each period and do manual calculations
-to figure out what production unit should be used at a particular time, according to the objective of keeping the
-expenses as low as possible, while also seeking the highest possible gained revenue. One of the challenges that they
-run into when executing the calculations is the cost of electricity, since its value is changing into a new,
-completely different value every hour. Another challenge is the maintenance planning, which done manually takes
-great amount of time when calculating and scheduling the heat distribution. The maintenance has to be set, ranging from
-30 to 60 hours, for one chosen production unit in each scenario once per year, preferably in the summer period,
-since the heat demand is lower in summer.
+\noindent The company is shceduling the distribution manually. This process requires operators to compare every aspect
+of all the production units, that depends also on the scenario and season, included the maximal heat the unit can produce,
+the cost of producing heat using this unit, the CO\textsubscript{2} emissions produced by the unit, the amount of fuel needed for
+generating the heat, and the maximal amount of electricity that could be produced. In addition, operators need to check all of the
+information for each period and do manual calculations to figure out what production unit should be used at a particular time,
+according to the objective of keeping the expenses as low as possible, while also seeking the highest possible gained revenue.
+One of the major challenges associated with executing the calculations is the cost of electricity, since its value is changing into a new,
+completely different value every hour, and it can also have a negative value. Another challenge is maintenance planning, which
+executed manually takes great amount of time when calculating and scheduling the heat distribution. Maintenance period must be scheduled, ranging
+from 30 to 60 hours, for one chosen production unit in each scenario once per year, preferably in the Summer period, since
+the heat demand is lower in this period.
 
 \vspace{0.5cm}
 
-\noindent All of this resulted in being inefficient, as the manual scheduling takes an overwhelming amount of time. It also
-leads to the company having more expenses than needed for distributing the heat due to insufficient calculations,
-to missed opportunity of a possible greater revenue gained for the electricity produced, and finally,
-this system also creates more space for error made or influenced by human factor.
+\noindent As a result, the scheduling process takes an overwhelming amount of time. Furthermore, it also leads to greater
+expenses for the company than needed due to insufficient calcualtions. In addition, the company might miss on an opportunity
+to gain possible profit by not using the best production unit at the right time. Finally, the greatest flaw in this manual
+scheduling system is the possibility of the human factor being the root cause of these errors and challenges.
 
-\subsection{Relevance}
+\subsection{Motivation}
 Automizing and optimizing the scheduling of the heat distribution using the production units available
-will result in reducing the expenses needed, and also in boosting the revenue gained from electricity produced.
-Not only will it save the company's money for heat generation and distribution, and increase the profit
-from electricity generation, but it will also make the process more efficient and it will eliminate the
+results in reduction of the expenses needed, while also boosting the revenue gained from electricity produced.
+In addition, it will save the company's money for heat generation and distribution and increase the profit
+from electricity generation. Furthermore, it will make the process more efficient and it will eliminate the
 possibility of error made by a human factor.
 
 \vspace{0.5cm}
 
-\noindent Also, it is possible to design and engineer the system in a way, where it could be reused for either another
-city, or another district heating area. It could also be reused for if there are new production units added,
+\noindent Furthermore, the system can be designed in a way, where it could be reused for either another
+city, or another district heating area. In addition, it could also be reused for if there are new production units added,
 production units totally removed, or if the data and values for the existing production units parameters were to be changed.
-Ensuring such scalability for this project would make it a very efficient and reliable tool that can be used by the company for years.
+Ensuring scalability and flexibility for this software system would greatly improve its long-term usability.
 
 \vspace{0.5cm}
 
-\noindent One of the main problem is calculating the net production cost. Every production unit has a fixed price for producing
-1 MWh of heat. However, the cost for some units that are using or producing electricity, the \textbf{Gas Motor 1} and \textbf{Electric Boiler 1},
-can be different from the fixed price. The \textbf{Gas Motor 1} produces electricity as a byproduct that can be sold, which
-reduces its production cost. The \textbf{Electric Boiler 1} works in an opposite way by being dependent on the electricity
-to run, meaning the higher the electricity price is the more expensive it is to use the production unit. The \textbf{Optimizer} uses
-these net production costs to rank each unit from cheapest to the most expensive for each hour.
+\noindent One of the primary challenges in the optimization process is calculating the net production cost.
+For each production unit there is a predefined price for producing 1 MWh of heat. However, the cost for certain units that are
+using or producing electricity, the \textbf{Gas Motor 1} and \textbf{Electric Boiler 1},
+can be different from the predefined price. The \textbf{Gas Motor 1} produces electricity as a byproduct that can be sold, which
+reduces its production cost. The \textbf{Electric Boiler 1} opperates in an opposite way by consuming the electricity
+to operate, meaning the higher the electricity price is the more expensive it is to use the production unit. The \textbf{Optimizer} uses
+these net production costs to rank each unit from cheapest to the most expensive for each hour, and decides which unit should
+be used at a certain time.
 
 \vspace{0.5cm}
 
-\noindent There is also a scenario where the electricity prices have a negative value. This event flips the logic around,
-where the \textbf{Gas Motor 1} now has to paid for to produce the electricity, making it one of the most expensive units
-to run, and the \textbf{Electric Boiler 1} now gets paid for consuming the electricity, making it potentially the cheapest,
-or maybe even profitable option.
+\noindent In addition, there are also occurances of the electricity prices having a negative value. This event flips the
+previously mentioned logic around, where the \textbf{Gas Motor 1} now creates expenses for producing the electricity, making it
+one of the most expensive units to run, and the \textbf{Electric Boiler 1} now gains revenue for consuming the electricity,
+making it potentially the cheapest, and better said, profitable option.
 
 \vspace{0.5cm}
 
-\noindent Furthermore, developing the \textbf{Data Visualization} module within the system will help the operators
-and the schedulers to view clear diagram and graph, turning complex optimization result data into intuitive and easily
-understandable format. The module will display key information, such as the heat demand, the heat production, the amount
+\noindent Furthermore, developing the \textbf{Data Visualization} module within the system will support the operators
+and the schedulers to view an easy to understand graph, turning complex optimization result data into intuitive and easily
+understandable format. The module displays the key information, namely: the heat demand, the heat production, the amount
 of electricity used, the electricity price, the CO\textsubscript{2} emissions produced, the fuel consumption, and the production cost.
-The graph will function in an intelligent way, where some of the information that is special for certain scenario,
+The graph will function in an intelligent way, where certain information that is special for particular scenario,
 for example the amount of electricity used and the electricity price, will only be available for viewing when the corresponding scenario is selected.
-The graph will be interactable in such way, where the operator is able to click into specific position in the graph, to view the
-information connected with the production unit, for example the date and time of the current selected point on graph, how much heat
-was generated by this unit, etc.
+In addition, the graph will prvoide an interactive way to be operated, where the operator is able to click any part of the graph to view the
+information connected with the production unit that is used at the time. For instance, the date and time of the current
+selected point on graph, how much heat is generated by this unit, etc.
 
-\section{Goal and Objectives}
-The goal of this project is to create a system for the utility company \textit{Danfoss},
-which is responsible for heat generation and distribution to approximately 1600 buildings in 
-the city \textit{Heatington}, using a single district heating system. The system must be capable of operating
-in two distinct scenarios where there are different production units available, and also must be able to operate
-throughout two different 14 days long periods, in summer and in winter. The automatization and optimized scheduling
-of production units is going to help with delivering sufficient amount of heat according to the heat demand at the
-lowest possible cost, and it will maximize the possible profit to be gained from the electricty generation.
+\section{Project Requirements and Objectives}
+
+\subsection{Project Requirements}
+\textbf{Functional Requirements:}
+\begin{itemize}
+    \item \textbf{FR-1:} The system must secure heat for about 1600 buildings in the district heating area.
+    It must guarantee that total heat production meets demand if a feasible solution exists.
+    \item \textbf{FR-2:} The system must produce heat at the lowest costs. It must calculate "net production costs"
+    for each unit per hour to find the cheapest way.
+    \item \textbf{FR-3:} The system must use the electricity market to get the highest profit (from selling) or lowest costs (from buying).
+    It should handle negative prices where you get paid to consume electricity.
+    \item \textbf{FR-4:} The system has to consist of 5 modules, namely: \textbf{Asset Manager}, \textbf{Source Data Manager},
+    \textbf{Result Data Manager}, \textbf{Optimizer}, and \textbf{Data Visualization}.
+    \item \textbf{FR-5:} The system must be able to operate in two distinct opearational scenarios.
+        \begin{itemize}[label=\textbullet]
+            \item \textbf{FR-5.1:} Scenario 1 = The system must operate for a district heating area using 3 Gas Boilers (\textbf{
+            Gas Boiler 1, Gas Boiler 2, Gas Boiler 3}) and one Oil Boiler (\textbf{Oil Boiler 1}).
+            \item \textbf{FR-5.2:} Scenario 2 = The system must operate for a district heating area using 2 Gas Boilers (\textbf{
+            Gas Boiler 1, Gas Boiler 3}), one Gas Motor (\textbf{Gas MOtotr 1}), and one Electric Boiler (\textbf{Electric Boiler 1}).
+        \end{itemize}
+    \item \textbf{FR-6:} The system must be able to operate in two distinct, 14-days long seasonal periods, in Summer and in Winter.
+    \item \textbf{FR-7:} The system must allow for a maintenance period to be scheduled between 30 and 60 hours where one unit is
+    offline and not used by the \textbf{Optimizer}.
+\end{itemize}
 
 \vspace{0.5cm}
 
-\noindent The objectives for creation of this project are:
+\noindent \textbf{Non-functional Requirements:}
+\begin{itemize}
+    \item \textbf{NFR-1 (Modularity):} The system must have a modular architecture so components can be replaced or extended easily.
+    \item \textbf{NFR-2 (Time Resolution):} All data and calclulations must use a strict 1-hour time resolution.
+    \item \textbf{NFR-3 (Tech Stack):} Developed in .NET using an object-oriented language like C\#.
+    \item \textbf{NFR-4 (Storage):}  The system must use local file formats like csv or excel for data.
+    \item \textbf{NFR-5 (Usability):} The GUI should let users configure scenarios and run optimization without
+    editting config files directly.
+    \item \textbf{NFR-6 (Testing):} The code should follow good practices and include tests for the subsystems.
+\end{itemize}
+
+\subsection{Project Objectives}
+The objective of this project is to develop a software system for the utility company \textit{Danfoss},
+which is responsible for heat generation and distribution to approximately 1600 buildings in
+the city \textit{Heatington}, through a single district heating system. The proposed solution is that the system
+must be capable of operating in two distinct scenarios where there are different production units available. Furthermore,
+the system must be able to operate throughout two different 14 days long periods, in summer and in winter.
+The automatization and optimized scheduling of production units helps with delivering sufficient amount of heat
+according to the heat demand at the lowest possible cost. Furthermore, it maximizes the possible profit to be gained
+from the electricty generation.
+
+\vspace{0.5cm}
+
+\noindent The primary objectives of this project are:
 
 \begin{itemize}
     \item Develop a modular software system consisting of 5 different modules, namely:
         \begin{enumerate}
-            \item \textbf{Asset Manager (AM)} - acting as a source repository for static system information,
+            \item \textbf{Asset Manager (AM)} - acts as a source repository for static system information,
             responsible for retrieving the data when called by the \textbf{Optimizer} module or the \textbf{Data Visualization} module
-            \item \textbf{Source Data Manager (SDM)} - acting as a source repository for dynamic system information,
+            \item \textbf{Source Data Manager (SDM)} - acts as a source repository for dynamic system information,
             responsible for retrieving the data when called by the \textbf{Optimizer} module or the \textbf{Data Visualization} module
-            \item \textbf{Result Data Manager (RDM)} - acting as a sink repository for optimization results,
+            \item \textbf{Result Data Manager (RDM)} - acts as a sink repository for optimization results,
             responsible for saving the optimized data from the \textbf{Optimizer} module into CSV files for each unit, and retrieving that data
             when called by the \textbf{Data Visualization} module
-            \item \textbf{Optimizer (OPT)} - a kernel module for optimization of the energy production
-            \item \textbf{Data Visualization (DV)} - responsible for visualizing the optimized result data via diagrams
-            and charts on the GUI (Graphical User Interface) of the software
+            \item \textbf{Optimizer (OPT)} - serves as a kernel module for optimization of the energy production
+            \item \textbf{Data Visualization (DV)} - responsible for visualizing the optimized result data in a clear and
+            understandable format
         \end{enumerate}
 \end{itemize}
 
@@ -151,16 +197,13 @@ lowest possible cost, and it will maximize the possible profit to be gained from
 \end{figure}
 
 \begin{itemize}
-    \item Develop logic for the \textbf{Optimizer} module, in a way where it optimizes the heat production and distribution schedule
-    with the lowest expenses possible, and with the highest profit gained possible
-    \item Design the system in a way where it will operate in two distinct scenarios and two different time periods,
-    that being the summer period and the winter period
-    \item Design the \textbf{Result Data Manager} so it saves all of the optimized result data into CSV files with the name identical
+    \item Develop the logic for the \textbf{Optimizer} module, so that it can generate optimization of the heat production
+    and distribution schedule with the lowest possible operational cost, and with the highest possible revenue
+    \item Design the system to support two operational scenarios and two different seasonal periods, the summer period and the winter period
+    \item Design the \textbf{Result Data Manager} so it stores all of the optimized result data into CSV files with the name identical
     to the production unit name
-    \item Create a GUI for visualizing the optimized result data and the information about each unit using the Avalonia module
-    \item Implement a control panel for the scenario and the period switching into the GUI
-    \item Implement a maintenance control panel for assigning the maintenance period into the GUI
-    \item Implement the possibility to switch between dark and light theme for a better user experience
+    \item Develop a GUI using the programming language C\# and the Avalonia module and its library
+    \item Implement a control panel in the GUI for the operational scenarios switching
+    \item Implement a maintenance control panel in the GUI for scheduling the production unit maintenance period
+    \item Implement the functionality that allows the user to switch between dark and light theme in order to improve the user experience
 \end{itemize}
-
-
