@@ -165,9 +165,8 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
                     {
                         double y0 = lastY[dt];
                         double y1 = y0 + val;
-                        // Center around minute 30, with a narrow 12-minute span (20%)
-                        double x0 = DateTimeAxis.ToDouble(dt.AddMinutes(24));
-                        double x1 = DateTimeAxis.ToDouble(dt.AddMinutes(36));
+                        double x0 = DateTimeAxis.ToDouble(dt);
+                        double x1 = DateTimeAxis.ToDouble(dt.AddHours(1));
 
                         series.Items.Add(new RectangleBarItem(x0, y0, x1, y1));
                         lastY[dt] = y1;

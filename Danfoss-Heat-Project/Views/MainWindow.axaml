@@ -246,7 +246,7 @@
                                 <Popup IsOpen="{Binding Visualizer.Legend.IsLegendExpanded, Mode=TwoWay}" 
                                        Placement="Top" 
                                        PlacementGravity="TopRight"
-                                       IsLightDismissEnabled="True">
+                                       IsLightDismissEnabled="False">
                                     <Border Background="{DynamicResource ChartAreaBg}" 
                                             BorderBrush="{DynamicResource MainText}" 
                                             BorderThickness="1" 
