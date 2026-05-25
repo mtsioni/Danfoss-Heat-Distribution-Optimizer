@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.4.11)  25 MAY 2026 14:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.4.11)  25 MAY 2026 17:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2047,11 +2047,6 @@ Chapter 5.
 (./Chapters/Implementation.tex [27
 
 ]
-Underfull \hbox (badness 3250) in paragraph at lines 47--48
-\T1/cmtl/m/n/12 CurrentScenario \T1/cmbr/m/sc/12 (+20) method. Af-ter-wards, th
-e \T1/cmtl/m/n/12 SyncOptimization
- []
-
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2061,6 +2056,15 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
 [28]
+<Images/RadioButtonStyle.png, id=441, 764.8575pt x 638.385pt>
+File: Images/RadioButtonStyle.png Graphic file (type png)
+<use Images/RadioButtonStyle.png>
+Package pdftex.def Info: Images/RadioButtonStyle.png  used on input line 64.
+(pdftex.def)             Requested size: 426.79135pt x 356.21709pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2070,6 +2074,12 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
 [29]
+<Images/ComboBoxStyle.png, id=450, 764.8575pt x 315.1775pt>
+File: Images/ComboBoxStyle.png Graphic file (type png)
+<use Images/ComboBoxStyle.png>
+Package pdftex.def Info: Images/ComboBoxStyle.png  used on input line 73.
+(pdftex.def)             Requested size: 426.79135pt x 175.86818pt.
+
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2078,7 +2088,12 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
-[30])
+[30 <./Images/RadioButtonStyle.png> <./Images/ComboBoxStyle.png>]
+Underfull \hbox (badness 3250) in paragraph at lines 99--100
+\T1/cmtl/m/n/12 CurrentScenario \T1/cmbr/m/sc/12 (+20) method. Af-ter-wards, th
+e \T1/cmtl/m/n/12 SyncOptimization
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2096,14 +2111,16 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
-[32
+[32])
 
-]
-Chapter 6.
-(./Chapters/Discussion.tex
-Underfull \vbox (badness 4467) has occurred while \output is active []
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 15.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.0pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
 
- [33]
+(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
+
+[33]
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2113,15 +2130,13 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
 [34]
+Chapter 6.
+(./Chapters/Discussion.tex
+Underfull \vbox (badness 4467) has occurred while \output is active []
 
-Package fancyhdr Warning: \headheight is too small (14.0pt): 
-(fancyhdr)                Make it at least 15.0pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.0pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
+ [35
 
-(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
-
-[35]
+]
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2140,11 +2155,6 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
 [37]
-Overfull \hbox (70.9086pt too wide) in paragraph at lines 92--93
-\T1/cmbr/m/sc/12 (-20) All the tests were built on the xU-nit frame-work. For t
-est-ing the GUI, the \T1/cmtl/m/n/12 Avalonia.Headless.XUnit
- []
-
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2162,7 +2172,12 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
-[39])
+[39]
+Overfull \hbox (70.9086pt too wide) in paragraph at lines 92--93
+\T1/cmbr/m/sc/12 (-20) All the tests were built on the xU-nit frame-work. For t
+est-ing the GUI, the \T1/cmtl/m/n/12 Avalonia.Headless.XUnit
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (14.0pt): 
 (fancyhdr)                Make it at least 15.0pt, for example:
@@ -2172,8 +2187,26 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
 [40]
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 15.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.0pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
+
+[41])
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 15.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.0pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
+
+[42]
 Chapter 7.
-(./Chapters/Conclusion.tex) [41
+(./Chapters/Conclusion.tex) [43
 
 ]
 
@@ -2184,13 +2217,44 @@ Package fancyhdr Warning: \headheight is too small (14.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
 
-[42
+[44
+
+]
+Chapter 8.
+(./Chapters/Acknowledgements.tex [45]
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 15.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.0pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
+
+[46])
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 15.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.0pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
+
+[47]
+
+Package fancyhdr Warning: \headheight is too small (14.0pt): 
+(fancyhdr)                Make it at least 15.0pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.0pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.0pt}.
+
+[48
 
 ]
 Appendix A.
 (./Chapters/Appendix.tex)
 No file main.bbl.
-[43] (./main.aux)
+[49] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -2199,15 +2263,24 @@ L3 programming layer <2024-01-22>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E7404B9B8A2CE8FE8D720FD888A47B6D;5024.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: 939EC96B0E50D22A312C1B6E2BE0673A;5062
+(rerunfilecheck)             After:  A33849269F9C572894122ABB00E6D5B9;5246.
  ) 
 Here is how much of TeX's memory you used:
- 51491 strings out of 474222
- 1198558 string characters out of 5748733
+ 51537 strings out of 474222
+ 1199499 string characters out of 5748733
  1952975 words of memory out of 5000000
- 72626 multiletter control sequences out of 15000+600000
- 587225 words of font info for 186 fonts, out of 8000000 for 9000
+ 72648 multiletter control sequences out of 15000+600000
+ 587441 words of font info for 188 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  110i,19n,117p,1255b,2374s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr10.pfb></usr/s
@@ -2217,10 +2290,10 @@ c/cm-super/sfbmo10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbmo17.pf
 b></usr/share/texmf/fonts/type1/public/cm-super/sfbmr10.pfb></usr/share/texmf/f
 onts/type1/public/cm-super/sfbmr8.pfb></usr/share/texmf/fonts/type1/public/cm-s
 uper/sfbtl10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on main.pdf (50 pages, 15556945 bytes).
+Output written on main.pdf (56 pages, 15621653 bytes).
 PDF statistics:
- 577 PDF objects out of 1000 (max. 8388607)
- 460 compressed objects within 5 object streams
- 115 named destinations out of 1000 (max. 500000)
- 45990 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 619 PDF objects out of 1000 (max. 8388607)
+ 492 compressed objects within 5 object streams
+ 132 named destinations out of 1000 (max. 500000)
+ 46000 words of extra memory for PDF output out of 51595 (max. 10000000)
 

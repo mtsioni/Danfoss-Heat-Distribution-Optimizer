@@ -25,6 +25,60 @@ Interaction between all three layers in the architecture is provided via the Rea
 % DOMINIK
 % put your chapters here
 \subsubsection{UI Elements and Styling}
+The layout of the on-screen UI Elements was designed with the main objective being availability of all functionalities at one place. The operator has access to everything that the system is capable of executing,
+from scenario switching, through period switching, to maintenance planning. The entire interface is defined in the MainWindow.axaml file, and it is structured and contained in a Grid container.
+
+The left section - the \textbf{Control Panel} - consists of a dark-red column, 2 radio buttons, slider bar, dropdown menu, and a theme toggle switch. It uses the dark-red coloured background because it is the characteristic color of the \textit{Danfoss} company.
+\begin{enumerate}
+    \item \textbf{Scenario Switch} - It is built using two rounded radio buttons with the \texttt{GroupName} being "ScenariosGroup". It allows the operator to switch between the Scenario 1 (Heat Scenario)
+    and Scenario 2 (Heat \& Electricity Scenario). After selecting an option, the graph in the main section of the frame automatically updates and shows the selected option, either the Heat Scenario
+    or the Heat \& Electricity Scenario. The IsChecked binding of this switch is connected to the \texttt{IsHeatScenarioSelected} and the \texttt{IsHeatAndElecScenarioSelected} attributes inside the
+    \texttt{MainWindowViewModel.cs} file.
+    \item \textbf{Period Switch} - It is also built using two rounded radio buttons with the \texttt{GroupName} being "PeriodGroup". This switch allows the operator to switch between the Summer Period
+    and the Winter Period. After selecting an option, the graph in the main section of the frame automatically updates and shows the selected option, either the Summer Period or the Winter Period.
+    The \texttt{IsChecked} binding is connected to the \texttt{IsWinterSelected} and the \texttt{IsSummerSelected} attributes inside the \texttt{MainWindowViewModel.cs} file.
+    \item \textbf{Maintenance Planning} - Section for scheduling the maintenance period, for time selected using the slider, and for the selected production unit from the dropdown menu. The slider value
+    ranges from 30 to 60 hours. In addition, the slider has snapping allowed with the \texttt{TickFrequency} being set to 1. There is a text label under the slider, that is bound to the slider value.
+    Furthermore, there is a \texttt{ComboBox} dropdown menu under the text label, containing every production unit available, with the option "None" as well, in case there is no maintenance needed for
+    scheduling. The \texttt{SelectedItem} is binded to the \texttt{SelectedUnit} attribute inside the \texttt{MainWindowViewModel.cs} file.
+    \item \textbf{Theme Toggle} - A toggle switch located at the very bottom section of the Control Panel sidebar controlling \texttt{IsDarkTheme} and switching the entire system theme.
+\end{enumerate}
+
+The right section - the \textbf{Main Section} - consists of 3 vertical areas:
+\begin{enumerate}
+    \item \textbf{Header} - It consists of a text label stating the official name of the tool, the location/city where the heat distribution is operated at, and the approximate number of buildings in the
+    district heating area. In addition, there is a \textit{Danfoss} logo, loaded from the application assets, located at the very right section of the Header.
+    \item \textbf{Interactive Chart} - The most important part of the screen. It contains an \texttt{oxy:PlotView}, which is bound to \texttt{Visualizer.CurrentPlotModel}. Below the chart, there is a horizontal
+    panel with checkboxes for selecting the metrics to be displayed on the chart, namely: Heat Demand, Heat Production (these two are set to \texttt{IsChecked} as default), Electricity, Electricity Price (these
+    two are only available to be selected when operating in the Scenario 2 - the Heat \& Electricity Scenario), CO\textsubscript{2} Eimissions, Fuel Consumption, and the Production Costs). In addition, there
+    is a Legend button located in the bottom-right corner of this section, which when clicked expands and displays a detailed pop-up legend, explaining which color on the graph represents what metric.
+    \item \textbf{Production Units Cards} - A responsive \texttt{UniformGrid} with three columns, located at the very bottom of the screen below the \textbf{Interactive Chart} section, displaying detailed
+    specification of three production units at once. There are arrows located on both left and right side of this section, allowing the operator to navigate between all available production units which are paginated,
+    allowing the system to create a new page of production unit cards, in case a unit, or multiple units were added.
+\end{enumerate}
+
+To ensure a proffesional interface, there were multiple overrides defined for the \texttt{ControlTemplate} in \texttt{Window.Style}, inside the \texttt{MainWindow.axaml} file. The traditional radio buttons were transformed into a more modern segmented buttons. The following XAML code snippet defines the right-rounded radio button segment with a checkmark visible only when selected:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/RadioButtonStyle.png}
+    \caption{Radio Button with Visible Checkmark}
+    \label{fig:radiobutton}
+\end{figure}
+
+The combo box for selecting production units for maintenance scheduling is also visually customized to have dark-red background, white text, and both hover and selection states.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/ComboBoxStyle.png}
+    \caption{Combo Box Style Configuration}
+    \label{fig:combobox}
+\end{figure}
+
+The production unit cards at the very bottom of the right section are modified rectngular modules (\texttt{CornerRadius="15"}, \texttt{ClipToBounds="True"}). There is the image of the
+production unit on the left side of the card, which is loaded from the application assets, and will automatically adapt to the size of the card via \texttt{Stretch="UniformToFill"}.
+Lastly, there are specification and different metrics that are significant to each production unit available, and they are shown on the right side of the card. This part of the card is
+designed to have dark-red background and white text, which ensures perfect readability even when using lower screen resolutions.
 
 \subsubsection{UI Logic and Engineering Decisions}
 
