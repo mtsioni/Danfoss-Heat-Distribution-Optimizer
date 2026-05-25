@@ -108,3 +108,74 @@ During the architecture design phase, the main goal of the team was to clearly s
 
 \noindent Due to this strictly engineered data architecture, the entire 14-day optimisation, including exporting data into CSV files and rendering of complex graph usually takes less than 100 milliseconds. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
 
+\subsection{Implementation Backend}
+
+\subsubsection*{Asset Manager}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/AM-InitializeMethod.png}
+    \caption{Initialize method}
+\end{figure}
+
+The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and safes all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/AM-DataForOptimizerMethod.png}
+    \caption{GetDataForOptimizer method}
+\end{figure}
+
+To provide the initialized data for the Optimizer, the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method first turns the Required data into a list of generic units.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/GenToOpAd.png}
+    \caption{GenericToOptimizedAdapter}
+\end{figure}
+
+This list gets to the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method to assign each individual unit of the list to a specific type of unit: \textbf{ElectticUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit} and get provided as optimisedUnit.
+Those optimized units get collected as a list of OptimizedUnit, using the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method. 
+The list of optimized units gets returend by the the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method. 
+
+\subsubsection*{Source Data Manager}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/SourceDataManager.png}
+    \caption{SourceDataManager}
+\end{figure}
+
+The data for the optimization period, the heat demand and electricity prices get provided by the \texttt{SourceDataManager}. Heat demand and electricity prices get loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
+
+
+\subsubsection*{Optimizer}
+ 
+For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/OP_CalculateHeatPerPrice-methode.png}
+    \caption{calculate heat per price}
+\end{figure}
+
+
+The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, computed for each unit of the OptimizedUnits list, how high are the costs of the unit to produce heat for a selected period of time.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/OP_Sorting-methode.png}
+    \caption{Sorting list of Units}
+\end{figure}
+
+Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method sorted through the list of units, after verified that the unit is not on maintenance, for the value of the \texttt{HeatPerPriceRecords} of each unit. The units got ordered in descending order and saved in a list as available units. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/OP_Optimize-methode1.png}
+    \includegraphics[width=1\textwidth]{Images/OP_Optimize-methode2.png}
+    \caption{Optimize method}
+\end{figure}
+
+The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units. 
+The method got called by a method of the \texttt{ResultDataManager}. 
