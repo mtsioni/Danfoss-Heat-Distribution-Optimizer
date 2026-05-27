@@ -61,7 +61,7 @@ To ensure a proffesional interface, there were multiple overrides defined for th
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/RadioButtonStyle.png}
+    \includegraphics[width=1\textwidth]{RadioButtonStyle.png}
     \caption{Radio Button with Visible Checkmark}
     \label{fig:radiobutton}
 \end{figure}
@@ -70,7 +70,7 @@ The combo box for selecting production units for maintenance scheduling is also 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/ComboBoxStyle.png}
+    \includegraphics[width=1\textwidth]{ComboBoxStyle.png}
     \caption{Combo Box Style Configuration}
     \label{fig:combobox}
 \end{figure}
@@ -110,56 +110,77 @@ During the architecture design phase, the main goal of the team was to clearly s
 
 \subsection{Implementation Backend}
 
-The core algorithm of the application is the Optimization-process, which calculates, based on given Data from the Asset Manager
-and the Source Data Manager, the most optimal time schedule for the production units, with focus on the most cost-efficient outcome. 
-Those calculations are affected by the choice of Scenarios and the maintenance of the production unit. 
+\subsubsection*{Asset Manager}
 
-\subsubsection*{Data from Asset Manager}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{AM-InitializeMethod.png}
+    \caption{Initialize method}
+\end{figure}
 
-For the calculation of the time schedule, first the Scenario Manager provides a list of Generic units for the Asset Manager.
-The Asset Manager passes the list to the GenericToOptimizedAdapter, which identifies each unit in the given list as one of three
-types of units:  HybridUnit, ElectricUnit or CombustionUnit. And creates a new list with the identified units. 
-This list gets passed back to the Asset Manager, which provides it for the Optimizer request.  
+The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and safes all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection. 
 
-\subsubsection*{Data from Source Data Manager}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{AM-DataForOptimizerMethod.png}
+    \caption{GetDataForOptimizer method}
+\end{figure}
 
-Next to the list of units the Optimizer also depends on the Data of the heat demand, and for the second scenario the
-electricity prices, as well as the current period, summer or winter. 
-Those Data get provided by the Source Data Manager, which first loads Data from a given from the Source Data Loader 
-in form of Time series objects. These Objects contain a Date and time, the period and the value for the heat demand 
-or the value for the electricity price and can be indexed by the DateTime value. The Source Data Manager contains two
-functions, one to load the electricity price and one to load the heat demand. Those functions get called by the 
-Optimizer to obtain the required Data for the calculation. 
+To provide the initialized data for the Optimizer, the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method first turns the Required data into a list of generic units.
 
-\subsubsection*{Calculation for Optimization}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{GenToOpAd.png}
+    \caption{GenericToOptimizedAdapter}
+\end{figure}
 
-For the optimization process the Optimizer contains a function that first calculates the value of heat per price for
-each available unit and adds it to the unit’s properties as HeatPerPriceRecords. 
-With these values the next function sorts through the list of available units and sorts for the HeatPerPriceRecords 
-value, form most heat per cost to least money. It also calculates if the Unit can produce the required heat demand on 
-its own or if additional units are required, by comparing the heat demand to the maximum of heat the unit can produce. 
+This list gets to the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method to assign each individual unit of the list to a specific type of unit: \textbf{ElectticUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit} and get provided as optimisedUnit.
+Those optimized units get collected as a list of OptimizedUnit, using the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method. 
+The list of optimized units gets returend by the the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method. 
 
-\subsubsection*{Optimization function}
+\subsubsection*{Source Data Manager}
 
-In the optimize function itself, the application calculates heat per price and sorts the list of available units for
-each hour in the selected duration. 
-The optimization function gets called when the Result Data Manger requests the optimized data. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{SourceDataManager.png}
+    \caption{SourceDataManager}
+\end{figure}
 
-\subsubsection*{ResultDataManager}
+The data for the optimization period, the heat demand and electricity prices get provided by the \texttt{SourceDataManager}. Heat demand and electricity prices get loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
 
-After calling the optimized data from the Optimizer, the Result Data Manager adds the number of used hours for each 
-unit and safes the Data as CSV file. 
-Those Data can be requested by the Data Visualizer. 
 
-\subsubsection*{Maintenance}
+\subsubsection*{Optimizer}
+ 
+For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods. 
 
-The Optimizer Class contains a function that sets a selected unit on maintenance for a chosen number of hours. The 
-start of the maintenance will be selected randomly by the program and is only possible during summer period due to 
-less heat demand. 
-During the sorting process, of the available units the function checks if each unit is on maintenance, if its true 
-the loop continues with the next unit of the list and doesn’t add the maintenance unit to the optimized list. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{OP_CalculateHeatPerPrice-methode.png}
+    \caption{calculate heat per price}
+\end{figure}
 
-\subsection{Implementation Data Management}
+
+The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, computed for each unit of the OptimizedUnits list, how high are the costs of the unit to produce heat for a selected period of time.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{OP_Sorting-methode.png}
+    \caption{Sorting list of Units}
+\end{figure}
+
+Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method sorted through the list of units, after verified that the unit is not on maintenance, for the value of the \texttt{HeatPerPriceRecords} of each unit. The units got ordered in descending order and saved in a list as available units. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{OP_Optimize-methode1.png}
+    \includegraphics[width=1\textwidth]{OP_Optimize-methode2.png}
+    \caption{Optimize method}
+\end{figure}
+
+The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units. 
+The method got called by a method of the \texttt{ResultDataManager}. 
+
+\subsection{Implementation Data Managerment}
 
 The data management implementation handles the movement of information across the system. 
 It has the ability to read static asset data from JSON files, load time-dependent data from CSV file and give back optimized 
