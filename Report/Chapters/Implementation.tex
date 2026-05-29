@@ -61,7 +61,7 @@ To ensure a proffesional interface, there were multiple overrides defined for th
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/RadioButtonStyle.png}
+    \includegraphics[width=1\textwidth]{RadioButtonStyle.png}
     \caption{Radio Button with Visible Checkmark}
     \label{fig:radiobutton}
 \end{figure}
@@ -70,7 +70,7 @@ The combo box for selecting production units for maintenance scheduling is also 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/ComboBoxStyle.png}
+    \includegraphics[width=1\textwidth]{ComboBoxStyle.png}
     \caption{Combo Box Style Configuration}
     \label{fig:combobox}
 \end{figure}
@@ -114,7 +114,7 @@ During the architecture design phase, the main goal of the team was to clearly s
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/AM-InitalizeMethod.png}
+    \includegraphics[width=1\textwidth]{AM-InitializeMethod.png}
     \caption{Initialize method}
 \end{figure}
 
@@ -122,7 +122,7 @@ The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and safe
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/AM-DataForOptimizerMethod.png}
+    \includegraphics[width=1\textwidth]{AM-DataForOptimizerMethod.png}
     \caption{GetDataForOptimizer method}
 \end{figure}
 
@@ -130,7 +130,7 @@ To provide the initialized data for the Optimizer, the \texttt{AssetManager.}\al
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/GenToOpAd.png}
+    \includegraphics[width=1\textwidth]{GenToOpAd.png}
     \caption{GenericToOptimizedAdapter}
 \end{figure}
 
@@ -142,7 +142,7 @@ The list of optimized units gets returend by the the \texttt{AssetManager.}\allo
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/SourceDataManager.png}
+    \includegraphics[width=1\textwidth]{SourceDataManager.png}
     \caption{SourceDataManager}
 \end{figure}
 
@@ -155,7 +155,7 @@ For the optimization, the list of optimized units from the \texttt{AssetManager}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/OP_CalculateHeatPerPrice-methode.png}
+    \includegraphics[width=1\textwidth]{OP_CalculateHeatPerPrice-methode.png}
     \caption{calculate heat per price}
 \end{figure}
 
@@ -164,7 +164,7 @@ The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, compu
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/OP_Sorting-methode.png}
+    \includegraphics[width=1\textwidth]{OP_Sorting-methode.png}
     \caption{Sorting list of Units}
 \end{figure}
 
@@ -172,10 +172,109 @@ Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method so
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Images/OP_Optimize-methode1.png}
-    \includegraphics[width=1\textwidth]{Images/OP_Optimize-methode2.png}
+    \includegraphics[width=1\textwidth]{OP_Optimize-methode1.png}
+    \includegraphics[width=1\textwidth]{OP_Optimize-methode2.png}
     \caption{Optimize method}
 \end{figure}
 
 The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units. 
 The method got called by a method of the \texttt{ResultDataManager}. 
+
+\subsection{Implementation Data Managerment}
+
+The data management implementation handles the movement of information across the system. 
+It has the ability to read static asset data from JSON files, load time-dependent data from CSV file and give back optimized 
+results for research, audit and debug purposes. In the system, there are three dedicated classes that handle these I/O operations, 
+as well as the format handling. The reason that the team decide to follow this approach is because in this way the core optimization 
+logic stays separated and independent from file formatting building processes of the final data. Other than clear separation of concerns, 
+this method of data management provides independent testing, as well opportunities for future expanding of the data management system.
+
+\subsubsection{Asset Loader – Production units’ loader}
+
+The \texttt{AssetsLoader} class provides can read the production units from the \texttt{ProductionUnits.json} file, 
+which is located in the Assets folder. 
+Each production unit is defined by nine properties; unit ID, name, maximum heat capacity, fuel type, maximum electricity capacity, 
+production cost, fuel consumption, emissions and image path for the UI display.
+
+The loading process begins with a method that tries to find the path of the Assets folder. 
+This method checks two locations, first the root directory, then it checks a fallback path in case the building 
+of the program is happening in a debug mode. This approach ensures that the application will run whether is being executed 
+from the project root or not. The team established this approach, because they encountered various errors while trying to 
+deploy the app via different OS systems.
+
+Then, there is the \texttt{LoadUnits()} method which parses the JSON file using the \texttt{JsonDocument} 
+API from the System.Text.Json library. For each unit in the JSON array, the method extracts the nine properties 
+using the \texttt{TryGetProperty()} calls, which prevents exceptions if a property is missing or not implemented correctly. 
+Each extracted unit is instantiated as a \texttt{GenericUnit} object and added to a list. If an error occurs, for example the 
+file is not found or an incorrect JSON, the method returns an empty list, instead of letting the application crash. 
+The reason the team decided to follow this approach is to keep the UI intact even if the assets, meaning the productions units, are not loaded.
+
+The \texttt{AssetsLoader} class is implemented as static, which eliminates the need of multiple instantiations of the class. 
+This approach indicates that the class is a tool with no internal state to maintain between calls.
+
+\subsubsection{Source Data Loader - Heat Demand and Electricity Prices}
+
+The \texttt{SourceDataLoader} class reads time based operational data from \texttt{SourceData.csv}, 
+which contains heat demand and electricity price values organized by timestamps. Unlike the static asset loader, 
+this data is dependent on time and it must have the ability to support searching through that data in hourly intervals, 
+on which the optimizer does its’ calculations. 
+
+The core loading logic uses the CsvHelper library in the \texttt{SourceDataLoader.cs} file, 
+which handles the complexity of CSV parsing through column mapping. The \texttt{SourceDataModel} 
+classes define properties of the CSV files with \texttt{[Index(n)]} attributes that specify the exact CSV column position for each value. 
+For example, \texttt{SourceDataModelHeatDemand} specifies that column 0 contains the winter timestamp, column 2 the winter heat demand value, 
+column 5 the summer timestamp, and column 7 the summer value. This approach prevents the common error of manually parsing
+CSV lines and accidentally reading from incorrect columns.
+
+The loaded data is stored in a \texttt{TimeSeries<double>} object, a generic container using \texttt{Dictionary<DateTime, T>} internally. 
+The team decided to choose this design in order to prioritize searching performance rather than iterating through a list to find values. 
+Due to this approach the optimizer can directly access any timestamp without difficulties. For example during the optimization process, 
+when the algorithm searches for heat demand at 2024-01-15 12:00, the dictionary lookup is instant regardless of the  size of the data in 
+the csv file.
+
+The format consistency is enforced through two methods. First, the datetime format is standardized to \texttt{"dd.MM.yyyy HH:mm"}, 
+which is European format including day, month, year, hour, and minute. Second, \texttt{CultureInfo.InvariantCulture} 
+ensures that numeric values parse identically on any system. Without the invariant culture method, a CSV containing \texttt{123.45} 
+on a US system might be misinterpreted as \texttt{12345} on a system using comma as the decimal separator.
+
+Lastly, validation occurs at multiple places. In the beginning of the \texttt{LoadSourceData} there is a validation if statement 
+the checks if the input argument is either \texttt{"HeatDemand"} or \texttt{"ElectricityPrice"}, rejecting invalid requests with an exception. 
+Immediately after, there is a second if statement that verifies file existence before attempting to parse.
+
+\subsubsection{Result Data Saver: Storing Optimization Results}
+
+Once the optimizer completes its calculations, it produces \texttt{OptimizedUnit} objects containing hourly time-series data 
+for each activated production unit. The \texttt{ResultDataSaver} class converts these results into CSV files for saving, 
+auditing and researching purposes.
+
+First, the \texttt{SaveToCSV()} method detects if the path of the Assets folder is correct, using the same path-finding 
+approach as \texttt{AssetsLoader} does and described earlier. This allows result CSV files to be written to the correct 
+location regardless of how the application is launched.
+
+Second, the method creates the path for the optimization results, dynamically. Rather than assuming that \texttt{Assets/ResultData/} 
+already exists, the code explicitly creates it if missing using \texttt{Directory.CreateDirectory()}. 
+This approach eliminates a deployment error were missing directories cause exceptions at runtime.
+
+Third, each production unit receives its own CSV file allowing resulted data for each unit to be looked up independently. 
+The filename is constructed as \texttt{\{UnitName\}.csv}, making it clear which unit's data is in each file.
+
+The \texttt{ConvertToCSV()} method generates the CSV content. It writes this explicit header 
+row \texttt{Time,HeatMWh,Electricity,ProductionCost,FuelConsumption,Co2Emissions}. 
+This header is hardcoded rather than generated through reflection, ensuring clarity 
+about which fields are being exported. Each data row uses the same datetime format as the input data (\texttt{dd.MM.yyyy HH:mm}) 
+and applies \texttt{CultureInfo.InvariantCulture} to all numeric values. This format symmetry between input data 
+and output resulted data ensures that a CSV file saved by the system can be re-parsed correctly using the same \texttt{SourceDataLoader} logic,
+maintaining consistency across the data in the system.
+
+\subsubsection{Data Management Architecture}
+
+The three loader/saver classes form a linear data architecture through their shared design patterns and principles. 
+Each class has a single responsibility: \texttt{AssetsLoader} handles JSON parsing for static data parsing, 
+\texttt{SourceDataLoader} handles CSV parsing for time-indexed given data, and \texttt{ResultDataSaver} handles CSV generation for results. 
+None of these classes depend on each other, and none coordinate with business logic; they are tools that can be tested independently, 
+reused and expanded in different contexts.
+
+The separation of data I/O from business logic enabled the team to develop and test the data layer independently 
+from the optimization algorithms. The optimizer could request data from \texttt{SourceDataLoader} without caring whether this data came from. 
+Similarly, results could be saved to CSV via \texttt{ResultDataSaver} and later audited or re-imported without modifying the optimizer. 
+This architectural clarity made the system maintainable and extensible for future implementations.
