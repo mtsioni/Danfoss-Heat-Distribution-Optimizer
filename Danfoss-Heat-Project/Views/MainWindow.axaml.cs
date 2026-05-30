@@ -3,11 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Styling;
 using Danfoss_Heat_Distribution_Optimizer.ViewModels;
 using System;
-using System.IO;
-using System.Text.Json;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Views;
 
@@ -89,7 +86,6 @@ public partial class MainWindow : Window
     // left arrow clicked
     public void OnPrevPageClicked(object? sender, RoutedEventArgs e)
     {
-        // 'is' keyword safely casts DataContext to the viewmodel type
         if (DataContext is MainWindowViewModel vm)
             vm.PreviousPage();
     }

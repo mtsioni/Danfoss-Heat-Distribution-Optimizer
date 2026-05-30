@@ -12,20 +12,15 @@
         Background="#EED9B9"
         WindowState="Maximized">
 
-    <!-- theme color definitions - swap these to change the base app color scheme -->
-    <!-- the x:Key names are referenced with DynamicResource throughout the file -->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
-                
-                <!-- light theme colors -->
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="RightPanelBg">#F2E6D8</SolidColorBrush>
                     <SolidColorBrush x:Key="ChartAreaBg">#E8DACB</SolidColorBrush>
                     <SolidColorBrush x:Key="MainText">#5E0006</SolidColorBrush>
                 </ResourceDictionary>
                 
-                <!-- dark theme colors -->
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="RightPanelBg">#1E1E1E</SolidColorBrush>
                     <SolidColorBrush x:Key="ChartAreaBg">#333333</SolidColorBrush>
@@ -182,7 +177,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- bottom section: theme toggle -->
+                <!-- theme toggle -->
                 <Grid Grid.Row="2" ColumnDefinitions="*, Auto" Margin="0,20,0,0">
                     <TextBlock Grid.Column="0" Text="LIGHT/DARK THEME" FontSize="18" Foreground="#efebe5" VerticalAlignment="Center"/>
                     <ToggleSwitch Grid.Column="1" IsChecked="{Binding IsDarkTheme}" OffContent="" OnContent=""/>
@@ -191,7 +186,6 @@
         </Border>
 
         <!-- right side content area -->
-        <!-- DynamicResource picks up the correct color from the theme dict above -->
         <Border Grid.Column="1" Background="{DynamicResource RightPanelBg}" Padding="20">
             <Grid RowDefinitions="Auto, 4*, 1.2*">
                 
@@ -299,16 +293,13 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:UnitViewModel">
-                                <!-- outer card — rounded corners, clips the image to round edges -->
                                 <Border CornerRadius="15" Margin="5" ClipToBounds="True">
                                     <Grid ColumnDefinitions="*, *">
 
-                                        <!-- left half: machine photo fills the space -->
                                         <Image Grid.Column="0"
                                                Source="{Binding Image}"
                                                Stretch="UniformToFill"/>
 
-                                        <!-- right half: red panel with stats -->
                                         <Border Grid.Column="1" Background="#d01d29" Padding="10,8">
                                             <StackPanel Spacing="0" VerticalAlignment="Center">
 

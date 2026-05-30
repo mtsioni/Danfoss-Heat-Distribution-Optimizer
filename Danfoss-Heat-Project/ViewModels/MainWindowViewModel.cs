@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using Avalonia;
 using Avalonia.Styling;
@@ -9,7 +8,6 @@ using ReactiveUI;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 using OxyPlot;
-using System.Xml.Serialization;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels;
 
@@ -18,7 +16,7 @@ public partial class MainWindowViewModel : ReactiveObject
     // visualizer holds all the graph logic so we dont clutter this file too much
     public DataVisualizerViewModel Visualizer { get; } = new();
 
-    // =# SCENARIO STUFF #=
+    // SCENARIO
     // keeps track of what scenario the user choosed
     // we use a private variable with a public getter/setter so we can inject RaiseAndSetIfChanged
     private Scenario _selectedScenario = Scenario.Heat;
@@ -159,8 +157,7 @@ public partial class MainWindowViewModel : ReactiveObject
         UpdateChart();
     }
 
-    // =# CHART UPDATER #=
-    // core logic to refresh graph and grey out the checkboxes
+    // CHART UPDATE
     private void UpdateChart()
     {
         bool hasEnergy = ShowHeatDemand || ShowHeatProduction || ShowElectricity;
@@ -192,18 +189,14 @@ public partial class MainWindowViewModel : ReactiveObject
         Visualizer.UpdatePlot(activeKinds, SelectedPeriod);
     }
 
-    // =# UNIT CARDS PAGINATION #=
-    // All loaded units keeps everything from json
+    //  UNIT CARDS
     private List<UnitViewModel> _allUnits = new();
 
-    // The 3 units currently shown on screen in the cards area
     private ObservableCollection<UnitViewModel> _visibleUnits = new();
     public ObservableCollection<UnitViewModel> VisibleUnits => _visibleUnits;
 
-    // Which page we are on (0 = first 3 units, 1 = next 3, etc)
     private int _unitPageIndex = 0;
 
-    // simple math checks if we can go back or forward so the arrows grey out automatically
     public bool CanGoPrev => _unitPageIndex > 0;
     public bool CanGoNext => (_unitPageIndex + 1) * 3 < _allUnits.Count;
 
@@ -226,7 +219,6 @@ public partial class MainWindowViewModel : ReactiveObject
         _visibleUnits.Clear();
         int start = _unitPageIndex * 3;
         
-        // Skip jumps over previous pages and Take grabs exactly 3 for the current page
         var page = _allUnits.Skip(start).Take(3);
         
         foreach (var unit in page)
@@ -243,7 +235,6 @@ public partial class MainWindowViewModel : ReactiveObject
         set { this.RaiseAndSetIfChanged(ref _isDarkTheme, value); ApplyTheme(); }
     }
 
-    // The full list is still kept for the ComboBox in the left panel
     public ObservableCollection<UnitViewModel> Units { get; } = new();
 
     public MainWindowViewModel()
@@ -281,7 +272,6 @@ public partial class MainWindowViewModel : ReactiveObject
         RefreshVisibleUnits();
     }
 
-    // pushes the bright or dark mode deep into Avalonia internal settings
     private void ApplyTheme()
     {
         if (Application.Current != null)
