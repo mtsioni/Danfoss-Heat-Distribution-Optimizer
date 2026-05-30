@@ -101,17 +101,15 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             {
                 rightAxis.Title = rightTitle;
                 rightAxis.IsAxisVisible = !string.IsNullOrEmpty(rightTitle);
-                rightAxis.Minimum = double.NaN; // Auto-scale (allow negative)
+                rightAxis.Minimum = double.NaN;
                 rightAxis.MajorStep = double.NaN;
             }
 
-            // 1. First add the bars (to the back)
             if (activeKinds.Contains(DataKind.HeatProduction))
             {
                 AddStackedHeatProduction(period, getAxisKey(DataKind.HeatProduction));
             }
 
-            // 2. Then add the lines (to the front)
             foreach (var kind in activeKinds.Where(k => k != DataKind.HeatProduction))
             {
                 var data = GetAggregatedData(kind, period);
@@ -119,7 +117,6 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
 
                 foreach (var point in data.OrderBy(p => p.Key))
                 {
-                    // Align points to center of bar (minute 30) for visual stability
                     series.Points.Add(DateTimeAxis.CreateDataPoint(point.Key.AddMinutes(30), point.Value));
                 }
 

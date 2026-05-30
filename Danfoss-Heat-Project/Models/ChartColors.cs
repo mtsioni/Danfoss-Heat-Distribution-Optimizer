@@ -21,11 +21,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Models
         public static OxyColor GetColor(DataKind kind) => kind switch
         {
             DataKind.HeatDemand => OxyColors.Red,
-            DataKind.HeatProduction => OxyColors.Transparent, // Not used for lines
-            DataKind.Electricity => OxyColor.FromRgb(255, 255, 0), // Bright Yellow
+            DataKind.HeatProduction => OxyColors.Transparent,
+            DataKind.Electricity => OxyColor.FromRgb(255, 255, 0),
             DataKind.ElectricityPrice => OxyColors.Cyan,
             DataKind.Co2Emissions => OxyColors.Black,
-            DataKind.FuelConsumption => OxyColor.FromRgb(139, 69, 19), // Brown
+            DataKind.FuelConsumption => OxyColor.FromRgb(139, 69, 19),
             DataKind.ProductionCosts => OxyColors.Green,
             _ => OxyColors.Gray
         };
