@@ -78,13 +78,13 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         if (SelectedPeriod == Period.Winter)
         {
-            Optimizer.OptimizationPeriodStart = new DateTime(2026, 1, 5);
-            Optimizer.OptimizationPeriodEnd = new DateTime(2026, 1, 19);
+            Optimizer.OptimizationPeriodStart = Optimizer.WinterStart;
+            Optimizer.OptimizationPeriodEnd = Optimizer.WinterEnd;
         }
         else
         {
-            Optimizer.OptimizationPeriodStart = new DateTime(2025, 9, 8);
-            Optimizer.OptimizationPeriodEnd = new DateTime(2025, 9, 22);
+            Optimizer.OptimizationPeriodStart = Optimizer.SummerStart;
+            Optimizer.OptimizationPeriodEnd = Optimizer.SummerEnd;
         }
 
         Optimizer.TimeResolution = 1;

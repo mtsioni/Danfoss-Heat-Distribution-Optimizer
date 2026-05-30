@@ -6,6 +6,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
 {
     public static class Optimizer
     {
+        public static readonly DateTime WinterStart = new DateTime(2026, 1, 5);
+        public static readonly DateTime WinterEnd = new DateTime(2026, 1, 19);
+        public static readonly DateTime SummerStart = new DateTime(2025, 9, 8);
+        public static readonly DateTime SummerEnd = new DateTime(2025, 9, 22);
+
         public static DateTime OptimizationPeriodStart { get; set; }
         public static DateTime OptimizationPeriodEnd { get; set; }
         public static TimeSeries<double>? ElectricityPrices { get; set; }
@@ -37,14 +42,11 @@ namespace Danfoss_Heat_Distribution_Optimizer.Services
         {
             Random genSsummer= new Random();
             
-            DateTime SummerStartRange = new DateTime(2025, 9, 8); 
-            DateTime SummerEndRange = new DateTime(2025, 9, 22); 
-            
-            long SummerRange = SummerEndRange.Ticks - SummerStartRange.Ticks;
+            long SummerRange = SummerEnd.Ticks - SummerStart.Ticks;
             
             long randomSummerTicks = (long)(genSsummer.NextDouble() * SummerRange);
             
-            SummerMaintenanceStart = SummerStartRange.AddTicks(randomSummerTicks);
+            SummerMaintenanceStart = SummerStart.AddTicks(randomSummerTicks);
             
             return SummerMaintenanceStart;
         }
