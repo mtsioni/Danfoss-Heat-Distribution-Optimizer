@@ -5,8 +5,8 @@
 
 \documentclass[12pt,                                          % Main text font size
                a4paper,                                       % Paper size
-               openright,                                     % Chapters start on odd pages (right)
-               twoside]{report}                               % Print two-sided, LaTeX 'report' template
+               openany                                 % Chapters start on odd pages (right)
+              ]{report}                               % Print two-sided, LaTeX 'report' template
 
 % -------------------------------------------------------------
 % PACKAGES - Only load if necessary / used
@@ -51,6 +51,7 @@
 \usepackage{hyperref}
 \usepackage{pdfpages}
 \usepackage{array}
+\usepackage{layout}
 \pgfplotsset{compat=1.18}
 \usepgfplotslibrary{dateplot}
 
@@ -58,8 +59,8 @@
 % USER VARIABLES AND DEFINITIONS                              % EDIT THIS SECTION
 % -------------------------------------------------------------
 %\newcommand{}{}
-\newcommand{\theTitle}{Second Semester Project: Development of Software Systems (F26)}            % Thesis title
-\newcommand{\runningTitle}{Semester Project (F26)}                % Short title for headers
+\newcommand{\theTitle}{Development of Software Systems (F26)}            % Thesis title
+\newcommand{\runningTitle}{2nd Semester Project (F26)}                % Short title for headers
 \newcommand{\thegroup}{\textbf{Group 11}}                  % Author name
 
 \newcommand{\subtitle}[1]{%
@@ -96,16 +97,16 @@
 \vspace{40mm}                                                 % Vertical space
 \hrule\vspace{5mm}                                            % Horizontal rule above title
 
-{\LARGE \textbf{\textcolor{mygrey}{\theTitle}}} \subtitle{Your subtitle here}\\           % The title of the report
+{\LARGE \textbf{\textcolor{mygrey}{\theTitle}}} \subtitle{Danfoss Heat Production Optimizer}\\           % The title of the report
 
 \vspace{5mm}\hrule\vspace{20mm}                               % Horizontal rule below title
 
 {\large \thegroup} \\ \vspace{2mm} 
 {\large Daniel Falat dafal25@student.sdu.dk} \\ \vspace{2mm} % The author
 {\large Dominik Bežo dobez25@student.sdu.dk} \\ \vspace{2mm} % The author
-{\large Maria Thalia Tsioni matsi25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Maria Tsioni matsi25@student.sdu.dk} \\ \vspace{2mm} % The author
 {\large Pavel Seliavko pasel25@student.sdu.dk} \\ \vspace{2mm} % The author
-{\large Zoe Elea Schiwi zozei25@student.sdu.dk} \\ \vspace{2mm} % The author
+{\large Zoe Elea Schiwy zozei25@student.sdu.dk} \\ \vspace{2mm} % The author
 {\large Zoja Angelovicova zoang25@student.sdu.dk} \\ \vspace{2mm} % The author
 
 \vfill                                                        % Fill space down to bottom of page
@@ -123,8 +124,8 @@
 % TABLE OF CONTENTS, LISTS OF TABLES AND FIGURES
 % -------------------------------------------------------------
 \tableofcontents                                              % Add table of contents
-\listoftables                                                 % Add list of tables
-\listoffigures                                                % Add list of figures
+\listoftables    
+\newpage                                                       
 
 % -------------------------------------------------------------
 % ABSTRACT

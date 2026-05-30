@@ -2,12 +2,11 @@
 %    Implementation
 % -------------------------------------------------------------
 
-\section{Implementation}
-\raggedbottom % Tento prikaz rusi automaticke vertikalne roztahovanie textu na strankach
+% \section{Implementation}
+\raggedbottom
+\section{Implementation Frontend}
 
-\subsection{Implementation Frontend}
-
-\subsubsection{Architecture and Technology Stack (MVVM in Avalonia UI)}
+\subsection{Architecture and Technology Stack (MVVM in Avalonia UI)}
 \label{sec:architecture-mvvm-avalonia}
 
 The client application is built on the .NET platform using the Avalonia UI framework. Avalonia was chosen for its consistency with the Advanced Object-Oriented Programming course curriculum. The layout is described in XAML, so the structure of the interface is kept in markup files and the C\# code-behind only contains what cannot be expressed declaratively.
@@ -22,7 +21,7 @@ The internal structure follows the Model--View--ViewModel (MVVM) pattern. MVVM w
 
 Interaction between all three layers in the architecture is provided via the ReactiveUI library. The observable properties of both Models and ViewModels are created using the \texttt{RaiseAndSetIfChanged} method, which raises the property changed event each time the corresponding value changes. Thus, any change in the View, such as changing the slider to maintain a particular heat-producing unit, changes the value in the ViewModel that in turn recalculates the results of the Optimizer and the plot. Therefore, there is no need to explicitly call refreshing in the View.
 
-\subsubsection{UI Elements and Styling}
+\subsection{UI Elements and Styling}
 The layout of the on-screen UI Elements was designed with the main objective being availability of all functionalities at one place. The operator has access to everything that the system is capable of executing,
 from scenario switching, through period switching, to maintenance planning. The entire interface is defined in the MainWindow.axaml file, and it is structured and contained in a Grid container.
 
@@ -78,7 +77,7 @@ production unit on the left side of the card, which is loaded from the applicati
 Lastly, there are specification and different metrics that are significant to each production unit available, and they are shown on the right side of the card. This part of the card is
 designed to have dark-red background and white text, which ensures perfect readability even when using lower screen resolutions.
 
-\subsubsection{Data Flow}
+\subsection{Data Flow}
 During the architecture design phase, the main goal of the team was to clearly separate the presentation layer (frontend) from the complex mathematics of the optimisation algorithms (backend). This was achieved by implementing a strict data flow structure.
 
 \begin{enumerate}
@@ -99,9 +98,9 @@ During the architecture design phase, the main goal of the team was to clearly s
 
 \noindent Due to this strictly engineered data architecture, the entire 14-day optimisation, including exporting data into CSV files and rendering of complex graph are seamless. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
 
-\subsection{Implementation Backend}
+\section{Implementation Backend}
 
-\subsubsection*{Asset Manager}
+\subsection{Asset Manager}
 
 \begin{figure}[H]
     \centering
@@ -129,7 +128,7 @@ This list gets to the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{Gener
 Those optimized units get collected as a list of OptimizedUnit, using the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method.
 The list of optimized units gets returend by the the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method.
 
-\subsubsection*{Source Data Manager}
+\subsection{Source Data Manager}
 
 \begin{figure}[H]
     \centering
@@ -139,8 +138,7 @@ The list of optimized units gets returend by the the \texttt{AssetManager.}\allo
 
 The data for the optimization period, the heat demand and electricity prices get provided by the \texttt{SourceDataManager}. Heat demand and electricity prices get loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}.
 
-
-\subsubsection*{Optimizer}
+\subsection{Optimizer}
 
 For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods.
 
@@ -171,7 +169,7 @@ Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method so
 The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units.
 The method got called by a method of the \texttt{ResultDataManager}.
 
-\subsection{Implementation Data Managerment}
+\section{Implementation Data Managerment}
 
 The data management implementation handles the movement of information across the system.
 It has the ability to read static asset data from JSON files, load time-dependent data from CSV file and give back optimized
@@ -180,7 +178,7 @@ as well as the format handling. The reason that the team decide to follow this a
 logic stays separated and independent from file formatting building processes of the final data. Other than clear separation of concerns,
 this method of data management provides independent testing, as well opportunities for future expanding of the data management system.
 
-\subsubsection{Asset Loader – Production units’ loader}
+\subsection{Asset Loader – Production units’ loader}
 
 The \texttt{AssetsLoader} class provides can read the production units from the \texttt{ProductionUnits.json} file,
 which is located in the Assets folder.
@@ -203,7 +201,7 @@ The reason the team decided to follow this approach is to keep the UI intact eve
 The \texttt{AssetsLoader} class is implemented as static, which eliminates the need of multiple instantiations of the class.
 This approach indicates that the class is a tool with no internal state to maintain between calls.
 
-\subsubsection{Source Data Loader - Heat Demand and Electricity Prices}
+\subsection{Source Data Loader - Heat Demand and Electricity Prices}
 
 The \texttt{SourceDataLoader} class reads time based operational data from \texttt{SourceData.csv},
 which contains heat demand and electricity price values organized by timestamps. Unlike the static asset loader,
@@ -232,7 +230,7 @@ Lastly, validation occurs at multiple places. In the beginning of the \texttt{Lo
 the checks if the input argument is either \texttt{"HeatDemand"} or \texttt{"ElectricityPrice"}, rejecting invalid requests with an exception.
 Immediately after, there is a second if statement that verifies file existence before attempting to parse.
 
-\subsubsection{Result Data Saver: Storing Optimization Results}
+\subsection{Result Data Saver: Storing Optimization Results}
 
 Once the optimizer completes its calculations, it produces \texttt{OptimizedUnit} objects containing hourly time-series data
 for each activated production unit. The \texttt{ResultDataSaver} class converts these results into CSV files for saving,
@@ -257,7 +255,7 @@ and applies \texttt{CultureInfo.InvariantCulture} to all numeric values. This fo
 and output resulted data ensures that a CSV file saved by the system can be re-parsed correctly using the same \texttt{SourceDataLoader} logic,
 maintaining consistency across the data in the system.
 
-\subsubsection{Data Management Architecture}
+\subsection{Data Management Architecture}
 
 The three loader/saver classes form a linear data architecture through their shared design patterns and principles.
 Each class has a single responsibility: \texttt{AssetsLoader} handles JSON parsing for static data parsing,
