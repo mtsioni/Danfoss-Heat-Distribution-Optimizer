@@ -75,13 +75,13 @@ namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
             {
                 if (period == Period.Winter)
                 {
-                    timeAxis.Minimum = DateTimeAxis.ToDouble(new DateTime(2026, 1, 5));
-                    timeAxis.Maximum = DateTimeAxis.ToDouble(new DateTime(2026, 1, 19));
+                    timeAxis.Minimum = DateTimeAxis.ToDouble(Optimizer.WinterStart);
+                    timeAxis.Maximum = DateTimeAxis.ToDouble(Optimizer.WinterEnd);
                 }
                 else
                 {
-                    timeAxis.Minimum = DateTimeAxis.ToDouble(new DateTime(2025, 9, 8));
-                    timeAxis.Maximum = DateTimeAxis.ToDouble(new DateTime(2025, 9, 22));
+                    timeAxis.Minimum = DateTimeAxis.ToDouble(Optimizer.SummerStart);
+                    timeAxis.Maximum = DateTimeAxis.ToDouble(Optimizer.SummerEnd);
                 }
             }
 
