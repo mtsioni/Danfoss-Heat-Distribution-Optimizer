@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using Avalonia;
 using Avalonia.Styling;
@@ -9,7 +8,6 @@ using ReactiveUI;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 using OxyPlot;
-using System.Xml.Serialization;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels;
 

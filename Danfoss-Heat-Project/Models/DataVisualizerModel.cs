@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 
 namespace Danfoss_Heat_Distribution_Optimizer.Models

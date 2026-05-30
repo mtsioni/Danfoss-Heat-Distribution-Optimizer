@@ -3,11 +3,9 @@ using System.Linq;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
-using OxyPlot.Legends;
 using Danfoss_Heat_Distribution_Optimizer.Models;
 using Danfoss_Heat_Distribution_Optimizer.Services;
 using ReactiveUI;
-using System.Collections.ObjectModel;
 using System;
 
 namespace Danfoss_Heat_Distribution_Optimizer.ViewModels
