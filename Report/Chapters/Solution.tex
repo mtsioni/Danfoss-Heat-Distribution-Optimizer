@@ -25,7 +25,7 @@
 
 \noindent Requests can be made from several parts of the Presentation layer, which is represented as a found message.
 
-\noindent The Result Data Manager makes a self-call that then calls the Optimizer. After it is resolved, within the same self-call, another self-call is made to save Optimization results in local .csv files. For data management, a call to a separate class is made, represented as a lost message. After that, the Result Data Manager’s sequence ends. 
+\noindent The Result Data Manager makes a self-call that then calls the Optimizer. After it is resolved, within the same self-call, another self-call is made to save Optimization results in local .\acrshort{csv} files. For data management, a call to a separate class is made, represented as a lost message. After that, the Result Data Manager’s sequence ends. 
 
 \noindent The Optimizer makes a self-call that then makes three self-calls, first resulting in a call to the Asset Manager and second in two calls to the Source Data Manager. It then enters a loop of two self-calls. After that Optimizer’s sequence ends.
 
@@ -61,7 +61,7 @@
 \newpage
 
 \section{Technical Architecture}
-\noindent Project was developed in C\# in .NET framework, using Avalonia UI in combination with OxyPlot, ReactiveUI and CommunityToolkit.MVVM for Data Visualization. All input and output data, specifically: images, units' specifications and resulting schedule are stored locally. File manipulation is performed by use of System library and CsvHelper library. Functional and integration tests were implemented with the xUnit framework.
+\noindent Project was developed in C\# in .NET framework, using Avalonia \acrshort{ui} in combination with OxyPlot, ReactiveUI and CommunityToolkit.\acrshort{mvvm} for Data Visualization. All input and output data, specifically: images, units' specifications and resulting schedule are stored locally. File manipulation is performed by use of System library and CsvHelper library. Functional and integration tests were implemented with the xUnit framework.
 
 \noindent Solution is organized into the following layers:
 \begin{itemize}
@@ -83,12 +83,12 @@
     \end{itemize}
 
 \end{itemize}
-\noindent The project's architecture is a combination of the MVVM pattern and micro-service architecture approach.
+\noindent The project's architecture is a combination of the \acrshort{mvvm} pattern and micro-service architecture approach.
 
-\noindent Data Handling layer includes: Data - classes that handle file manipulation; Assets - static data storage consisting of .json, .csv and .png files.
+\noindent Data Handling layer includes: Data - classes that handle file manipulation; Assets - static data storage consisting of \acrshort{json}, \acrshort{csv} and \acrshort{png} files.
 
-\noindent Business Logic includes: Models - classes that: model real life entities and concepts, transfer data, represent UI components; Services - classes that manage classes from Data, and control the process of optimization; ViewModels - classes that provide functionality to the UI and establish connection between Models, Services and Presentation layer.
+\noindent Business Logic includes: Models - classes that: model real life entities and concepts, transfer data, represent \acrshort{ui} components; Services - classes that manage classes from Data, and control the process of optimization; ViewModels - classes that provide functionality to the \acrshort{ui} and establish connection between Models, Services and Presentation layer.
 
-\noindent Presentation layer includes: Views - partial classes that control the appearance of the UI.
+\noindent Presentation layer includes: Views - partial classes that control the appearance of the \acrshort{ui}.
 
-\noindent This architecture structure was implemented because it follows SOLID principles which facilitate flexibility and scalability, by significantly reducing required amount of refactoring in development process. MVVM pattern was implemented in the overall structure of this project. Core benefit of MVVM is separation of responsibilities. Microservice architecture is most represented by Services and it follows the Open/Closed principle.
+\noindent This architecture structure was implemented because it follows \acrshort{solid} principles which facilitate flexibility and scalability, by significantly reducing required amount of refactoring in development process. \acrshort{mvvm} pattern was implemented in the overall structure of this project. Core benefit of \acrshort{mvvm} is separation of responsibilities. Microservice architecture is most represented by Services and it follows the Open/Closed principle.

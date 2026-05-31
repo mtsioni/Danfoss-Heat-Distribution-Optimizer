@@ -1,45 +1,86 @@
 \babel@toc {english}{}\relax 
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Problem Statement}{1}{section.1.1}%
-\contentsline {subsection}{\numberline {1.1.1}Background}{1}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Motivation}{4}{subsection.1.1.2}%
-\contentsline {section}{\numberline {1.2}Project Requirements and Objectives}{5}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}Project Requirements}{5}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}Project Objectives}{6}{subsection.1.2.2}%
-\contentsline {chapter}{\numberline {2}Scrum Implementation}{9}{chapter.2}%
+\contentsline {section}{\numberline {1.1}Project Requirements and Objectives}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Project Requirements}{1}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Project Objectives}{2}{subsection.1.1.2}%
+\contentsline {section}{\numberline {1.2}Problem Statement}{3}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Background}{4}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Motivation}{5}{subsection.1.2.2}%
+\contentsline {chapter}{\numberline {2}Scrum Implementation}{7}{chapter.2}%
 \contentsline {chapter}{\numberline {3}Sprints}{11}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Sprint 1}{11}{section.3.1}%
 \contentsline {section}{\numberline {3.2}Sprint 2}{12}{section.3.2}%
 \contentsline {section}{\numberline {3.3}Sprint 3}{13}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Sprint 4}{15}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Sprint 5}{19}{section.3.5}%
-\contentsline {section}{\numberline {3.6}Sprint 6}{19}{section.3.6}%
-\contentsline {chapter}{\numberline {4}Solution}{21}{chapter.4}%
-\contentsline {section}{\numberline {4.1}UML Diagrams}{21}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Activity Diagrams:}{21}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Sequence Diagram:}{22}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Class Diagram:}{23}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Technical Architecture}{24}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Implementation and Technical Realization}{27}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Implementation}{27}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Implementation Frontend}{27}{subsection.5.1.1}%
-\contentsline {subsubsection}{Architecture and Technology Stack (MVVM in Avalonia UI)}{27}{subsection.5.1.1}%
-\contentsline {subsubsection}{UI Elements and Styling}{28}{subsection.5.1.1}%
-\contentsline {subsubsection}{UI Logic and Engineering Decisions}{31}{figure.caption.22}%
-\contentsline {subsubsection}{Data Flow}{31}{figure.caption.22}%
-\contentsline {subsection}{\numberline {5.1.2}Implementation Backend}{32}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Implementation Data Management}{34}{subsection.5.1.3}%
-\contentsline {chapter}{\numberline {6}Discussion and Reflection}{35}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Scrum}{35}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Requirements Engineering}{36}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Refactoring}{37}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Code review}{38}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Testing}{39}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Future Work}{41}{section.6.6}%
-\contentsline {chapter}{\numberline {7}Conclusion}{43}{chapter.7}%
-\contentsline {chapter}{\numberline {8}Acknowledgements}{45}{chapter.8}%
-\contentsline {section}{\numberline {8.1}AI Usage}{45}{section.8.1}%
-\contentsline {chapter}{\numberline {A}Appendix A}{49}{appendix.A}%
-\contentsline {section}{\numberline {A.1}First section}{49}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Second section}{49}{section.A.2}%
-\contentsline {section}{\numberline {A.3}Third section}{49}{section.A.3}%
+\contentsline {section}{\numberline {3.4}Sprint 4}{14}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Sprint 5}{14}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Sprint 6}{15}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Solution}{16}{chapter.4}%
+\contentsline {section}{\numberline {4.1}UML Diagrams}{16}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Activity Diagrams:}{16}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Sequence Diagram:}{18}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Class Diagram:}{19}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Technical Architecture}{20}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Implementation}{22}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Frontend}{22}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Architecture and Technology Stack (\acrshort {mvvm} in Avalonia \acrshort {ui})}{22}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}\acrshort {ui} Elements and Styling}{23}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Data Flow}{25}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Backend}{26}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Asset Manager}{26}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Source Data Manager}{26}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Optimizer}{26}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Data Management}{27}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Asset Loader}{27}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Source Data Loader}{28}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Result Data Saver}{29}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Architecture}{29}{subsection.5.3.4}%
+\contentsline {chapter}{\numberline {6}Discussion and Reflection}{30}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Scrum}{30}{section.6.1}%
+\contentsline {subsubsection}{Scrum practices and benefits}{30}{section.6.1}%
+\contentsline {subsubsection}{Impact of behaviour and code quality}{31}{section.6.1}%
+\contentsline {subsubsection}{Challenges and issues}{31}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Req. Engineering}{31}{section.6.2}%
+\contentsline {subsubsection}{Impact on work quality}{31}{section.6.2}%
+\contentsline {subsubsection}{Important takeaways}{32}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Refactoring}{32}{section.6.3}%
+\contentsline {subsubsection}{Impact on code quality}{32}{section.6.3}%
+\contentsline {subsubsection}{Teamwork and skills balance}{33}{section.6.3}%
+\contentsline {subsubsection}{Refactoring challenges}{33}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Code review}{33}{section.6.4}%
+\contentsline {subsubsection}{Code quality and knowledge sharing}{33}{section.6.4}%
+\contentsline {subsubsection}{Challenges and solutions}{34}{section.6.4}%
+\contentsline {subsubsection}{Process adjustments}{34}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Testing}{34}{section.6.5}%
+\contentsline {subsubsection}{Implementation}{35}{section.6.5}%
+\contentsline {subsubsection}{Scope of testing}{35}{section.6.5}%
+\contentsline {subsubsection}{Benefits and limitations of testing}{35}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Reflection}{36}{section.6.6}%
+\contentsline {subsubsection}{Fulfilment of requirements and problem solving}{36}{section.6.6}%
+\contentsline {subsubsection}{Identified limitations}{36}{section.6.6}%
+\contentsline {subsubsection}{Future development}{36}{section.6.6}%
+\contentsline {chapter}{\numberline {7}Conclusion}{38}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusion}{38}{section.7.1}%
+\contentsline {chapter}{\numberline {8}Acknowledgements}{39}{chapter.8}%
+\contentsline {section}{\numberline {8.1}AI Usage}{39}{section.8.1}%
+\contentsline {chapter}{\numberline {A}Appendix A}{42}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Contracts}{42}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Report Responsibilities Table}{50}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Development Table}{51}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Sprint Backlogs and Retrospectives}{52}{section.A.4}%
+\contentsline {subsection}{\numberline {A.4.1}Sprint 1}{52}{subsection.A.4.1}%
+\contentsline {subsection}{\numberline {A.4.2}Sprint 2}{53}{subsection.A.4.2}%
+\contentsline {subsection}{\numberline {A.4.3}Sprint 3}{54}{subsection.A.4.3}%
+\contentsline {subsection}{\numberline {A.4.4}Sprint 4}{57}{subsection.A.4.4}%
+\contentsline {subsection}{\numberline {A.4.5}Sprint 5}{58}{subsection.A.4.5}%
+\contentsline {section}{\numberline {A.5}Implementation Backend}{59}{section.A.5}%
+\contentsline {subsection}{\numberline {A.5.1}AssetManager}{59}{subsection.A.5.1}%
+\contentsline {subsection}{\numberline {A.5.2}SourceDataManager}{59}{subsection.A.5.2}%
+\contentsline {subsection}{\numberline {A.5.3}Optimizer}{59}{subsection.A.5.3}%
+\contentsline {section}{\numberline {A.6}Meeting Logs}{59}{section.A.6}%
+\contentsline {section}{\numberline {A.7}Product Increments}{90}{section.A.7}%
+\contentsline {section}{\numberline {A.8}Other UML Diagrams}{126}{section.A.8}%
+\contentsline {section}{\numberline {A.9}Figma Prototype}{128}{section.A.9}%
+\contentsline {section}{\numberline {A.10}Early Sketches}{128}{section.A.10}%
+\contentsline {section}{\numberline {A.11}Introduction: Figures}{138}{section.A.11}%
+\contentsline {section}{\numberline {A.12}Styling: Snippets}{140}{section.A.12}%
+\contentsline {chapter}{References}{141}{figure.caption.43}%

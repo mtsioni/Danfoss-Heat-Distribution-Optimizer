@@ -32,9 +32,9 @@ In the beginning, a noun-verb analysis was conducted. This technique helped in t
 
 Creating the product backlog helped with dividing the complex system into smaller, more testable functions. This ensured that during the development the team remained focused on the goal, which is optimising heating expenses.
 
-Before starting application development, the UI was prototyped. Each team member sketched their vision of the UI, after which the best design was picked and then improved by incorporating better ideas from other sketches. After creating the final sketch, a detailed working Figma prototype for the GUI was created, which served as the primary source of truth for UI. This process eliminated uncertainties in front-end development with Avalonia and saved time that would otherwise be spent discussing the design.
+Before starting application development, the \acrshort{ui} was prototyped. Each team member sketched their vision of the \acrshort{ui}, after which the best design was picked and then improved by incorporating better ideas from other sketches. After creating the final sketch, a detailed working Figma prototype for the \acrshort{gui} was created, which served as the primary source of truth for \acrshort{ui}. This process eliminated uncertainties in front-end development with Avalonia and saved time that would otherwise be spent discussing the design.
 
-A decision to use UML diagrams and CRC cards as dynamic documents that evolved with the code development enabled the team to react to new discoveries during implementation in a flexible manner.
+A decision to use \acrshort{uml} diagrams and \acrshort{crc} cards as dynamic documents that evolved with the code development enabled the team to react to new discoveries during implementation in a flexible manner.
 
 \subsubsection{Important takeaways}
 In the future, it would be beneficial to keep the practice of reconsidering requirements in the beginning of each sprint. For example, in the second sprint it was discovered that in order to solve Data Visualizer module, a Source Data Manager had to be developed prior, which helped prevent blocking the progress of other teams.
@@ -57,7 +57,7 @@ Rotating work between teams, for example having Team Slovaks refactor modules in
 Furthermore, establishing the English as standard for all comments and naming (after incorporating peer feedback from the previous semester project) during refactoring sessions significantly improved collaboration and understanding within an international team.
 
 \subsubsection{Refactoring challenges}
-One of the main challenges was keeping documentation in sync with the code. As project evolved, UML diagrams and CRC cards had to be constantly updated to reflect latest refactored state, which was demanding to manage alongside development.
+One of the main challenges was keeping documentation in sync with the code. As project evolved, \acrshort{uml} diagrams and \acrshort{crc} cards had to be constantly updated to reflect latest refactored state, which was demanding to manage alongside development.
 
 Another significant hurdle that was encountered was that the code was written in an overly complex way, even though it followed the coding principles that were agreed on. This complexity meant that the refactoring took much more time than initially expected. The team had to spend the extra effort to simplify the logic and make it more readable without breaking any of functionality already implemented.
 
@@ -89,7 +89,7 @@ Testing was an important part of the project development to make sure the heat d
 It is important to note that the team faced a significant challenge with unit testing. Since a large part of the code was written using static and private classes and methods, it was very difficult to isolate individual components for pure unit tests. As a consequence, this static architecture and how specific the logic was, the team realized that traditional unit testing would not be suitable for this architecture. Instead of forcing tests that didn't fit the current structure, after receiving feedback from the lecturer, the team decided to focus on integration and functional tests. Therefore it was ensured that the different modules correctly worked together.
 
 \subsubsection{Implementation}
-All the tests were built on the xUnit framework. For testing the GUI, the \texttt{Avalonia.Headless.XUnit} extension was used, which allows testing the project without the need to physically open the application window.
+All the tests were built on the xUnit framework. For testing the \acrshort{gui}, the \texttt{Avalonia.Head\-less.XUnit} extension was used, which allows testing the project without the need to physically open the application window.
 
 As mentioned before, the team agreed on using a strict naming format for tests: Object\_Method\_ExpectedOutcome. A good example of the test naming format can be \texttt{ToggleLegend\_FlipsIsLegendExpanded\_Correctly}. This simple rule made all of the test reports much easier to read and understand.
 
@@ -98,14 +98,14 @@ Because some tests interacted with static resources and shared states (like Opti
 \subsubsection{Scope of testing}
 Unit tests were focused on the logic inside ViewModels and auxiliary services. A good example are tests for \texttt{DataVisualizerViewModel}, where it was tested whether theme colours switch correctly or if data aggregates correctly for summer and winter periods.
 
-Integration tests checked whether all managers interacted with external files correctly. The team verified if \texttt{AssetManager} and \texttt{SourceDataManager} correctly load data from both JSON and CSV files and if \texttt{ResultDataManager} produces results that are not empty, right after optimization runs.
+Integration tests checked whether all managers interacted with external files correctly. The team verified if \texttt{AssetManager} and \texttt{SourceDataManager} correctly load data from both \acrshort{json} and \acrshort{csv} files and if \texttt{ResultDataManager} produces results that are not empty, right after optimization runs.
 
 Functional tests were there to check whole business processes. For instance, tests confirmed that when selecting a Heat scenario, units like Gas Motor 1 or Electric Boiler 1 are correctly excluded from the calculation.
 
 \subsubsection{Benefits and limitations of testing}
 Thanks to the implemented tests, bugs were found much faster during refactoring, especially in complex math inside optimizer and when processing time series in SourceDataManager.
 
-However, testing GUI was quite hard and technically demanding because it had to simulate how user navigates between pages using CanGoNext and CanGoPrev. Development teams also lost some time and productivity in Sprint 4 having to figure out what to do with duplicate tests caused by misunderstanding and assumptions from team Slovaks.
+However, testing \acrshort{gui} was quite hard and technically demanding because it had to simulate how user navigates between pages using CanGoNext and CanGoPrev. Development teams also lost some time and productivity in Sprint 4 having to figure out what to do with duplicate tests caused by misunderstanding and assumptions from team Slovaks.
 
 In future projects, it would be beneficial to try mocking (for example with Moq library) to isolate tested logic from file system, which would make tests even faster and more stable.
 
@@ -121,9 +121,9 @@ As mentioned in testing section, current architecture relies heavily on static m
 \subsubsection{Future development}
 To address the issue with file paths, future version should use database to save data instead of files.
 \begin{itemize}
-    \item Since current system works with historical 14-days winter and summer periods from Excel/CSV files, an API client could be implemented. This client would call API from Energinet.dk to directly read electricity prices from their web server. Furthermore, it will be possible to implement APIs for communication between the modules instead of calling methods directly.
-    \item Another proposed feature is the ability to activate (allow) and deactivate (prohibit) units, change their statistics and create new units to be part of optimization directly from UI. This would make it much easier to simulate real maintenance periods. It could then directly compare results in terms of revenue, CO2 emissions and other metrics directly in data visualization.
-    \item Other than that, it is definitely possible to add map of the city into the application, with heating units and district heating network visually displayed as well as weather forecast by using meteorological API. Since heat demand usually depends on the temperature outside, using live weather data would make optimization much more realistic.
+    \item Since current system works with historical 14-days winter and summer periods from \acrshort{csv} files, an \acrshort{api} client could be implemented. This client would call \acrshort{api} from Energinet.dk to directly read electricity prices from their web server. Furthermore, it will be possible to implement \acrshort{api}s for communication between the modules instead of calling methods directly.
+    \item Another proposed feature is the ability to activate (allow) and deactivate (prohibit) units, change their statistics and create new units to be part of optimization directly from \acrshort{ui}. This would make it much easier to simulate real maintenance periods. It could then directly compare results in terms of revenue, CO2 emissions and other metrics directly in data visualization.
+    \item Other than that, it is definitely possible to add map of the city into the application, with heating units and district heating network visually displayed as well as weather forecast by using meteorological \acrshort{api}. Since heat demand usually depends on the temperature outside, using live weather data would make optimization much more realistic.
     \item Exporting is another step for future development. Adding an option to generate and export graphs and optimization results in various formats would be useful for company management and for presentations.
     \item Lastly, another proposed addition is the implementation of user authentication and roles. Since application would be used by different employees, having basic login system with roles (like Admin who can edit production units and Viewer who can only see charts) would help with improving the security of the optimizer application.
 \end{itemize}

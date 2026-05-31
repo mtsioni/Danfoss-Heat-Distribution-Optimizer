@@ -52,6 +52,7 @@
 \usepackage{pdfpages}
 \usepackage{array}
 \usepackage{layout}
+\usepackage[acronym]{glossaries}
 \pgfplotsset{compat=1.18}
 \usepgfplotslibrary{dateplot}
 
@@ -81,6 +82,47 @@
 \makenomenclature                                             % Create a nomenclature
 \setlength{\nomlabelwidth}{10mm}                              % Set width of nomenclature label
 \setlength{\headheight}{14pt}                                 % Minimum hadhight length
+% -------------------------------------------------------------
+% CREATE ABBREVIATIONS
+% -------------------------------------------------------------
+\makeglossaries
+
+\newacronym{sdu}{SDU}{University of Southern Denmark}
+\newacronym{fr}{FR}{Functional Requirement}
+\newacronym{nfr}{NFR}{Non-Functional Requirement}
+\newacronym{gui}{GUI}{Graphical User Interface}
+\newacronym{am}{AM}{Asset Manager}
+\newacronym{sdm}{SDM}{Source Data Manager}
+\newacronym{opt}{OPT}{Optimizer}
+\newacronym{rdm}{RDM}{Result Data Manager}
+\newacronym{dv}{DV}{Data Visualization}
+\newacronym{csv}{CSV}{Comma Separated Values}
+\newacronym{mvvm}{MVVM}{Model View View-Model}
+\newacronym{sm}{SM}{Scrum Master}
+\newacronym{dt}{DT}{Development Team}
+\newacronym{po}{PO}{Product Owner}
+\newacronym{uml}{UML}{Unified Modeling Language}
+\newacronym{crc}{CRC}{Class Responsibility Collaboration}
+\newacronym{xml}{XML}{Extensible Markup Language}
+\newacronym{xlsx}{XLSX}{Microsoft Excel Open \acrshort{xml} Spreadsheet}
+\newacronym{ui}{UI}{User Interface}
+\newacronym{srp}{SRP}{Single Responsibility Principle}
+\newacronym{ocp}{OCP}{Open/Closed Principle}
+\newacronym{lsp}{LSP}{Liskov Substitution Principle}
+\newacronym{isp}{ISP}{Interface Segregation Principle}
+\newacronym{dip}{DIP}{Dependency Injection Principle}
+\newacronym{solid}{SOLID}{\acrshort{srp} \acrshort{ocp} \acrshort{lsp} \acrshort{isp} \acrshort{dip}}
+\newacronym{xaml}{XAML}{Extensible Application Markup Language}
+\newacronym{axaml}{AXAML}{Avalonia \acrshort{xaml}}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{io}{I/O}{Input Output}
+\newacronym{api}{API}{Application Programming Interface}
+\newacronym{us}{US}{United States of America}
+\newacronym{ai}{AI}{Artificial Inteligence}
+\newacronym{os}{OS}{Operating System}
+\newacronym{ux}{UX}{User Experience}
+\newacronym{png}{PNG}{Portable Network Graphics}
+\newacronym{rgb}{RGB}{Red Green Blue}
 
 % -------------------------------------------------------------
 % START DOCUMENT CONTENT
@@ -125,6 +167,8 @@
 % -------------------------------------------------------------
 \tableofcontents                                              % Add table of contents
 \listoftables    
+\printglossary
+\printglossary[type=\acronymtype]
 \newpage                                                       
 
 % -------------------------------------------------------------

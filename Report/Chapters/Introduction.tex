@@ -7,23 +7,23 @@
 \subsection{Project Requirements}
 \textbf{Functional Requirements:}
 \begin{itemize}
-    \item \textbf{FR-1:} The system must secure heat for about 1600 buildings in the district heating area.
+    \item \textbf{\acrshort{fr}-1:} The system must secure heat for about 1600 buildings in the district heating area.
     It must guarantee that total heat production meets demand if a feasible solution exists.
-    \item \textbf{FR-2:} The system must produce heat at the lowest costs. It must calculate "net production costs"
+    \item \textbf{\acrshort{fr}-2:} The system must produce heat at the lowest costs. It must calculate "net production costs"
     for each unit per hour to find the cheapest way.
-    \item \textbf{FR-3:} The system must use the electricity market to get the highest profit (from selling) or lowest costs (from buying).
+    \item \textbf{\acrshort{fr}-3:} The system must use the electricity market to get the highest profit (from selling) or lowest costs (from buying).
     It should handle negative prices where you get paid to consume electricity.
-    \item \textbf{FR-4:} The system has to consist of 5 modules, namely: \textbf{Asset Manager}, \textbf{Source Data Manager},
+    \item \textbf{\acrshort{fr}-4:} The system has to consist of 5 modules, namely: \textbf{Asset Manager}, \textbf{Source Data Manager},
     \textbf{Result Data Manager}, \textbf{Optimizer}, and \textbf{Data Visualization}.
-    \item \textbf{FR-5:} The system must be able to operate in two distinct opearational scenarios.
+    \item \textbf{\acrshort{fr}-5:} The system must be able to operate in two distinct opearational scenarios.
         \begin{itemize}[label=\textbullet]
-            \item \textbf{FR-5.1:} Scenario 1 = The system must operate for a district heating area using 3 Gas Boilers (\textbf{
+            \item \textbf{\acrshort{fr}-5.1:} Scenario 1 = The system must operate for a district heating area using 3 Gas Boilers (\textbf{
             Gas Boiler 1, Gas Boiler 2, Gas Boiler 3}) and one Oil Boiler (\textbf{Oil Boiler 1}).
-            \item \textbf{FR-5.2:} Scenario 2 = The system must operate for a district heating area using 2 Gas Boilers (\textbf{
-            Gas Boiler 1, Gas Boiler 3}), one Gas Motor (\textbf{Gas MOtotr 1}), and one Electric Boiler (\textbf{Electric Boiler 1}).
+            \item \textbf{\acrshort{fr}-5.2:} Scenario 2 = The system must operate for a district heating area using 2 Gas Boilers (\textbf{
+            Gas Boiler 1, Gas Boiler 3}), one Gas Motor (\textbf{Gas Motor 1}), and one Electric Boiler (\textbf{Electric Boiler 1}).
         \end{itemize}
-    \item \textbf{FR-6:} The system must be able to operate in two distinct, 14-days long seasonal periods, in Summer and in Winter.
-    \item \textbf{FR-7:} The system must allow for a maintenance period to be scheduled between 30 and 60 hours where one unit is
+    \item \textbf{\acrshort{fr}-6:} The system must be able to operate in two distinct, 14-days long seasonal periods, in Summer and in Winter.
+    \item \textbf{\acrshort{fr}-7:} The system must allow for a maintenance period to be scheduled between 30 and 60 hours where one unit is
     offline and not used by the \textbf{Optimizer}.
 \end{itemize}
 
@@ -31,13 +31,13 @@
 
 \noindent \textbf{Non-functional Requirements:}
 \begin{itemize}
-    \item \textbf{NFR-1 (Modularity):} The system must have a modular architecture so components can be replaced or extended easily.
-    \item \textbf{NFR-2 (Time Resolution):} All data and calclulations must use a strict 1-hour time resolution.
-    \item \textbf{NFR-3 (Tech Stack):} Developed in .NET using an object-oriented language like C\#.
-    \item \textbf{NFR-4 (Storage):}  The system must use local file formats like csv or excel for data.
-    \item \textbf{NFR-5 (Usability):} The GUI should let users configure scenarios and run optimization without
-    editting config files directly.
-    \item \textbf{NFR-6 (Testing):} The code should follow good practices and include tests for the subsystems.
+    \item \textbf{\acrshort{nfr}-1 (Modularity):} The system must have a modular architecture so components can be replaced or extended easily.
+    \item \textbf{\acrshort{nfr}-2 (Time Resolution):} All data and calclulations must use a strict 1-hour time resolution.
+    \item \textbf{\acrshort{nfr}-3 (Tech Stack):} Developed in .NET using an object-oriented language like C\#.
+    \item \textbf{\acrshort{nfr}-4 (Storage):}  The system must use local file formats like \acrshort{csv} or excel for data.
+    \item \textbf{\acrshort{nfr}-5 (Usability):} The \acrshort{gui} should let users configure scenarios and run optimization without
+    editting configuration files directly.
+    \item \textbf{\acrshort{nfr}-6 (Testing):} The code should follow good practices and include tests for the subsystems.
 \end{itemize}
 
 \subsection{Project Objectives}
@@ -57,15 +57,15 @@ from the electricty generation.
 \begin{itemize}
     \item Develop a modular software system consisting of 5 different modules (see Appendix~\ref{sec:intro}  Fig.~\ref{fig:architecture}), namely:
         \begin{enumerate}
-            \item \textbf{Asset Manager (AM)} - acts as a source repository for static system information,
+            \item \textbf{\acrfull{am}} - acts as a source repository for static system information,
             responsible for retrieving the data when called by the \textbf{Optimizer} module or the \textbf{Data Visualization} module
-            \item \textbf{Source Data Manager (SDM)} - acts as a source repository for dynamic system information,
+            \item \textbf{\acrfull{sdm}} - acts as a source repository for dynamic system information,
             responsible for retrieving the data when called by the \textbf{Optimizer} module or the \textbf{Data Visualization} module
-            \item \textbf{Result Data Manager (RDM)} - acts as a sink repository for optimization results,
-            responsible for saving the optimized data from the \textbf{Optimizer} module into CSV files for each unit, and retrieving that data
+            \item \textbf{\acrfull{rdm}} - acts as a sink repository for optimization results,
+            responsible for saving the optimized data from the \textbf{Optimizer} module into \acrshort{csv} files for each unit, and retrieving that data
             when called by the \textbf{Data Visualization} module
-            \item \textbf{Optimizer (OPT)} - serves as a kernel module for optimization of the energy production
-            \item \textbf{Data Visualization (DV)} - responsible for visualizing the optimized result data in a clear and
+            \item \textbf{\acrfull{opt}} - serves as a kernel module for optimization of the energy production
+            \item \textbf{\acrfull{dv}} - responsible for visualizing the optimized result data in a clear and
             understandable format
         \end{enumerate}
 \end{itemize}
@@ -74,11 +74,11 @@ from the electricty generation.
     \item Develop the logic for the \textbf{Optimizer} module, so that it can generate optimization of the heat production
     and distribution schedule with the lowest possible operational cost, and with the highest possible revenue
     \item Design the system to support two operational scenarios and two different seasonal periods, the summer period and the winter period
-    \item Design the \textbf{Result Data Manager} so it stores all of the optimized result data into CSV files with the name identical
+    \item Design the \textbf{Result Data Manager} so it stores all of the optimized result data into \acrshort{csv} files with the name identical
     to the production unit name
-    \item Develop a GUI using the programming language C\# and the Avalonia module and its library
-    \item Implement a control panel in the GUI for the operational scenarios switching
-    \item Implement a maintenance control panel in the GUI for scheduling the production unit maintenance period
+    \item Develop a \acrshort{gui} using the programming language C\# and the Avalonia module and its library
+    \item Implement a control panel in the \acrshort{gui} for the operational scenarios switching
+    \item Implement a maintenance control panel in the \acrshort{gui} for scheduling the production unit maintenance period
     \item Implement the functionality that allows the user to switch between dark and light theme in order to improve the user experience
 \end{itemize}
 
@@ -95,7 +95,7 @@ In addition, the manual system requires an overwhelming amount of time for the s
 \textit{Danfoss} seeks an automated software system that optimizes the heat generation and distribution hourly,
 aiming to obtain the grestest revenue possible, while minimizing the expenses. The proposed solution is a
 modular software system consisting of \textbf{Asset Manager}, \textbf{Source Data Manager}, \textbf{Result Data Manager},
-\textbf{Optimizer}, and \textbf{Data Visualization}, developed in C\# using the .NET framework and the MVVM architecture.
+\textbf{Optimizer}, and \textbf{Data Visualization}, developed in C\# using the .NET framework and the \acrshort{mvvm} architecture.\acrfull{am}
 
 \subsection{Background}
 \textit{Danfoss} company is facing a significant challenge with scheduling the heat distribution to

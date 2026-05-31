@@ -6,22 +6,22 @@
 \raggedbottom
 \section{Frontend}
 
-\subsection{Architecture and Technology Stack (MVVM in Avalonia UI)}
+\subsection{Architecture and Technology Stack (\acrshort{mvvm} in Avalonia \acrshort{ui})}
 \label{sec:architecture-mvvm-avalonia}
 
-The client application is built on the .NET platform using the Avalonia UI framework. Avalonia was implemented for its consistency with the Advanced Object-Oriented Programming course curriculum. The layout is described in AXAML markup files. The C\# code-behind only contains what cannot be expressed declaratively.
+The client application is built on the .NET platform using the Avalonia \acrshort{ui} framework. Avalonia was implemented for its consistency with the Advanced Object-Oriented Programming course curriculum. The layout is described in \acrshort{axaml} markup files. The C\# code-behind only contains what cannot be expressed declaratively.
 
-The internal structure follows the Model--View--ViewModel (MVVM) pattern. MVVM was selected because the user interface and the optimization logic had to be developed in parallel by multiple teams and the pattern enforces a clear boundary between them. Keeping the View independent from the optimization code also made it possible to test the ViewModels in isolation, without instantiating any Avalonia controls. The three layers are organised as follows:
+The internal structure follows the \acrfull{mvvm} pattern. \acrshort{mvvm} was selected because the user interface and the optimization logic had to be developed in parallel by multiple teams and the pattern enforces a clear boundary between them. Keeping the View independent from the optimization code also made it possible to test the ViewModels in isolation, without instantiating any Avalonia controls. The three layers are organised as follows:
 
 \begin{itemize}
-    \item \textbf{View:} The interface is defined in \texttt{MainWindow.axaml}. The file contains only AXAML - layouts, styles, themes and bindings to the corresponding ViewModels. The \texttt{MainWindow.axaml.cs} is intentionally kept minimal and only handles operations that cannot be expressed through bindings, such as loading the logo asset and switching between the application's pages.
-    \item \textbf{ViewModel:} \texttt{MainWindowViewModel.cs} acts as the root ViewModel and owns the nested ViewModels used by the rest of the application. \texttt{DataVisualizerViewModel.cs} holds the state and configuration of the interactive charts and \texttt{UnitViewModel.cs} exposes the parameters and operational constraints of an individual heat production unit to the View.
+    \item \textbf{View:} The interface is defined in \texttt{MainWindow.axaml}. The file contains only \acrshort{axaml} - layouts, styles, themes and bindings to the corresponding ViewModels. The \texttt{MainWindow.axaml.cs} is intentionally kept minimal and only handles operations that cannot be expressed through bindings, such as loading the logo asset and switching between the application's pages.
+    \item \textbf{ViewModel:} \texttt{MainWindowViewModel.cs} acts as the root ViewModel and owns the nested ViewModels used by the rest of the application. \texttt{DataVisualizer\-ViewModel.cs} holds the state and configuration of the interactive charts and \texttt{UnitViewModel.cs} exposes the parameters and operational constraints of an individual heat production unit to the View.
     \item \textbf{Model:} The data layer is represented by the \texttt{DataVisualizerModel.cs} class, which contains time series data, data on previous operations, and data from the optimizer. This class provides access to the data needed for further visualization in the form convenient for use in the ViewModels.
 \end{itemize}
 
 Interaction between all three layers in the architecture is provided via the ReactiveUI library. The observable properties of both Models and ViewModels are created using the \texttt{RaiseAndSetIfChanged} method, which raises the property changed event each time the corresponding value changes. Thus, any change in the View, such as changing the slider to maintain a particular heat-producing unit, changes the value in the ViewModel, Optimizer recalculates the results, and new graph shown. Therefore, there is no need to explicitly call refreshing in the View.
 
-\subsection{UI Elements and Styling}
+\subsection{\acrshort{ui} Elements and Styling}
 The layout of the user interface was designed for easy access to features; therefore, all functionalities are available in one place. The operator has access to everything the system can execute, from scenario switching and period switching to maintenance planning. The entire interface is defined in the MainWindow.axaml file and is structured within a Grid container.
 
 The left section, the \textbf{Control Panel}, consists of a dark red column, two radio buttons, a slider, a dropdown menu, and a theme toggle switch. The background of the \textbf{Control Panel} is  \textit{Danfoss}-inspired red.
@@ -42,7 +42,7 @@ The right section - the \textbf{Main Section} - consists of 3 vertical areas:
     \item \textbf{Production Units Cards} - A responsive \texttt{UniformGrid} with three columns, located at the very bottom of the screen below the \textbf{Interactive Chart} section, displaying detailed specification of three production units at once. Arrows on the left and the right side of this section allow the operator to navigate between all available production units. The system automatically creates a new page of production unit cards when new units are added.
 \end{enumerate}
 
-To ensure a proffesional interface, there were multiple overrides defined for the \texttt{ControlTemplate} in \texttt{Window.Style}, inside the \texttt{MainWindow.axaml} file. The traditional radio buttons were transformed into a more modern segmented buttons. The following XAML code snippet defines the right-rounded radio button segment with a checkmark visible only when selected. (see Appendix~\ref{sec:styling}  Fig.~\ref{fig:radiobutton})
+To ensure a proffesional interface, there were multiple overrides defined for the \texttt{ControlTemplate} in \texttt{Window.Style}, inside the \texttt{MainWindow.axaml} file. The traditional radio buttons were transformed into a more modern segmented buttons. The following \acrshort{axaml} code snippet defines the right-rounded radio button segment with a checkmark visible only when selected. (see Appendix~\ref{sec:styling}  Fig.~\ref{fig:radiobutton})
 
 The combo box for selecting production units for maintenance scheduling is also visually customized to have dark-red background, white text, and both hover and selection states.
 (see Appendix~\ref{sec:styling}  Fig.~\ref{fig:combobox})
@@ -58,7 +58,7 @@ During the architecture design phase, the main goal of the team was to clearly s
 \begin{enumerate}
     \sloppy
     \item \textbf{Initialisation}\\
-    After the app is launched, \texttt{MainWindow}\allowbreak\texttt{ViewModel} becomes the most important class, since it essentially controls the app flow. This ViewModel requests a list of all available production units using the Asset Manager's \texttt{AssetManager.}\allowbreak\texttt{GetDataForDataVisualizer()} method. In order for the app to load quickly and remain smooth, the \texttt{AssetManager} class is designed to cache all loaded data. When the app is launched for the first time, it uses the \texttt{AssetsLoader} class to read and parse the data from JSON files. Whenever the \texttt{AssetManager} is called again, it does not need to read the data from disk, but rather returns the data directly from the cache. This approach helps to decrease latency as much as possible and ensures that the UI loads more quickly, even with a growing number of production units.
+    After the app is launched, \texttt{MainWindow}\allowbreak\texttt{ViewModel} becomes the most important class, since it essentially controls the app flow. This ViewModel requests a list of all available production units using the Asset Manager's \texttt{AssetManager.}\allowbreak\texttt{GetDataForDataVisualizer()} method. In order for the app to load quickly and remain smooth, the \texttt{AssetManager} class is designed to cache all loaded data. When the app is launched for the first time, it uses the \texttt{AssetsLoader} class to read and parse the data from \acrshort{json} files. Whenever the \texttt{AssetManager} is called again, it does not need to read the data from disk, but rather returns the data directly from the cache. This approach helps to decrease latency as much as possible and ensures that the \acrshort{ui} loads more quickly, even with a growing number of production units.
 
     \item \textbf{Optimisation}\\
     The optimisation data cycle begins whenever the operator uses the control panel to change the configuration. It can be initiated by either changing the scenario, switching the optimisation period between summer and winter, or adjusting the maintenance settings.
@@ -66,18 +66,18 @@ During the architecture design phase, the main goal of the team was to clearly s
     \begin{itemize}
         \item \texttt{MainWindow}\allowbreak\texttt{ViewModel} detects changes in the configuration and launches the \texttt{RefreshData}\allowbreak\texttt{AndChart()} method. This method handles synchronisation of the scenario configuration using the \texttt{ScenarioManager.}\allowbreak\texttt{CurrentScenario} method. Afterwards, the \texttt{SyncOptimization}\allowbreak\texttt{Period()} method is called, which defines clear time boundaries for both the winter and summer periods. The summer period ranges from 8 September to 22 September, while the winter period ranges from 5 January to 19 January. Maintenance settings are sent to the Optimizer module using the \texttt{Optimizer.}\allowbreak\texttt{SetMaintenanceData()} method.
         \item After all configuration data is saved, \texttt{MainWindow}\allowbreak\texttt{ViewModel} instructs \texttt{DataVisualizer}\allowbreak\texttt{Model} to update the data using \texttt{Visualizer.}\allowbreak\texttt{Model.}\allowbreak\texttt{UpdateData()}. At this stage, \texttt{DataVisualizer}\allowbreak\texttt{Model} requests data from \texttt{ResultData}\allowbreak\texttt{Manager}, which starts the optimisation process. The goal of the optimisation is to meet the heat demand using the available production units. The \texttt{Optimizer} calculates workload and then selects the most profitable configuration of units to activate.
-        \item When the optimisation process is complete, \texttt{ResultData}\allowbreak\texttt{Manager} saves the result data into CSV files using the \texttt{SaveResultData()} method. These records serve as a debugging tool if the optimisation does not run correctly or for occasional audits.
-        \item In the end, the \texttt{DataVisualizer}\allowbreak\texttt{Model} receives the result data in form of \texttt{OptimizedUnit}. It prepares the data for the \texttt{DataVisualizer}\allowbreak\texttt{ViewModel}, where the resulting \texttt{TimeSeries} data are converted into curves and bars on the chart. The \texttt{UpdatePlot()} method links units with the correct colours from \texttt{ChartColors.cs}, sets up axes using \texttt{Axes.cs}, the legend using \texttt{Legend.cs}, and calls \texttt{InvalidatePlot(true)} to ensure that the updated graph is displayed immediately within the GUI.
+        \item When the optimisation process is complete, \texttt{ResultData}\allowbreak\texttt{Manager} saves the result data into \acrshort{csv} files using the \texttt{SaveResultData()} method. These records serve as a debugging tool if the optimisation does not run correctly or for occasional audits.
+        \item In the end, the \texttt{DataVisualizer}\allowbreak\texttt{Model} receives the result data in form of \texttt{OptimizedUnit}. It prepares the data for the \texttt{DataVisualizer}\allowbreak\texttt{ViewModel}, where the resulting \texttt{TimeSeries} data are converted into curves and bars on the chart. The \texttt{UpdatePlot()} method links units with the correct colours from \texttt{ChartColors.cs}, sets up axes using \texttt{Axes.cs}, the legend using \texttt{Legend.cs}, and calls \texttt{InvalidatePlot(true)} to ensure that the updated graph is displayed immediately within the \acrshort{gui}.
     \end{itemize}
 \end{enumerate}
 
-\noindent Due to this strictly designed data architecture, the entire 14-day optimisation, including exporting data into CSV files and rendering of complex graphs is seamless. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
+\noindent Due to this strictly designed data architecture, the entire 14-day optimisation, including exporting data into \acrshort{csv} files and rendering of complex graphs is seamless. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
 
 \section{Backend}
 
 \subsection{Asset Manager}
 
-The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and saves all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection. 
+The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and saves all the data from a \acrshort{csv} file and verifies that all the data contains the correct type, to ensure early error detection. 
 The initialized data is provided to the Optimizer by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method, which turns the Required data into a list of generic units, by using the \texttt{GenericToOptimizedAdapter}.
 Each individual unit of the list gets identified as a specific type of unit: \textbf{ElectricUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit}.
 The described progress got accomplished by the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method.
@@ -86,7 +86,7 @@ The optimized units get collected as a list of OptimizedUnit and returned by the
 
 \subsection{Source Data Manager}
 
-The data, which contains the optimization period, the heat demand and electricity prices is provided by the \texttt{SourceDataManager}. Heat demand and electricity prices are loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
+The data, which contains the optimization period, the heat demand and electricity prices is provided by the \texttt{SourceDataManager}. Heat demand and electricity prices are loaded from a \acrshort{csv} file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
 
 \subsection{Optimizer}
 
@@ -98,26 +98,26 @@ The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method calls all other met
 \section{Data Management}
 
 The data management handles the movement of information across the system.
-It has the ability to read static asset data from JSON files, load time-dependent data from CSV file and give back optimized results for research, audit and debug purposes. In the system, there are three dedicated classes that handle these I/O operations, as well as the format handling. The reason behind this approach is because in this way the core optimization logic stays separated and independent from file formatting building processes of the final data. Other than clear separation of concerns, this method of data management provides independent testing, as well opportunities for future expanding of the data management system.
+It has the ability to read static asset data from \acrshort{json} files, load time-dependent data from \acrshort{csv} file and give back optimized results for research, audit and debug purposes. In the system, there are three dedicated classes that handle these \acrshort{io} operations, as well as the format handling. The reason behind this approach is because in this way the core optimization logic stays separated and independent from file formatting building processes of the final data. Other than clear separation of concerns, this method of data management provides independent testing, as well opportunities for future expanding of the data management system.
 
 \subsection{Asset Loader}
 
 The \texttt{AssetsLoader} class can read the production units from the \texttt{Production\-Units.json} file,
 which is located in the Assets folder.
 Each production unit is defined by nine properties; unit ID, name, maximum heat capacity, fuel type, maximum electricity capacity,
-production cost, fuel consumption, emissions and image path for the UI display.
+production cost, fuel consumption, emissions and image path for the \acrshort{ui} display.
 
 The loading process begins with a method that tries to find the path of the Assets folder.
 This method checks two locations, first the root directory, then it checks a fallback path in case the building
 of the program is happening in a debug mode. This approach ensures that the application will run whether is being executed
 from the project root or not. This approach was established to accomodate various errors that occured while trying to deploy the app via different operating systems.
 
-Then, there is the \texttt{LoadUnits()} method which parses the JSON file using the \texttt{JsonDocument}
-API from the System.Text.Json library. For each unit in the JSON array, the method extracts the nine properties
+Then, there is the \texttt{LoadUnits()} method which parses the \acrshort{json} file using the \texttt{JsonDocument}
+\acrshort{api} from the System.Text.Json library. For each unit in the \acrshort{json} array, the method extracts the nine properties
 using the \texttt{TryGetProperty()} calls, which prevents exceptions if a property is missing or not implemented correctly.
 Each extracted unit is instantiated as a \texttt{GenericUnit} object and added to a list. If an error occurs, for example the
-file is not found or JSON is incorrect, the method returns an empty list, instead of letting the application crash.
-This approach was implemented to keep the UI intact even if the assets are not loaded.
+file is not found or \acrshort{json} is incorrect, the method returns an empty list, instead of letting the application crash.
+This approach was implemented to keep the \acrshort{ui} intact even if the assets are not loaded.
 
 The \texttt{AssetsLoader} class is implemented as static, which eliminates the need of multiple instantiations of the class.
 This approach indicates that the class is a tool with no internal state to maintain between calls.
@@ -128,56 +128,56 @@ The \texttt{SourceDataLoader} class reads time based operational data from \text
 which contains heat demand and electricity price values organized by timestamps. Unlike the static asset loader, this data is dependent on time and it must have the ability to support searching through that data in hourly intervals.
 
 The core loading logic uses the CsvHelper library in the \texttt{SourceDataLoader.cs} file,
-which handles the complexity of CSV parsing through column mapping. The \texttt{SourceDataModel}
-classes define properties of the CSV files with \texttt{[Index(n)]} attributes that specify the exact CSV column position for each value.
+which handles the complexity of \acrshort{csv} parsing through column mapping. The \texttt{SourceDataModel}
+classes define properties of the \acrshort{csv} files with \texttt{[Index(n)]} attributes that specify the exact \acrshort{csv} column position for each value.
 For example, \texttt{SourceDataModelHeatDemand} specifies that column 0 contains the winter timestamp, column 2 the winter heat demand value,
 column 5 the summer timestamp, and column 7 the summer value. This approach prevents the common error of manually parsing
-CSV lines and accidentally reading from incorrect columns.
+\acrshort{csv} lines and accidentally reading from incorrect columns.
 
 The loaded data is stored in a \texttt{TimeSeries<double>} object, a generic container using \texttt{Dictionary<DateTime, T>} internally.
 This design was applied in order to prioritize searching performance rather than iterating through a list to find values.
 Due to this approach the optimizer can directly access any timestamp without difficulties. For example during the optimization process,
 when the algorithm searches for heat demand at 2024-01-15 12:00, the dictionary lookup is instant regardless of the  size of the data in
-the csv file.
+the \acrshort{csv} file.
 
 The format consistency is enforced through two methods. First, the datetime format is standardized to \texttt{"dd.MM.yyyy HH:mm"},
 which is European format including day, month, year, hour, and minute. Second, \texttt{CultureInfo.InvariantCulture}
-ensures that numeric values parse identically on any system. Without the invariant culture method, a CSV containing \texttt{123.45}
-on a US system might be misinterpreted as \texttt{12345} on a system using comma as the decimal separator.
+ensures that numeric values parse identically on any system. Without the invariant culture method, a \acrshort{csv} containing \texttt{123.45}
+on a \acrshort{us} system might be misinterpreted as \texttt{12345} on a system using comma as the decimal separator.
 
 Lastly, validation occurs at multiple places. In the beginning of the \texttt{LoadSourceData} there is an "if-statement" that validates if the input argument is either \texttt{"HeatDemand"} or \texttt{"ElectricityPrice"}, rejecting invalid requests with an exception.
 Immediately after, there is a second "if-statement" that verifies file existence before attempting to parse.
 
 \subsection{Result Data Saver}
 
-Once the optimizer completes its calculations, it produces \texttt{OptimizedUnit} objects containing hourly time-series data for each active production unit. The \texttt{ResultDataSaver} class converts these results into CSV files for saving, auditing and researching purposes.
+Once the optimizer completes its calculations, it produces \texttt{OptimizedUnit} objects containing hourly time-series data for each active production unit. The \texttt{ResultDataSaver} class converts these results into \acrshort{csv} files for saving, auditing and researching purposes.
 
-First, the \texttt{SaveToCSV()} method detects if the path of the Assets folder is correct, using the same path-finding approach as \texttt{AssetsLoader} does and described earlier. This allows result CSV files to be written to the correct location regardless of how the application is launched.
+First, the \texttt{SaveToCSV()} method detects if the path of the Assets folder is correct, using the same path-finding approach as \texttt{AssetsLoader} does and described earlier. This allows result \acrshort{csv} files to be written to the correct location regardless of how the application is launched.
 
 Second, the method creates the path for the optimization results, dynamically. Rather than assuming that \texttt{Assets/ResultData/}
 already exists, the code creates the path if missing, using \texttt{Directory.CreateDirectory()}.
 This approach eliminates a deployment error were missing directories cause exceptions at runtime.
 
-Third, each production unit receives its own CSV file allowing resulted data for each unit to be looked up independently.
+Third, each production unit receives its own \acrshort{csv} file allowing resulted data for each unit to be looked up independently.
 The filename is constructed as \texttt{\{UnitName\}.csv}, making it clear which unit's data is in each file.
 
-The \texttt{ConvertToCSV()} method generates the CSV content. It writes this explicit header
+The \texttt{ConvertToCSV()} method generates the \acrshort{csv} content. It writes this explicit header
 row \texttt{Time,HeatMWh,Electricity,ProductionCost,FuelConsumption,Co2\-Emissions}.
 This header is hardcoded rather than generated through reflection, ensuring clarity
 about which fields are being exported. Each data row uses the same datetime format as the input data (\texttt{dd.MM.yyyy HH:mm})
 and applies \texttt{CultureInfo.Invariant\-Culture} to all numeric values. This format symmetry between input data
-and output resulted data ensures that a CSV file saved by the system can be re-parsed correctly using the same \texttt{SourceDataLoader} logic,
+and output resulted data ensures that a \acrshort{csv} file saved by the system can be re-parsed correctly using the same \texttt{SourceDataLoader} logic,
 maintaining consistency across the data in the system.
 
 \subsection{Architecture}
 
 The three loader/saver classes form a linear data architecture through their shared design patterns and principles.
-Each class has a single responsibility: \texttt{AssetsLoader} handles JSON parsing for static data parsing,
-\texttt{SourceDataLoader} handles CSV parsing for time-indexed given data, and \texttt{ResultDataSaver} handles CSV generation for results.
+Each class has a single responsibility: \texttt{AssetsLoader} handles \acrshort{json} parsing for static data parsing,
+\texttt{SourceDataLoader} handles \acrshort{csv} parsing for time-indexed given data, and \texttt{ResultDataSaver} handles \acrshort{csv} generation for results.
 None of these classes depend on each other, and none coordinate with business logic; they are tools that can be tested independently,
 reused and expanded in different contexts.
 
-The separation of data I/O from business logic allows to develop and test the data layer independently
+The separation of data \acrshort{io} from business logic allows to develop and test the data layer independently
 from the optimization algorithms. The optimizer could request data from \texttt{SourceDataLoader} without caring where this data came from.
-Similarly, results could be saved to CSV via \texttt{ResultDataSaver} and later audited or re-imported without modifying the optimizer.
+Similarly, results could be saved to \acrshort{csv} via \texttt{ResultDataSaver} and later audited or re-imported without modifying the optimizer.
 This architectural clarity made the system maintainable and extensible for future implementations.
