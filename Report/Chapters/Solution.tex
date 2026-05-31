@@ -5,13 +5,13 @@
 \noindent Unified Modeling Language Diagrams are tools used to describe and design software artifacts.
 
 \subsection{Activity Diagrams:}
-\noindent Activity diagrams represent the optimization algorithm. The process takes place inside the optimizer class, and begins when the GetResultData method of the optimizer is called by the Result Data Manager. GetResultData method calls the Optimize method, which proceeds to retrieve all data necessary for optimization to commence. 
+\noindent Activity diagrams (see Figure~\ref{fig:ActivityDiagrams}) below represent the optimization algorithm. The process takes place inside the optimizer class, and begins when the GetResultData method of the Optimizer is called by the Result Data Manager. GetResultData method calls the Optimize method, which proceeds to retrieve all data necessary for optimization to commence. 
 
-\noindent When data has been gathered it enters a loop, iterating through every hour of each day of the optimization period. At the beginning of each iteration it checks if the gathered data is workable, after, if data is correct, the process continues. The weighted ratio of heat to price of each unit is calculated, and then the optimal unit is selected to be used in heat production and usage is recorded. These processes are performed by CalculateHeatPerPrice and ChooseAndRecordUsage methods.
+\noindent When data has been gathered it enters a loop, iterating through every hour of each day of the optimization period. At the beginning of each iteration it checks if the gathered data is workable. Afterwards, if the data is correct, the process continues. The weighted ratio of heat to price of each unit is calculated, and then the optimal unit is selected to be used in heat production and usage is recorded. These processes are performed by CalculateHeatPerPrice and ChooseAndRecordUsage methods.
 
-\noindent CalculateHeatPerPrice method iterates through the available units. For each unit ratio is calculated by first finding heat divided by price, and if ratio is negative it is weighted by a factor of 10, then in both cases the absolute value is taken. Negative ratios are weighted to increase priority of the respective unit, because negative heat to price ratio means that the unit generates profit. 
+\noindent CalculateHeatPerPrice method iterates through the available units. For each unit, ratio is calculated by finding heat divided by price. At the same time, if the ratio is negative it is weighted by a factor of 10. Then, in both cases the absolute value is taken. Negative ratios are weighted to increase priority of the respective unit, because negative heat to price ratio means that the unit generates profit. 
 
-\noindent ChooseAndRecordUsage method first sorts units by their heat per price ratio. When the list is sorted, method starts iterating through the sorted list. In iterations it keeps track of heat demand, how much heat has been produced and how many units are available. Iterating stops if it runs out of units or if the heat demand is reached. At the beginning of each iteration it checks if the current unit is on maintenance. If unit is on maintenance it is skipped, otherwise iteration continues. The next step is to check if the unit's maximum heat production exceeds remaining heat demand, which is the difference of total heat demand and produced heat. This is done to calculate workload - a coefficient from 0 to 1 that represents how much unit is used. If heat production is not exceeded the workload is 1, otherwise it is calculated by dividing remaining heat demand by the current unit's maximum heat production. After workload is calculated, produced heat is increased by current unit’s maximum heat production multiplied by workload. When the unit is used, its characteristics multiplied by workload are recorded.
+\noindent ChooseAndRecordUsage method first sorts units by their heat per price ratio. When the list is sorted, method starts iterating through the sorted list. In iterations, it keeps track of: heat demand, how much heat has been produced and how many units are available. Iterating stops if it runs out of units or if the heat demand is reached. At the beginning of each iteration it checks if the current unit is under maintenance. If it is, it is then skipped. Otherwise, iteration continues. The next step is to check if the unit's maximum heat production exceeds remaining heat demand, which is the difference of total heat demand and produced heat. This is done to calculate workload \textendash~a coefficient from 0 to 1 that represents how much unit is used. If heat production is not exceeded the workload is 1, otherwise it is calculated by dividing remaining heat demand by the current unit's maximum heat production. After workload is calculated, produced heat is increased by current unit’s maximum heat production multiplied by workload. When the unit is used, its characteristics multiplied by workload are recorded.
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{ActivityDiagram.png}
@@ -25,13 +25,13 @@
 
 \noindent Requests can be made from several parts of the Presentation layer, which is represented as a found message.
 
-\noindent The Result Data Manager makes a self-call that then calls the Optimizer. After that is resolved, within the same self-call another self-call is made to save Optimization results in local .csv files. For data management a call to a separate class is made, represented as a lost message. After that, the Result Data Manager’s sequence ends. 
+\noindent The Result Data Manager makes a self-call that then calls the Optimizer. After it is resolved, within the same self-call, another self-call is made to save Optimization results in local .csv files. For data management, a call to a separate class is made, represented as a lost message. After that, the Result Data Manager’s sequence ends. 
 
 \noindent The Optimizer makes a self-call that then makes three self-calls, first resulting in a call to the Asset Manager and second in two calls to the Source Data Manager. It then enters a loop of two self-calls. After that Optimizer’s sequence ends.
 
-\noindent The Asset Manager makes a self-call to initialize. Initialization is performed by making a request to a separate class, this is represented as a lost message. After that is resolved Asset Manager uses two different classes to provide the correct scenario with units of correct types. Requests to those classes are represented as lost messages. After that, Asset Manager’s sequence ends.
+\noindent The Asset Manager makes a self-call to initialize. Initialization is performed by making a request to a separate class; this is represented as a lost message. After it is resolved, Asset Manager uses two different classes to provide the correct scenario with units of correct types. Requests to those classes are represented as lost messages. After that, Asset Manager’s sequence ends.
 
-\noindent Source Data Manager sequence begins when it receives the first request from the Optimizer. This results in a self-call that uses a separate class for data manipulation represented as two lost messages. Then a second call from the optimizer results in following the same sequence. After that, Source Data Manager’s sequence ends.
+\noindent Source Data Manager sequence begins when it receives the first request from the Optimizer. This results in a self-call, that uses a separate class for data manipulation represented as two lost messages. Then, a second call from the Optimizer results in following the same sequence. After that, Source Data Manager’s sequence ends.
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{SequenceDiagram.png}
@@ -41,17 +41,17 @@
 \newpage
 
 \subsection{Class Diagram:}
-\noindent This class diagram represents the core of the solution - services and models classes.
+\noindent This class diagram represents the core of the solution \textendash~services and models classes.
 
 \noindent AssetManager has a unidirectional association with the Optimizer. This unidirectional association represents that AssetManager gets requests from the Optimizer, but doesn’t give requests to it. AssetManager aggregates instances of GenericUnit and Grid. This aggregation relationship represents that those are independent concepts.
 
-\noindent SourceDataManager has a unidirectional association with the Optimizer. This describes that Optimizer can send requests to SourceDataManger, but SourceDataManager doesn’t give requests to the Optimizer. It aggregates the TimeSeries<T> class. This represents that TimeSeries<T> is an independent class.
+\noindent SourceDataManager has a unidirectional association with the Optimizer. This describes that Optimizer can send requests to SourceDataManager, but it doesn’t give requests to the Optimizer. SourceDataManager aggregates the TimeSeries<T> class, which is an independent class.
 
 \noindent Optimizer has unidirectional associations with AssetManager, SourceDataManager and ResultDataManager. Those represent that Optimizer calls AssetManager and SourceDataManager, but does not receive requests from them. And that describes that Optimizer is called by ResultDataManager, but doesn’t give it requests. Optimizer aggregates TimeSeries<T> and OptimizedUnit. The aggregation relationship represents that both are independent concepts.
 
 \noindent ResultDataManager has a unidirectional association with the Optimizer. This represents that Optimizer is called by ResultDataManager, but ResultDataManager does not get requests from the Optimizer. ResultDataManager  aggregates OptimizedUnit. This aggregation relationship describes that this is an independent class.
 
-\noindent Unit models form an inheritance tree. GenericUnit class and abstract OptimizedUnit classes inherit from the base abstract class Unit. GenericUnit represents units with characteristics including an image, while OptimizedUnit represents units with only performance specifications, and records of usage. From the abstract OptimizedUnit class three classes: CombustionUnit, HybridUnit and ElectricUnit, inherit to allow for the differences in how they calculate price and how they record usage.
+\noindent Unit models form an inheritance tree. GenericUnit class and abstract OptimizedUnit classes inherit from the base abstract class Unit. GenericUnit represents units with characteristics including an image, while OptimizedUnit represents units with only performance specifications, and records of usage. From the abstract OptimizedUnit class, three classes \textendash~CombustionUnit, HybridUnit and ElectricUnit~\textendash~inherit to allow for the differences in how they calculate price and how they record usage.
 \begin{figure}[hbt!]
     \centering
     \includegraphics[width=1\textwidth]{ClassDiagram.png}
@@ -61,25 +61,25 @@
 \newpage
 
 \section{Technical Architecture}
-\noindent Project was developed in C\# in .NET framework, using Avalonia UI in combination with OxyPlot, ReactiveUI and CommunityToolkit.MVVM for Data Visualization. All input and output data, specifically: images, units' specifications and resulting schedule are stored locally, file manipulation is performed by use of System library and CsvHelper library. Functional and integration tests were implemented with the xUnit framework.
+\noindent Project was developed in C\# in .NET framework, using Avalonia UI in combination with OxyPlot, ReactiveUI and CommunityToolkit.MVVM for Data Visualization. All input and output data, specifically: images, units' specifications and resulting schedule are stored locally. File manipulation is performed by use of System library and CsvHelper library. Functional and integration tests were implemented with the xUnit framework.
 
 \noindent Solution is organized into the following layers:
 \begin{itemize}
 
-    \item [\(\cdot \)] Data Handling
+    \item [\(\circ \)] Data Handling
     \begin{itemize}
-        \item [\(\circ \)] Data
-        \item [\(\circ \)] Assets
+        \item [\(\cdot \)] Data
+        \item [\(\cdot \)] Assets
     \end{itemize}
-    \item [\(\cdot \)] Business Logic
+    \item [\(\circ \)] Business Logic
     \begin{itemize}
-        \item [\(\circ \)] Models
-        \item [\(\circ \)] Services
-        \item [\(\circ \)] ViewModels
+        \item [\(\cdot \)] Models
+        \item [\(\cdot \)] Services
+        \item [\(\cdot \)] ViewModels
     \end{itemize}
-    \item [\(\cdot \)] Presentation
+    \item [\(\circ \)] Presentation
     \begin{itemize}
-        \item [\(\circ \)] Views
+        \item [\(\cdot \)] Views
     \end{itemize}
 
 \end{itemize}
