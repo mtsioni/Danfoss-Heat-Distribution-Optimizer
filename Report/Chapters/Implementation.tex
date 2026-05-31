@@ -102,72 +102,25 @@ During the architecture design phase, the main goal of the team was to clearly s
 
 \subsection{Asset Manager}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{AM-InitializeMethod.png}
-    \caption{Initialize method}
-\end{figure}
+The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loaded and saved all the data from a csv file and verified that all the data contained the correct type, to ensure early error detection. 
+The initialized data got provided for the Optimizer by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method, which turned the Required data into a list of generic units, by using the \texttt{GenericToOptimizedAdapter}.
+Each individual unit of the list then got identified as a specific type of unit: textbf{ElectticUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit}.
+The described progress got accomplished by the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method.
+Those optimized units get collected as a list of OptimizedUnit by the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method and returned by the\texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method. 
 
-The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and safes all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{AM-DataForOptimizerMethod.png}
-    \caption{GetDataForOptimizer method}
-\end{figure}
-
-To provide the initialized data for the Optimizer, the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method first turns the Required data into a list of generic units.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{GenToOpAd.png}
-    \caption{GenericToOptimizedAdapter}
-\end{figure}
-
-This list gets to the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method to assign each individual unit of the list to a specific type of unit: \textbf{ElectticUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit} and get provided as optimisedUnit.
-Those optimized units get collected as a list of OptimizedUnit, using the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method.
-The list of optimized units gets returend by the the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method.
 
 \subsection{Source Data Manager}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{SourceDataManager.png}
-    \caption{SourceDataManager}
-\end{figure}
-
-The data for the optimization period, the heat demand and electricity prices get provided by the \texttt{SourceDataManager}. Heat demand and electricity prices get loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}.
+The data, which contained the optimization period, the heat demand and electricity prices, got provided by the \texttt{SourceDataManager}. Heat demand and electricity prices got loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
 
 \subsection{Optimizer}
 
-For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{OP_CalculateHeatPerPrice-methode.png}
-    \caption{calculate heat per price}
-\end{figure}
-
-
-The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, computed for each unit of the OptimizedUnits list, how high are the costs of the unit to produce heat for a selected period of time.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{OP_Sorting-methode.png}
-    \caption{Sorting list of Units}
-\end{figure}
-
-Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method sorted through the list of units, after verified that the unit is not on maintenance, for the value of the \texttt{HeatPerPriceRecords} of each unit. The units got ordered in descending order and saved in a list as available units.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{OP_Optimize-methode1.png}
-    \includegraphics[width=1\textwidth]{OP_Optimize-methode2.png}
-    \caption{Optimize method}
-\end{figure}
-
-The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units.
-The method got called by a method of the \texttt{ResultDataManager}.
+For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods. 
+The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, computed for each unit of the OptimizedUnits list, how high are the costs of the unit to produce heat for the selected time marine.
+Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage
+()} method sorted through the list of units, after the unit had been verified to be available and not on maintenance, for the value of the \texttt{HeatPerPriceRecords}. The units got ordered in descending order and saved in a list as available units. 
+The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units. 
+The method got called by the \texttt{ResultDataManager}, to restive and safe data.
 
 \section{Implementation Data Managerment}
 
