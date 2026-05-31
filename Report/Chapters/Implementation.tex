@@ -77,25 +77,23 @@ During the architecture design phase, the main goal of the team was to clearly s
 
 \subsection{Asset Manager}
 
-The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loaded and saved all the data from a csv file and verified that all the data contained the correct type, to ensure early error detection. 
-The initialized data got provided for the Optimizer by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method, which turned the Required data into a list of generic units, by using the \texttt{GenericToOptimizedAdapter}.
-Each individual unit of the list then got identified as a specific type of unit: textbf{ElectticUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit}.
+The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and saves all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection. 
+The initialized data is provided to the Optimizer by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method, which turns the Required data into a list of generic units, by using the \texttt{GenericToOptimizedAdapter}.
+Each individual unit of the list gets identified as a specific type of unit: \textbf{ElectricUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit}.
 The described progress got accomplished by the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method.
-Those optimized units get collected as a list of OptimizedUnit by the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method and returned by the\texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method. 
+The optimized units get collected as a list of OptimizedUnit and returned by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method. 
 
 
 \subsection{Source Data Manager}
 
-The data, which contained the optimization period, the heat demand and electricity prices, got provided by the \texttt{SourceDataManager}. Heat demand and electricity prices got loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
+The data, which contains the optimization period, the heat demand and electricity prices is provided by the \texttt{SourceDataManager}. Heat demand and electricity prices are loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
 
 \subsection{Optimizer}
 
-For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods. 
-The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, computed for each unit of the OptimizedUnits list, how high are the costs of the unit to produce heat for the selected time marine.
-Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage
-()} method sorted through the list of units, after the unit had been verified to be available and not on maintenance, for the value of the \texttt{HeatPerPriceRecords}. The units got ordered in descending order and saved in a list as available units. 
-The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units. 
-The method got called by the \texttt{ResultDataManager}, to restive and safe data.
+For the optimisation, the list of optimised units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} are retrieved using the \texttt{Optimizer.}\allowbreak\texttt{RetrieveUnits} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods. 
+The \allowbreak\texttt{CalculateHeatPerPrice()} method of the Optimizer calculates the weighted ratio of produced heat to net production cost at a given hour.
+Furthermore, the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method iterates through the list of units, after verifying that each unit is available and not under maintenance, to determine the value of the \texttt{HeatPerPriceRecords}. The units are then ordered in descending order and saved as a list of available units. 
+The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method calls all other methods of the Optimizer and is itself called within the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} method, which then returns the list of available Units. The method is called by the \texttt{ResultDataManager} to receive and save data.
 
 \section{Implementation Data Managerment}
 
