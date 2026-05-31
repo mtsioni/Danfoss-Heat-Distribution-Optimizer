@@ -9,68 +9,43 @@
 \subsection{Architecture and Technology Stack (MVVM in Avalonia UI)}
 \label{sec:architecture-mvvm-avalonia}
 
-The client application is built on the .NET platform using the Avalonia UI framework. Avalonia was chosen for its consistency with the Advanced Object-Oriented Programming course curriculum. The layout is described in XAML, so the structure of the interface is kept in markup files and the C\# code-behind only contains what cannot be expressed declaratively.
+The client application is built on the .NET platform using the Avalonia UI framework. Avalonia was implemented for its consistency with the Advanced Object-Oriented Programming course curriculum. The layout is described in AXAML markup files. The C\# code-behind only contains what cannot be expressed declaratively.
 
-The internal structure follows the Model--View--ViewModel (MVVM) pattern. MVVM was selected because the user interface and the optimization logic had to be developed in parallel by two sub-teams, and the pattern enforces a clear boundary between them. Keeping the View independent from the optimization code also made it possible to test the ViewModels in isolation, without instantiating any Avalonia controls. The three layers are organised as follows:
+The internal structure follows the Model--View--ViewModel (MVVM) pattern. MVVM was selected because the user interface and the optimization logic had to be developed in parallel by multiple teams and the pattern enforces a clear boundary between them. Keeping the View independent from the optimization code also made it possible to test the ViewModels in isolation, without instantiating any Avalonia controls. The three layers are organised as follows:
 
 \begin{itemize}
-    \item \textbf{View:} The interface is defined in \texttt{MainWindow.axaml}. The file contains only XAML --- layouts, styles, themes and bindings to the corresponding ViewModels. Its code-behind, \texttt{MainWindow.axaml.cs}, is intentionally kept minimal and only handles operations that cannot be expressed through bindings, such as loading the logo asset and switching between the application's pages.
-    \item \textbf{ViewModel:} \texttt{MainWindowViewModel.cs} acts as the root ViewModel and owns the nested ViewModels used by the rest of the application. The two main ones are \texttt{DataVisualizerViewModel.cs}, which holds the state and configuration of the interactive charts, and \texttt{UnitViewModel.cs}, which exposes the parameters and operational constraints of an individual heat production unit to the View.
+    \item \textbf{View:} The interface is defined in \texttt{MainWindow.axaml}. The file contains only AXAML - layouts, styles, themes and bindings to the corresponding ViewModels. The \texttt{MainWindow.axaml.cs} is intentionally kept minimal and only handles operations that cannot be expressed through bindings, such as loading the logo asset and switching between the application's pages.
+    \item \textbf{ViewModel:} \texttt{MainWindowViewModel.cs} acts as the root ViewModel and owns the nested ViewModels used by the rest of the application. \texttt{DataVisualizerViewModel.cs} holds the state and configuration of the interactive charts and \texttt{UnitViewModel.cs} exposes the parameters and operational constraints of an individual heat production unit to the View.
     \item \textbf{Model:} The data layer is represented by the \texttt{DataVisualizerModel.cs} class, which contains time series data, data on previous operations, and data from the optimizer. This class provides access to the data needed for further visualization in the form convenient for use in the ViewModels.
 \end{itemize}
 
-Interaction between all three layers in the architecture is provided via the ReactiveUI library. The observable properties of both Models and ViewModels are created using the \texttt{RaiseAndSetIfChanged} method, which raises the property changed event each time the corresponding value changes. Thus, any change in the View, such as changing the slider to maintain a particular heat-producing unit, changes the value in the ViewModel that in turn recalculates the results of the Optimizer and the plot. Therefore, there is no need to explicitly call refreshing in the View.
+Interaction between all three layers in the architecture is provided via the ReactiveUI library. The observable properties of both Models and ViewModels are created using the \texttt{RaiseAndSetIfChanged} method, which raises the property changed event each time the corresponding value changes. Thus, any change in the View, such as changing the slider to maintain a particular heat-producing unit, changes the value in the ViewModel, Optimizer recalculates the results, and new graph shown. Therefore, there is no need to explicitly call refreshing in the View.
 
 \subsection{UI Elements and Styling}
-The layout of the on-screen UI Elements was designed with the main objective being availability of all functionalities at one place. The operator has access to everything that the system is capable of executing,
-from scenario switching, through period switching, to maintenance planning. The entire interface is defined in the MainWindow.axaml file, and it is structured and contained in a Grid container.
+The layout of the user interface was designed for easy access to features; therefore, all functionalities are available in one place. The operator has access to everything the system can execute, from scenario switching and period switching to maintenance planning. The entire interface is defined in the MainWindow.axaml file and is structured within a Grid container.
 
-The left section - the \textbf{Control Panel} - consists of a dark-red column, 2 radio buttons, slider bar, dropdown menu, and a theme toggle switch. It uses the dark-red coloured background because it is the characteristic color of the \textit{Danfoss} company.
+The left section, the \textbf{Control Panel}, consists of a dark red column, two radio buttons, a slider, a dropdown menu, and a theme toggle switch. The background of the \textbf{Control Panel} is  \textit{Danfoss}-inspired red.
 \begin{enumerate}
-    \item \textbf{Scenario Switch} - It is built using two rounded radio buttons with the \texttt{GroupName} being "ScenariosGroup". It allows the operator to switch between the Scenario 1 (Heat Scenario)
+    \item \textbf{Scenario Switch} is built using two rounded radio buttons with the \texttt{GroupName} being "ScenariosGroup". It allows the operator to switch between the Scenario 1 (Heat Scenario)
     and Scenario 2 (Heat \& Electricity Scenario). After selecting an option, the graph in the main section of the frame automatically updates and shows the selected option, either the Heat Scenario
     or the Heat \& Electricity Scenario. The IsChecked binding of this switch is connected to the \texttt{IsHeatScenarioSelected} and the \texttt{IsHeatAndElecScenarioSelected} attributes inside the
     \texttt{MainWindowViewModel.cs} file.
-    \item \textbf{Period Switch} - It is also built using two rounded radio buttons with the \texttt{GroupName} being "PeriodGroup". This switch allows the operator to switch between the Summer Period
-    and the Winter Period. After selecting an option, the graph in the main section of the frame automatically updates and shows the selected option, either the Summer Period or the Winter Period.
-    The \texttt{IsChecked} binding is connected to the \texttt{IsWinterSelected} and the \texttt{IsSummerSelected} attributes inside the \texttt{MainWindowViewModel.cs} file.
-    \item \textbf{Maintenance Planning} - Section for scheduling the maintenance period, for time selected using the slider, and for the selected production unit from the dropdown menu. The slider value
-    ranges from 30 to 60 hours. In addition, the slider has snapping allowed with the \texttt{TickFrequency} being set to 1. There is a text label under the slider, that is bound to the slider value.
-    Furthermore, there is a \texttt{ComboBox} dropdown menu under the text label, containing every production unit available, with the option "None" as well, in case there is no maintenance needed for
-    scheduling. The \texttt{SelectedItem} is binded to the \texttt{SelectedUnit} attribute inside the \texttt{MainWindowViewModel.cs} file.
-    \item \textbf{Theme Toggle} - A toggle switch located at the very bottom section of the Control Panel sidebar controlling \texttt{IsDarkTheme} and switching the entire system theme.
+    \item \textbf{Period Switch} is also built using two rounded radio buttons with the \texttt{GroupName} being "PeriodGroup". This switch allows the operator to switch between the Summer Period and the Winter Period. After selecting an option, the graph in the main section of the frame automatically updates and shows the selected option, either the Summer Period or the Winter Period. The \texttt{IsChecked} binding is connected to the \texttt{IsWinterSelected} and the \texttt{IsSummerSelected} attributes inside the \texttt{MainWindowViewModel.cs} file. \item \textbf{Maintenance Planning} is a section for scheduling the maintenance period using a slider and selecting production unit from the dropdown menu. The slider value ranges from 30 to 60 hours. In addition, the slider has snapping allowed with the \texttt{TickFrequency} being set to 1. There is a text label under the slider, that is bound to the slider value. Furthermore, there is a \texttt{ComboBox} dropdown menu under the text label, containing every production unit available. The \texttt{SelectedItem} is binded to the \texttt{SelectedUnit} attribute inside the \texttt{MainWindowViewModel.cs} file.
+    \item \textbf{Theme Toggle Swich} is located at the very bottom section of the Control Panel sidebar controlling \texttt{IsDarkTheme} and switching the entire system theme.
 \end{enumerate}
 
 The right section - the \textbf{Main Section} - consists of 3 vertical areas:
 \begin{enumerate}
-    \item \textbf{Header} - It consists of a text label stating the official name of the tool, the location/city where the heat distribution is operated at, and the approximate number of buildings in the
+    \item \textbf{Header} consists of a text label stating the official name of the tool, the location/city where the heat distribution is operated at, and the approximate number of buildings in the
     district heating area. In addition, there is a \textit{Danfoss} logo, loaded from the application assets, located at the very right section of the Header.
-    \item \textbf{Interactive Chart} - The most important part of the screen. It contains an \texttt{oxy:PlotView}, which is bound to \texttt{Visualizer.CurrentPlotModel}. Below the chart, there is a horizontal
-    panel with checkboxes for selecting the metrics to be displayed on the chart, namely: Heat Demand, Heat Production (these two are set to \texttt{IsChecked} as default), Electricity, Electricity Price (these
-    two are only available to be selected when operating in the Scenario 2 - the Heat \& Electricity Scenario), CO\textsubscript{2} Eimissions, Fuel Consumption, and the Production Costs). In addition, there
-    is a Legend button located in the bottom-right corner of this section, which when clicked expands and displays a detailed pop-up legend, explaining which color on the graph represents what metric.
-    \item \textbf{Production Units Cards} - A responsive \texttt{UniformGrid} with three columns, located at the very bottom of the screen below the \textbf{Interactive Chart} section, displaying detailed
-    specification of three production units at once. There are arrows located on both left and right side of this section, allowing the operator to navigate between all available production units which are paginated,
-    allowing the system to create a new page of production unit cards, in case a unit, or multiple units were added.
+    \item \textbf{Interactive Chart} is the most important part of the screen. It contains an \texttt{oxy:PlotView}, which is bound to \texttt{Visualizer.CurrentPlotModel}. Below the chart, there is a horizontal panel with checkboxes for selecting the metrics to be displayed on the chart, namely: Heat Demand, Heat Production (these two are set to \texttt{IsChecked} as default), Electricity, Electricity Price (these two are only available to be selected when operating in the Scenario 2 - the Heat \& Electricity Scenario), CO\textsubscript{2} Emissions, Fuel Consumption, and the Production Costs). In addition, there is a Legend button located in the bottom-right corner of this section, which expands when clicked and displays a detailed pop-up legend, explaining which color on the graph represents what metric.
+    \item \textbf{Production Units Cards} - A responsive \texttt{UniformGrid} with three columns, located at the very bottom of the screen below the \textbf{Interactive Chart} section, displaying detailed specification of three production units at once. Arrows on the left and the right side of this section allow the operator to navigate between all available production units. The system automatically creates a new page of production unit cards when new units are added.
 \end{enumerate}
 
-To ensure a proffesional interface, there were multiple overrides defined for the \texttt{ControlTemplate} in \texttt{Window.Style}, inside the \texttt{MainWindow.axaml} file. The traditional radio buttons were transformed into a more modern segmented buttons. The following XAML code snippet defines the right-rounded radio button segment with a checkmark visible only when selected:
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{RadioButtonStyle.png}
-    \caption{Radio Button with Visible Checkmark}
-    \label{fig:radiobutton}
-\end{figure}
+To ensure a proffesional interface, there were multiple overrides defined for the \texttt{ControlTemplate} in \texttt{Window.Style}, inside the \texttt{MainWindow.axaml} file. The traditional radio buttons were transformed into a more modern segmented buttons. The following XAML code snippet defines the right-rounded radio button segment with a checkmark visible only when selected. (see Appendix~\ref{sec:styling}  Fig.~\ref{fig:radiobutton})
 
 The combo box for selecting production units for maintenance scheduling is also visually customized to have dark-red background, white text, and both hover and selection states.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{ComboBoxStyle.png}
-    \caption{Combo Box Style Configuration}
-    \label{fig:combobox}
-\end{figure}
+(see Appendix~\ref{sec:styling}  Fig.~\ref{fig:combobox})
 
 The production unit cards at the very bottom of the right section are modified rectngular modules (\texttt{CornerRadius="15"}, \texttt{ClipToBounds="True"}). There is the image of the
 production unit on the left side of the card, which is loaded from the application assets, and will automatically adapt to the size of the card via \texttt{Stretch="UniformToFill"}.
@@ -96,78 +71,29 @@ During the architecture design phase, the main goal of the team was to clearly s
     \end{itemize}
 \end{enumerate}
 
-\noindent Due to this strictly engineered data architecture, the entire 14-day optimisation, including exporting data into CSV files and rendering of complex graph are seamless. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
+\noindent Due to this strictly designed data architecture, the entire 14-day optimisation, including exporting data into CSV files and rendering of complex graphs is seamless. The operator therefore receives immediate feedback which ensures a fluid and positive user experience.
 
 \section{Implementation Backend}
 
 \subsection{Asset Manager}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{AM-InitializeMethod.png}
-    \caption{Initialize method}
-\end{figure}
+The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and saves all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection. 
+The initialized data is provided to the Optimizer by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method, which turns the Required data into a list of generic units, by using the \texttt{GenericToOptimizedAdapter}.
+Each individual unit of the list gets identified as a specific type of unit: \textbf{ElectricUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit}.
+The described progress got accomplished by the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method.
+The optimized units get collected as a list of OptimizedUnit and returned by the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method. 
 
-The \texttt{AssetManager.}\allowbreak\texttt{Initialize()} method loads and safes all the data from a csv file and verifies that all the data contains the correct type, to ensure early error detection.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{AM-DataForOptimizerMethod.png}
-    \caption{GetDataForOptimizer method}
-\end{figure}
-
-To provide the initialized data for the Optimizer, the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method first turns the Required data into a list of generic units.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{GenToOpAd.png}
-    \caption{GenericToOptimizedAdapter}
-\end{figure}
-
-This list gets to the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimized()} method to assign each individual unit of the list to a specific type of unit: \textbf{ElectticUnit}, \textbf{CombustionUnit} or \textbf{HybridUnit} and get provided as optimisedUnit.
-Those optimized units get collected as a list of OptimizedUnit, using the \texttt{GenericToOptimizedAdapter}\allowbreak\texttt{GenericToOptimizedList()} method.
-The list of optimized units gets returend by the the \texttt{AssetManager.}\allowbreak\texttt{GetDataForOptimizer()} method.
 
 \subsection{Source Data Manager}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{SourceDataManager.png}
-    \caption{SourceDataManager}
-\end{figure}
-
-The data for the optimization period, the heat demand and electricity prices get provided by the \texttt{SourceDataManager}. Heat demand and electricity prices get loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}.
+The data, which contains the optimization period, the heat demand and electricity prices is provided by the \texttt{SourceDataManager}. Heat demand and electricity prices are loaded from a csv file and saved as \texttt{TimeSeries}, using the \texttt{SourceDataLoader}. 
 
 \subsection{Optimizer}
 
-For the optimization, the list of optimized units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} got called by the \texttt{Optimizer.}\allowbreak\texttt{Retrieve Units} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{OP_CalculateHeatPerPrice-methode.png}
-    \caption{calculate heat per price}
-\end{figure}
-
-
-The method \texttt{Optimizer.}\allowbreak\texttt{CalculateHeatPerPrice()}, computed for each unit of the OptimizedUnits list, how high are the costs of the unit to produce heat for a selected period of time.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{OP_Sorting-methode.png}
-    \caption{Sorting list of Units}
-\end{figure}
-
-Next the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method sorted through the list of units, after verified that the unit is not on maintenance, for the value of the \texttt{HeatPerPriceRecords} of each unit. The units got ordered in descending order and saved in a list as available units.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{OP_Optimize-methode1.png}
-    \includegraphics[width=1\textwidth]{OP_Optimize-methode2.png}
-    \caption{Optimize method}
-\end{figure}
-
-The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method called all the other methods of the Optimizer and got called itself inside the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} methode, which then returned the list of available Units.
-The method got called by a method of the \texttt{ResultDataManager}.
+For the optimisation, the list of optimised units from the \texttt{AssetManager} and the data from the \texttt{SourceDataManager} are retrieved using the \texttt{Optimizer.}\allowbreak\texttt{RetrieveUnits} and \texttt{Optimizer.}\allowbreak\texttt{RetrieveSourceData} methods. 
+The \allowbreak\texttt{CalculateHeatPerPrice()} method of the Optimizer calculates the weighted ratio of produced heat to net production cost at a given hour.
+Furthermore, the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method iterates through the list of units, after verifying that each unit is available and not under maintenance, to determine the value of the \texttt{HeatPerPriceRecords}. The units are then ordered in descending order and saved as a list of available units. 
+The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method calls all other methods of the Optimizer and is itself called within the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} method, which then returns the list of available Units. The method is called by the \texttt{ResultDataManager} to receive and save data.
 
 \section{Implementation Data Managerment}
 
