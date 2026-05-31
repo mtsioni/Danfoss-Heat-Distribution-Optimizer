@@ -95,7 +95,7 @@ The \allowbreak\texttt{CalculateHeatPerPrice()} method of the Optimizer calculat
 Furthermore, the \texttt{Optimizer.}\allowbreak\texttt{ChooseAndRecordUsage()} method iterates through the list of units, after verifying that each unit is available and not under maintenance, to determine the value of the \texttt{HeatPerPriceRecords}. The units are then ordered in descending order and saved as a list of available units. 
 The \texttt{Optimizer.}\allowbreak\texttt{optimize()} method calls all other methods of the Optimizer and is itself called within the \texttt{Optimizer.}\allowbreak\texttt{GetResultData()} method, which then returns the list of available Units. The method is called by the \texttt{ResultDataManager} to receive and save data.
 
-\section{Data Managerment}
+\section{Data Management}
 
 The data management handles the movement of information across the system.
 It has the ability to read static asset data from JSON files, load time-dependent data from CSV file and give back optimized results for research, audit and debug purposes. In the system, there are three dedicated classes that handle these I/O operations, as well as the format handling. The reason behind this approach is because in this way the core optimization logic stays separated and independent from file formatting building processes of the final data. Other than clear separation of concerns, this method of data management provides independent testing, as well opportunities for future expanding of the data management system.
