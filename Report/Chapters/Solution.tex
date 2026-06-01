@@ -4,7 +4,7 @@
 \section{UML Diagrams}
 \noindent Unified Modeling Language Diagrams are tools used to describe and design software artifacts.
 
-\subsection{Activity Diagrams:}
+\subsection{Activity Diagrams}
 \noindent Activity diagrams (see Figure~\ref{fig:ActivityDiagrams}) below represent the optimization algorithm. The process takes place inside the optimizer class, and begins when the GetResultData method of the Optimizer is called by the Result Data Manager. GetResultData method calls the Optimize method, which proceeds to retrieve all data necessary for optimization to commence. 
 
 \noindent When data has been gathered it enters a loop, iterating through every hour of each day of the optimization period. At the beginning of each iteration it checks if the gathered data is workable. Afterwards, if the data is correct, the process continues. The weighted ratio of heat to price of each unit is calculated, and then the optimal unit is selected to be used in heat production and usage is recorded. These processes are performed by CalculateHeatPerPrice and ChooseAndRecordUsage methods.
@@ -20,7 +20,7 @@
 \end{figure}
 \newpage
 
-\subsection{Sequence Diagram:}
+\subsection{Sequence Diagram}
 \noindent This sequence diagram represents how service classes interact when result data is requested.
 
 \noindent Requests can be made from several parts of the Presentation layer, which is represented as a found message.
@@ -40,7 +40,7 @@
 \end{figure}
 \newpage
 
-\subsection{Class Diagram:}
+\subsection{Class Diagram}
 \noindent This class diagram represents the core of the solution \textendash~services and models classes.
 
 \noindent AssetManager has a unidirectional association with the Optimizer. This unidirectional association represents that AssetManager gets requests from the Optimizer, but doesn’t give requests to it. AssetManager aggregates instances of GenericUnit and Grid. This aggregation relationship represents that those are independent concepts.

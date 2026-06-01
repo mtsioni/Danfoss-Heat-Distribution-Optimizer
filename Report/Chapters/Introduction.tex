@@ -15,7 +15,7 @@
     It should handle negative prices where you get paid to consume electricity.
     \item \textbf{\acrshort{fr}-4:} The system has to consist of 5 modules, namely: \textbf{Asset Manager}, \textbf{Source Data Manager},
     \textbf{Result Data Manager}, \textbf{Optimizer}, and \textbf{Data Visualization}.
-    \item \textbf{\acrshort{fr}-5:} The system must be able to operate in two distinct opearational scenarios.
+    \item \textbf{\acrshort{fr}-5:} The system must be able to operate in two distinct operational scenarios.
         \begin{itemize}[label=\textbullet]
             \item \textbf{\acrshort{fr}-5.1:} Scenario 1 = The system must operate for a district heating area using 3 Gas Boilers (\textbf{
             Gas Boiler 1, Gas Boiler 2, Gas Boiler 3}) and one Oil Boiler (\textbf{Oil Boiler 1}).
@@ -32,11 +32,11 @@
 \noindent \textbf{Non-functional Requirements:}
 \begin{itemize}
     \item \textbf{\acrshort{nfr}-1 (Modularity):} The system must have a modular architecture so components can be replaced or extended easily.
-    \item \textbf{\acrshort{nfr}-2 (Time Resolution):} All data and calclulations must use a strict 1-hour time resolution.
+    \item \textbf{\acrshort{nfr}-2 (Time Resolution):} All data and calculations must use a strict 1-hour time resolution.
     \item \textbf{\acrshort{nfr}-3 (Tech Stack):} Developed in .NET using an object-oriented language like C\#.
     \item \textbf{\acrshort{nfr}-4 (Storage):}  The system must use local file formats like \acrshort{csv} or excel for data.
     \item \textbf{\acrshort{nfr}-5 (Usability):} The \acrshort{gui} should let users configure scenarios and run optimization without
-    editting configuration files directly.
+    editing configuration files directly.
     \item \textbf{\acrshort{nfr}-6 (Testing):} The code should follow good practices and include tests for the subsystems.
 \end{itemize}
 
@@ -117,12 +117,12 @@ of September at midnight, while the Winter period (see Appendix~\ref{sec:intro} 
 
 \vspace{0.5cm}
 
-\noindent The company is shceduling the distribution manually. This process requires operators to compare every aspect of all the production units, that depends also on the scenario and season, included the maximal heat the unit can produce, the cost of producing heat using this unit, the CO\textsubscript{2} emissions produced by the unit, the amount of fuel needed for generating the heat, and the maximal amount of electricity that could be produced. In addition, operators need to check all of the information for each period and do manual calculations to figure out what production unit should be used at a particular time. Operators' decisions are made according to the objective of keeping the expenses as low as possible, while also seeking the highest possible gained revenue.
+\noindent The company is scheduling the distribution manually. This process requires operators to compare every aspect of all the production units, that depends also on the scenario and season, included the maximal heat the unit can produce, the cost of producing heat using this unit, the CO\textsubscript{2} emissions produced by the unit, the amount of fuel needed for generating the heat, and the maximal amount of electricity that could be produced. In addition, operators need to check all of the information for each period and do manual calculations to figure out what production unit should be used at a particular time. Operators' decisions are made according to the objective of keeping the expenses as low as possible, while also seeking the highest possible gained revenue.
 One of the major challenges associated with executing the calculations is the cost of electricity, since its value is changing into a new, completely different value every hour, and it can also have a negative value. Another challenge is maintenance planning, which executed manually takes great amount of time when calculating and scheduling the heat distribution. Maintenance period must be scheduled, ranging from 30 to 60 hours, for one chosen production unit in each scenario once per year, preferably in the Summer period, since the heat demand is lower in this period.
 
 \vspace{0.5cm}
 
-\noindent As a result, the scheduling process takes an overwhelming amount of time. Furthermore, it also leads to greater expenses for the company than needed due to insufficient calcualtions. In addition, the company might miss on an opportunity to gain possible profit by not using the best production unit at the right time. Finally, the greatest flaw in this manual scheduling system is the possibility of the human factor being the root cause of these errors and challenges.
+\noindent As a result, the scheduling process takes an overwhelming amount of time. Furthermore, it also leads to greater expenses for the company than needed due to insufficient calculations. In addition, the company might miss on an opportunity to gain possible profit by not using the best production unit at the right time. Finally, the greatest flaw in this manual scheduling system is the possibility of the human factor being the root cause of these errors and challenges.
 
 \subsection{Motivation}
 Automizing and optimizing the scheduling of the heat distribution results in reduction of the expenses needed, while also boosting the revenue gained from electricity produced. Furthermore, it will make the process more efficient and it will eliminate the possibility of error made by human factor.
@@ -146,4 +146,4 @@ can be different from the predefined price. The \textbf{Gas Motor 1} produces el
 \noindent Furthermore, developing the \textbf{Data Visualization} module within the system will support the operators and the schedulers to view an easy to understand graph. As a result, turning complex optimization result data into intuitive and easily understandable format. The module displays the key information, namely: the heat demand, the heat production, the amount of electricity used, the electricity price, the CO\textsubscript{2} emissions produced, the fuel consumption, and the production cost.
 The graph will function in an intelligent way, where certain information that is special for particular scenario,
 for example the amount of electricity used and the electricity price, will only be available for viewing when the corresponding scenario is selected.
-In addition, the graph will prvoide an interactive way to be operated, where the operator is able to click any part of the graph to view the information connected with the production unit that is used at the time. For instance, the date and time of the current selected point on graph, how much heat is generated by this unit, etc.
+In addition, the graph will provide an interactive way to be operated, where the operator is able to click any part of the graph to view the information connected with the production unit that is used at the time. For instance, the date and time of the current selected point on graph, how much heat is generated by this unit, etc.

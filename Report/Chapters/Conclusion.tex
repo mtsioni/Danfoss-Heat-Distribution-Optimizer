@@ -2,51 +2,12 @@
 %    Conclusion
 % -------------------------------------------------------------
 
-Overall, the Software Development result of this project has been a success.
- 
-The project requirements for a heat Optimizer Distribution application were:
+The product was developed successfully and achieved its main goal.
 
-\begin{itemize}
-\item Developing a System application that computes cost-effective schedules for production Units, including the possibility of maintenance for the units. 
-	
-\item The system logic should be based on the Models: Optimizer, AssetManager, SourceDataManger, ResultDataManager, DataVisualizer 
+Major discoveries show that automatic hourly scheduling can significantly reduce operating costs. The system responds to electricity price fluctuations and enables profit from specific situations (e.g. negative electricity prices), incorporating a gas motor and electric boiler in the heat and electricity scenario. An architecture based on \acrshort{mvvm} pattern and Avalonia \acrshort{ui} proved to be an effective choice for parallel development of the frontend and backend.
 
-\item  A GUI should allow the user to select maintenance, switch between summer and winter period, include an overview of active units and visualising selected Data within a Graph.
+The developed product solved the problem of inefficient and time-consuming manual scheduling. By automating complex calculations, the system delivers the optimal configuration of active units. This way, the human factor is completely removed, reducing the time needed to create a schedule with a focus on minimal expenses and maximal profit.
 
-\end{itemize}
+Regarding the set goals, the team did not fully cover the system logic with unit tests due to the selected architecture. Isolating individual components for unit testing was technically demanding. Therefore, the team reconsidered their strategy and focused on integration and functional tests instead.
 
-All those features had been implemented into a fully functioning application.
-
-But there can still be made further improvements in the future. 
-Displaying the units differently, to ensure an efficient overview even with a higher number of units or extending the application to be used over multiple cities. 
-Those changes would improve flexibility. 
-Implementing an API would upgrade the Data Management.
-This shows that this application still has a lot of potential for future development. 
-
-
-
-
-
-
-
-
-
-
-%In the process of developing an application that allows the user to optimize the time schedule of heat producing, as well as electricity requiring and producing units, for cost-effective. 
-
-%The key points of the system were Design and implementation of:
-
-%\begin{itemize}
-%    \item \texttt{Data flow}, deserializing and/or passing Data from the application to the \texttt{Models}, along with visualizing them.
-
-%    \item Implementation of logic and calculation of the \texttt{optimizing process}
-
-%    \item Compiling all functionalities in \texttt{one Window}, while keeping it user-friendly and non-complex 
-%\end{itemize}
-
-%By calculating a value for each production unit, for their own cost per hour to produce heat, based on the net production cost of each unit depending on heat demand and electricity price per hour, and sorting a list of available units for that value, the application can create cost-effective time schedules. 
-%Additionally, the calculation considers settings such as: Scenarios, periods and maintenance, which can easily be changed on the main window. 
-
-%For future development, the application could receive a change for more flexibility, especially for the visualisation of the units, since the current version works inefficient for a higher number of units.
-%Another future approach would be the implementation of an API to improve the Data flow. 
-%Additionally, the application could be improved to operate for different cities. 
+Areas for future work include reducing dependency on static classes and using a centralised database instead of \acrshort{json}/\acrshort{csv} files. This would address issues with manual configuration of file paths. The system could include an \acrshort{api} for direct loading of prices from energinet.dk and a meteorological \acrshort{api}, as demand depends on the weather. Additionally, displaying the units differently to provide an efficient overview with a larger number of available units could be implemented. This demonstrates that the application has great potential for future development.
