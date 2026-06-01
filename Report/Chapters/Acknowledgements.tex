@@ -5,7 +5,7 @@
 
 This chapter explains how the Group 11 used \acrshort{ai} tools during the development of the project, while strictly adhering to the rules of the University of Southern Denmark.
 
-\subssection{Technical Consultations}
+\subsection{Technical Consultations}
 \acrshort{ai} tools (specifically Gemini, Copilot, ChatGPT, and Claude) were used solely as technical consultants, which ensured that it was not used to generate code or software architecture. For example, the team encountered a problem with version control in Git, where certain files listed in .gitignore were still being tracked and pushed to GitHub. \acrshort{ai} was used to explain how the mechanism works - that the Git index is saved in the cache. Then it suggested possible solutions. After reviewing the solutions proposed by \acrshort{ai}, the team independently decided to run terminal commands to manually fix the cache memory.
 
 Prompt example: ``I added a folder into the .gitignore file in my project. However, git still tracks them and pushes them to the repository on GitHub. Explain why this happens and propose possible solutions to stop tracking those files.''
